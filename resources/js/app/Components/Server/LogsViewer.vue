@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {computed, onBeforeMount, onDeactivated, onMounted, onUnmounted, ref, StyleValue} from "vue";
+import {nextTick, computed, onBeforeMount, onMounted, onUnmounted, ref, StyleValue} from "vue";
 import {useZomboidLogsStore, ZomboidLogInterface} from "@/store/zomboid/logs";
 import {ChannelProxy} from "@/classes/Events/ChannelProxy";
 import {Event} from "@/classes/Events/Event";
@@ -14,7 +14,7 @@ const logs = useZomboidLogsStore();
 const styles = computed<StyleValue>(() => ({
     display: (globalWidth.value < 786) ? "none": "block",
     height: (globalWidth.value > 1023) ? "480px": "560px",
-    width: (globalWidth.value > 1023) ? "984px": "700px",
+    "min-width": (globalWidth.value > 1023) ? "802px": "560px",
 }));
 
 onBeforeMount(() => {
@@ -31,15 +31,20 @@ onMounted(async () => {
 
         scrollWindowValue.scrollTop = scrollWindowValue.scrollHeight;
 
-        channelProxy.addEvent(new Event<ZomboidLogInterface[]>('.record', async (newLogs: ZomboidLogInterface[]) => {
-            const ifScrollHeightWasInTheEndOfList = (scrollWindowValue.scrollTop + scrollWindowValue.clientHeight) === scrollWindowValue.scrollHeight;
+        channelProxy.addEvent(
+            new Event('.record', async (_handler?: unknown) => {
+                const ifScrollHeightWasInTheEndOfList =
+                    (scrollWindowValue.scrollTop + scrollWindowValue.clientHeight) >= scrollWindowValue.scrollHeight;
 
-            logs.setData(newLogs);
+                await logs.fetch();
 
-            if (ifScrollHeightWasInTheEndOfList) {
-                scrollWindowValue.scrollTop = scrollWindowValue.scrollHeight;
-            }
-        }));
+                await nextTick(() => {
+                    if (ifScrollHeightWasInTheEndOfList) {
+                        scrollWindowValue.scrollTop = scrollWindowValue.scrollHeight;
+                    }
+                });
+            })
+        );
     }
 });
 
@@ -50,9 +55,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div ref="scrollWindow" class="bg-gray-300 overflow-y-scroll" :style="styles">
-        <div class="text-black font-mono mx-3 my-5">
-            <span v-for="(log, index) in logs.getLogs" :key="index" class="text-sm font-mono block" v-html="log.toString()">
+    <div ref="scrollWindow" class="bg-gray-300 overflow-x-scroll" :style="styles">
+        <div class="text-black font-mono mx-3 my-5 overflow-x-visible">
+            <span v-for="(log, index) in logs.getLogs" :key="index" class="text-sm font-mono block overflow-x-visible" v-html="log.toString()">
             </span>
         </div>
     </div>

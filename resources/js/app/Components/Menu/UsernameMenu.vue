@@ -58,18 +58,6 @@ function logout(): void {
             </el-sub-menu>
         </el-menu>
     </div>
-
-
-<!--    <div class="text-3xl mr-2">-->
-<!--        <el-dropdown placement="bottom-end">-->
-<!--            <el-button>{{ username }}</el-button>-->
-<!--            <template #dropdown>-->
-<!--                <el-dropdown-menu>-->
-<!--                    <el-dropdown-item @click="authStore.logout()">LOGOUT</el-dropdown-item>-->
-<!--                </el-dropdown-menu>-->
-<!--            </template>-->
-<!--        </el-dropdown>-->
-<!--    </div>-->
 </template>
 
 <style scoped>

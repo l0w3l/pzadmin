@@ -39,6 +39,11 @@ class FilesystemLogRepository extends AbstractRepository implements LogRepositor
         throw new RuntimeException('Non supported action for filesystem log repository');
     }
 
+    public function append(LogInstanceData $logsInstance, Collection $logsInstanceData): Collection
+    {
+        throw new RuntimeException('Non supported action for filesystem log repository');
+    }
+
     public function reset(LogInstanceData $logInstanceData): void
     {
         throw new RuntimeException('Non supported action for filesystem log repository');

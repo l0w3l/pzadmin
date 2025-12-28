@@ -45,6 +45,20 @@ class DatabaseLogRepository extends AbstractRepository implements LogRepositoryI
         return LogData::collect($logInstance->logs);
     }
 
+    /**
+     * @throws LogInstanceNotFoundException
+     */
+    public function append(LogInstanceData $logInstanceData, Collection $logDataCollection): Collection
+    {
+        $logInstance = LogInstance::fromLogInstanceData($logInstanceData);
+
+        $logInstance->logs()->saveMany(
+            $logDataCollection->map(fn (LogData $logData) => new Log($logData->toArray()))->all()
+        );
+
+        return LogData::collect($logInstance->logs);
+    }
+
     public function reset(LogInstanceData $logInstanceData): void
     {
         $logInstance = LogInstance::fromLogInstanceData($logInstanceData);

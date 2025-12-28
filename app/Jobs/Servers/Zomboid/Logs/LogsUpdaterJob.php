@@ -32,7 +32,7 @@ class LogsUpdaterJob implements ShouldQueue
 
         $logService->saveLogsInDatabase($logs);
 
-        event(new LogRecordEvent($logs));
+        event(new LogRecordEvent);
     }
 
     public function getLogService(): LogServiceInterface

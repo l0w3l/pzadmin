@@ -20,3 +20,4 @@ enum LogInstanceEnum: string
         return md5_file($this->path());
     }
 }
+

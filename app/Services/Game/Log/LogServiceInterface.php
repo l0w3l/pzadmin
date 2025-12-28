@@ -10,11 +10,15 @@ use Illuminate\Support\Collection;
 interface LogServiceInterface
 {
     /**
+     * Return server console logs from DB
+     *
      * @return Collection<int, LogData>
      */
     public function getServerConsoleLogs(): Collection;
 
     /**
+     * Return server console logs from filesystem
+     *
      * @return Collection<int, LogData>
      */
     public function getServerConsoleLogsFromFilesystem(): Collection;
@@ -24,6 +28,14 @@ interface LogServiceInterface
      * @return Collection<int, LogData>
      */
     public function saveLogsInDatabase(Collection $logsInstancesData): Collection;
+
+    /**
+     * Append logs into database
+     *
+     * @param Collection<int, LogData> $logsInstanceData
+     * @return Collection<int, LogData>
+     */
+    public function appendLogsInDatabase(Collection $logsInstanceData): Collection;
 
     /**
      * Reset all logs

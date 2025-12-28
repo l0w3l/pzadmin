@@ -39,6 +39,30 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
+        'sqlite_zomboid' => [
+            'driver' => 'sqlite',
+            'url' => env('DB_URL'),
+            'database' => base_path('/docker/zomboid/storage/data/db/'.env('APP_NAME').'.db'),
+            'prefix' => '',
+            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
+        ],
+
+        'sqlite_zomboid_players' => [
+            'driver' => 'sqlite',
+            'url' => env('DB_URL'),
+            'database' => base_path('/docker/zomboid/storage/data/Saves/Multiplayer/'.env('APP_NAME').'/players.db'),
+            'prefix' => '',
+            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
+        ],
+
+        'sqlite_zomboid_vehicles' => [
+            'driver' => 'sqlite',
+            'url' => env('DB_URL'),
+            'database' => base_path('/docker/zomboid/storage/data/Saves/Multiplayer/'.env('APP_NAME').'/vehicles.db'),
+            'prefix' => '',
+            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
+        ],
+
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DB_URL'),

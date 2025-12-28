@@ -11,7 +11,7 @@ const channelProxy = new ChannelProxy('servers.zomboid');
 onMounted(async () => {
     setTimeout(server.fetch, 1000);
 
-    channelProxy.addEvent(new Event('.status', (handler: any) => {
+    channelProxy.addEvent(new Event('.status', async (handler: any) => {
         server.setStatus(handler.status);
     }));
 })

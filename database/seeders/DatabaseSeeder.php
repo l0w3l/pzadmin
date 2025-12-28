@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Auth\User;
 use Database\Seeders\Game\LogInstanceSeeder;
 use Database\Seeders\Game\LogSeeder;
-use Database\Seeders\Game\PlayerSeeder;
 use Database\Seeders\Game\ServerSeeder;
 use Illuminate\Database\Seeder;
 
@@ -24,7 +23,9 @@ class DatabaseSeeder extends Seeder
                 'password' => config('debug.user.password'),
             ]);
 
-            $this->call([PlayerSeeder::class, LogSeeder::class]);
+            $this->call([
+                LogSeeder::class,
+            ]);
         }
     }
 }

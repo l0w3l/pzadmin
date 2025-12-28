@@ -1,19 +1,19 @@
 import {EventInterface} from "@/classes/Events/Event";
 import {Channel} from "laravel-echo";
 
-export interface ChannelProxyInterface
+export interface ChannelProxyInterface<T>
 {
     readonly channelName: string;
 
-    addEvent(event: EventInterface): this;
+    addEvent(event: EventInterface<T>): this;
 
     destroy(): this;
 }
 
-export class ChannelProxy implements ChannelProxyInterface
+export class ChannelProxy<T> implements ChannelProxyInterface<T>
 {
     readonly channelName: string;
-    eventsCollection: Array<EventInterface>;
+    eventsCollection: Array<EventInterface<T>>;
 
     private readonly channel: Channel;
 
@@ -23,7 +23,7 @@ export class ChannelProxy implements ChannelProxyInterface
         this.eventsCollection = [];
     }
 
-    addEvent(event: EventInterface): this {
+    addEvent(event: EventInterface<T>): this {
         this.channel.listen(event.eventName, event.callable);
         this.eventsCollection.push(event);
 
@@ -31,7 +31,7 @@ export class ChannelProxy implements ChannelProxyInterface
     }
 
     destroy(): this {
-        this.eventsCollection.map((event: EventInterface) => this.channel.stopListening(event.eventName));
+        this.eventsCollection.map((event: EventInterface<T>) => this.channel.stopListening(event.eventName));
         this.eventsCollection = [];
 
         return this;

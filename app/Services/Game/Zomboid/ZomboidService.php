@@ -14,7 +14,7 @@ use App\Services\Game\Zomboid\Docker\ZomboidDockerContainer;
 class ZomboidService extends AbstractService implements ZomboidServiceInterface
 {
     public function __construct(
-        protected ZomboidDockerContainer $zomboidDockerContainer,
+        public ZomboidDockerContainer $zomboidDockerContainer,
         protected ServerRepositoryInterface $serverRepository,
     ) {}
 

@@ -42,6 +42,13 @@ class LogService extends AbstractService implements LogServiceInterface
         return $this->logRepositoryFactory->getDatabase()->save($logInstance, $logsInstancesData);
     }
 
+    public function appendLogsInDatabase(Collection $logsInstanceData): Collection
+    {
+        $logsInstance = $this->logInstanceRepository->findOrCreate(LogInstanceEnum::SERVER_CONSOLE);
+
+        return $this->logRepositoryFactory->getDatabase()->append($logsInstance, $logsInstanceData);
+    }
+
     public function resetLogsInDatabase(): void
     {
         $logInstance = $this->logInstanceRepository->findOrCreate(LogInstanceEnum::SERVER_CONSOLE);

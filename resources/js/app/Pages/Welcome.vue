@@ -43,7 +43,7 @@ onMounted(async () => {
                 <li v-for="(player,index) in players.getPlayersList" class="flex flex-row justify-center text-4xl xl:text-6xl lg:text-5xl mb-7">
                     <p>{{ index + 1 }}</p>
                     <span class="mr-3">.</span>
-                    <p>{{ player?.name ?? 'none' }}</p>
+                    <p>{{ player.username }} {{ (player?.name) ? `(${player.name})`: '' }}</p>
                 </li>
             </ul>
         </div>

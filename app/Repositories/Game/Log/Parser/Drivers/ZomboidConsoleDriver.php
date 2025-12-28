@@ -17,7 +17,7 @@ class ZomboidConsoleDriver implements ParserDriverInterface
     {
         return [
             ServiceFormattersEnum::EACH->value => fn ($value) => trim($value),
-            ServiceFormattersEnum::IGNORE->value => fn () => ['seed1', 'seed2'],
+            ServiceFormattersEnum::IGNORE->value => fn () => ['seed1'],
         ];
     }
 }

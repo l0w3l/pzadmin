@@ -41,6 +41,6 @@ class Server extends Model
      */
     public function players(): HasMany
     {
-        return $this->hasMany(Player::class);
+        return $this->hasMany(Player::class, 'world', 'name');
     }
 }

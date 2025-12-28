@@ -31,6 +31,14 @@ interface LogRepositoryInterface extends RepositoryInterface
     public function save(LogInstanceData $logInstanceData, Collection $logDataCollection): Collection;
 
     /**
+     * Append logs into instance
+     *
+     * @param  Collection<int, LogData>  $logDataCollection
+     * @return Collection<int, LogData>
+     */
+    public function append(LogInstanceData $logInstanceData, Collection $logDataCollection): Collection;
+
+    /**
      * Reset all logs
      *
      * @throws LogInstanceNotFoundException

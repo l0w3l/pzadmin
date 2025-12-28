@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\V1\Players;
+namespace App\Http\Resources\V1\Player;
 
 use App\Models\Game\Player;
 use Illuminate\Http\Request;
@@ -9,7 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @mixin Player
  */
-class PlayersResource extends JsonResource
+class PlayerResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,6 +20,9 @@ class PlayersResource extends JsonResource
     {
         return [
             'name' => $this->name,
+            'username' => $this->username,
+            'is_dead' => $this->isDead,
+            'steam_id' => $this->steamid,
         ];
     }
 }

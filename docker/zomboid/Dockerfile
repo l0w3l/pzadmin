@@ -1,7 +1,5 @@
 FROM steamcmd/steamcmd:latest
 
-LABEL maintainer="daniel.carrasco@electrosoftcloud.com"
-
 ENV STEAMAPPID 380870
 ENV STEAMAPP pz
 ENV STEAMAPPDIR "${HOMEDIR}/${STEAMAPP}-dedicated"
@@ -15,11 +13,11 @@ RUN apt-get update \
 
 # Download the Project Zomboid dedicated server app using the steamcmd app
 # Set the entry point file permissions
-RUN mkdir -p "${STEAMAPPDIR}" \
-  && chown -R "${USER}:${USER}" "${STEAMAPPDIR}" \
-  && steamcmd +force_install_dir "${STEAMAPPDIR}" \
+RUN mkdir -p "${STEAMAPPDIR}"
+RUN chown -R "${USER}:${USER}" "${STEAMAPPDIR}"
+RUN steamcmd +force_install_dir "${STEAMAPPDIR}" \
                                     +login anonymous \
-                                    +app_update "${STEAMAPPID}" validate \
+                                    +app_update "${STEAMAPPID}" -beta 42.13.1 \
                                     +quit
 
 # Copy the entry point file

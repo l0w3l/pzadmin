@@ -12,9 +12,8 @@ class Player extends Model
     /** @use HasFactory<Factory<Player>> */
     use HasFactory;
 
-    protected $fillable = [
-        'server_id', 'name',
-    ];
+    protected $connection = 'sqlite_zomboid_players';
+    protected $table = 'networkPlayers';
 
     /**
      * @return HasOne<Server>
