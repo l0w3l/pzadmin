@@ -1,12 +1,16 @@
 <?php
 
+use App\Repositories\Game\Player\PlayerRepositoryInterface;
 use Database\Seeders\DatabaseSeeder;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\Mock\Repositories\Game\Player\PlayerMockRepository;
 use Tests\TestCase;
 
 /** @var TestCase $this */
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
+
+    $this->app->bind(PlayerRepositoryInterface::class, fn () => new PlayerMockRepository);
 });
 
 /**
@@ -20,8 +24,10 @@ test('players with pagination test', function () {
             'data' => [
                 '*' => [
                     'name',
+                    'username',
+                    'isDead',
+                    'steamid',
                 ],
             ],
-            'links',
         ])->assertJsonCount(10, 'data');
 });

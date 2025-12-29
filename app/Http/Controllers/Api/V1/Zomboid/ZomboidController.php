@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\V1\Zomboid;
 
 use App\Http\Controllers\Controller;
-use App\Services\Zomboid\ZomboidServiceInterface;
+use App\Services\Game\Zomboid\ZomboidServiceInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final readonly class ZomboidController extends Controller
 {
     public function __construct(
-        private ZomboidServiceInterface $zomboidService
+        private ZomboidServiceInterface $zomboidService,
     ) {}
 
     public function index(): Response

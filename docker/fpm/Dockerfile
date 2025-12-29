@@ -1,15 +1,34 @@
 FROM php:8.3-fpm
 
-RUN apt-get update &&  \
-    apt-get upgrade -y && \
-    apt-get install -y libbz2-dev zlib1g-dev libpng-dev libpq-dev libonig-dev libzip-dev libmagickwand-dev libmagickcore-dev curl screen
-RUN docker-php-ext-install pdo mbstring exif pcntl bcmath gd zip bz2
-RUN pecl install xdebug redis imagic
-RUN docker-php-ext-enable xdebug redis
+WORKDIR /var/www/html
 
-RUN touch /var/log/fpm-php.www.log && chmod 666 /var/log/fpm-php.www.log
+ARG HOST_UID=1000
+ARG HOST_GID=1000
 
-RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
+RUN apt-get update && apt-get install -y \
+    libbz2-dev \
+    zlib1g-dev \
+    libpng-dev \
+    libpq-dev \
+    libonig-dev \
+    libzip-dev \
+    libmagickwand-dev \
+    curl \
+ && docker-php-ext-configure gd --with-jpeg --with-webp \
+ && docker-php-ext-install pdo mbstring exif pcntl bcmath gd zip bz2 \
+ && pecl install redis imagick \
+ && docker-php-ext-enable redis imagick \
+ && rm -rf /var/lib/apt/lists/*
 
 
-CMD /bin/sh -c "ulimit -Sn 10000 && ulimit -Hn 50000 && screen -dmS events bash -c 'php artisan queue:work' && screen -dmS jobs bash -c 'php artisan schedule:work' && php-fpm"
+RUN groupadd -g ${HOST_GID} app \
+ && useradd -u ${HOST_UID} -g app -m app
+
+RUN sed -i \
+  -e "s/user = www-data/user = app/" \
+  -e "s/group = www-data/group = app/" \
+  /usr/local/etc/php-fpm.d/www.conf
+
+USER app
+
+CMD ["php-fpm"]

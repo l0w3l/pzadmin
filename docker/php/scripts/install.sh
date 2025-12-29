@@ -1,15 +1,16 @@
 #!/bin/bash
+set -e
 
 # NVM, NPM, COMPOSER INSTALLATION AND BUILD
 
-scripts_folder=/root/scripts/
+scripts_folder=/usr/local/bin/scripts
 
 while getopts 'd:' opt; do
     case "$opt" in
         d)
             arg="$OPTARG"
             if [ "$arg" == "true" ]; then
-                bash "$scripts_folder"installers/xdebug.sh
+                bash "$scripts_folder"/installers/xdebug.sh
             fi
             ;;
         *)
@@ -17,5 +18,5 @@ while getopts 'd:' opt; do
     esac
 done
 
-bash "$scripts_folder"installers/composer.sh
-bash "$scripts_folder"installers/nvm.sh
+bash "$scripts_folder"/installers/composer.sh
+bash "$scripts_folder"/installers/nvm.sh

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Zomboid;
 
 use App\Http\Controllers\Controller;
-use App\Services\Player\PlayerServiceInterface;
+use App\Services\Game\Player\PlayerServiceInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final readonly class PlayersController extends Controller

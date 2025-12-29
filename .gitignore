@@ -19,3 +19,4 @@ _ide_helper*.php
 /.fleet
 /.idea
 /.vscode
+.setup_done

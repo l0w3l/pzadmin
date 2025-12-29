@@ -8,7 +8,7 @@ use App\Data\Game\ServerData;
 use App\Enums\Docker\ContainerStatusEnum;
 use App\Enums\Models\Game\ServerEnum;
 use App\Repositories\Game\Server\ServerRepositoryInterface;
-use App\Services\Zomboid\ZomboidServiceInterface;
+use App\Services\Game\Zomboid\ZomboidServiceInterface;
 use Illuminate\Support\Facades\App;
 
 class ZomboidServiceMock implements ZomboidServiceInterface

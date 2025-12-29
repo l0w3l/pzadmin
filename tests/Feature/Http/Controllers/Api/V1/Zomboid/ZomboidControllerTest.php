@@ -3,7 +3,7 @@
 use App\Enums\Docker\ContainerStatusEnum;
 use App\Enums\Models\Game\ServerEnum;
 use App\Models\Auth\User;
-use App\Services\Zomboid\ZomboidServiceInterface;
+use App\Services\Game\Zomboid\ZomboidServiceInterface;
 use Database\Seeders\DatabaseSeeder;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\Mock\Services\Zomboid\ZomboidServiceMock;

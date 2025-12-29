@@ -4,7 +4,7 @@ namespace App\Jobs\Servers\Zomboid;
 
 use App\Data\Game\ServerData;
 use App\Events\Servers\Zomboid\StatusEvent as ZomboidStatusEvent;
-use App\Services\Zomboid\ZomboidServiceInterface;
+use App\Services\Game\Zomboid\ZomboidServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

@@ -1,6 +1,11 @@
 #!/bin/bash
+set -e
 
-scripts_folder=/root/scripts/
+rm -f /var/www/html/.setup_done
 
-bash "$scripts_folder"setups/npm.sh
-bash "$scripts_folder"setups/composer.sh
+scripts_folder=/usr/local/bin/scripts
+
+bash "$scripts_folder"/setups/npm.sh
+bash "$scripts_folder"/setups/composer.sh
+
+touch /var/www/html/.setup_done

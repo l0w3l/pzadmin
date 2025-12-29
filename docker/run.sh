@@ -1,34 +1,52 @@
 #!/bin/bash
+set -euo pipefail
 
-source .env
+[ -f .env ] || { echo ".env not found"; exit 1; }
 
-DIRS=("${STORAGE_NGINX}" "${STORAGE_FPM}" "${STORAGE_SQLITE}")
+set -a
+source <(grep -v '^#' .env | sed '/^$/d')
+set +a
 
-for index in ${!DIRS[*]}
-do
-    mkdir -p "${DIRS[index]}"
+: "${STORAGE_NGINX:?}"
+: "${STORAGE_FPM:?}"
+: "${STORAGE_SQLITE:?}"
+: "${STORAGE_APP:?}"
+
+DIRS=(
+  "$STORAGE_NGINX"
+  "$STORAGE_FPM"
+  "$STORAGE_SQLITE"
+)
+
+for dir in "${DIRS[@]}"; do
+  mkdir -p "$dir"
 done
 
-# init logs files for mounting
-LOG_FILES=("${STORAGE_FPM}/logs/fpm-php.www.log" "${STORAGE_NGINX}/logs/access.log" "${STORAGE_NGINX}/logs/error.log")
+LOG_FILES=(
+  "$STORAGE_FPM/logs/fpm-php.www.log"
+  "$STORAGE_NGINX/logs/access.log"
+  "$STORAGE_NGINX/logs/error.log"
+)
 
-for index in ${!LOG_FILES[*]}
-do
-  subject="${LOG_FILES[$index]}"
-  mkdir -p "$(dirname "${subject}")" && touch "$subject" && chmod 666 "$subject"
+for file in "${LOG_FILES[@]}"; do
+  mkdir -p "$(dirname "$file")"
+  touch "$file"
+  chmod 664 "$file"
 done
 
-DOCKER_ARGS=''
+DOCKER_ARGS=()
 
-while getopts 'b' opt; do
-    case "$opt" in
-        b)
-            DOCKER_ARGS="${DOCKER_ARGS} --build"
-            ;;
-        ?)
-            ;;
-    esac
+while getopts 'bf' opt; do
+  case "$opt" in
+    b) DOCKER_ARGS+=(--build) ;;
+    f) DOCKER_ARGS+=(--force-recreate) ;;
+  esac
 done
 
-bash -c "docker compose --env-file=.env --env-file='${STORAGE_APP}/.env' -f ./docker-compose.yml up -d ${DOCKER_ARGS}"
+echo "docker compose up -d ${DOCKER_ARGS[*]}"
 
+docker compose \
+  --env-file .env \
+  --env-file "${STORAGE_APP}/.env" \
+  -f docker-compose.yml \
+  up -d "${DOCKER_ARGS[@]}"

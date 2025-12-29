@@ -8,7 +8,7 @@ use App\Data\Game\ServerData;
 use App\Enums\Docker\ContainerStatusEnum;
 use App\Enums\Models\Game\ServerEnum;
 use App\Models\Game\Server;
-use App\Repositories\Abstract\AbstractRepository;
+use Lowel\LaravelServiceMaker\Repositories\AbstractRepository;
 
 class ServerRepository extends AbstractRepository implements ServerRepositoryInterface
 {

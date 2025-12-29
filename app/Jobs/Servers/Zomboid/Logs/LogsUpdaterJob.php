@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Jobs\Servers\Zomboid\Logs;
 
 use App\Events\Servers\Zomboid\Logs\RecordEvent as LogRecordEvent;
-use App\Services\Log\LogServiceInterface;
+use App\Services\Game\Log\LogServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -25,7 +25,6 @@ class LogsUpdaterJob implements ShouldQueue
 
         $logs = $logService->getServerConsoleLogsFromFilesystem();
 
-        dump($logs);
         // return if nothing was changed
         if ($logService->getServerConsoleLogs()->count() === $logs->count()) {
             return;

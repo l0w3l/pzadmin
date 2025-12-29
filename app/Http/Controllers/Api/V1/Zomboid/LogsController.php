@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Zomboid;
 
 use App\Http\Controllers\Controller;
-use App\Services\Log\LogServiceInterface;
+use App\Services\Game\Log\LogServiceInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final readonly class LogsController extends Controller
@@ -14,6 +14,6 @@ final readonly class LogsController extends Controller
 
     public function console(): Response
     {
-        return $this->json($this->logService->getServerConsoleLogsFromFilesystem());
+        return $this->json($this->logService->getServerConsoleLogs());
     }
 }

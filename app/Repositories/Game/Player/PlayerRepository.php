@@ -6,8 +6,8 @@ namespace App\Repositories\Game\Player;
 
 use App\Data\Game\PlayerData;
 use App\Models\Game\Player;
-use App\Repositories\Abstract\AbstractRepository;
 use Illuminate\Pagination\AbstractPaginator;
+use Lowel\LaravelServiceMaker\Repositories\AbstractRepository;
 
 class PlayerRepository extends AbstractRepository implements PlayerRepositoryInterface
 {

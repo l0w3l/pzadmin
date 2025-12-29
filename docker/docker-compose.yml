@@ -1,21 +1,17 @@
-version: "3"
-
 services:
     nginx:
+        env_file:
+            - ./../.env
         container_name: "${APP_NAME:-pzadmin}_nginx"
         build: ./nginx
         ports:
             - "${APP_HTTP:-80}:80"
-            - "${APP_HTTPS:-433}:433"
+            - "${APP_HTTPS:-443}:443"
             - "${VITE_REVERB_PORT:-8080}:8080"
             - "${VITE_PORT:-5173}:5173"
             - "${INERTIA_PORT:-13714}:13714"
         networks:
             - backend
-        links:
-            - fpm
-            - php-laravel-reverb
-            - php-vite-dev
         volumes:
             - "${STORAGE_APP}:/var/www/html"
             - "${STORAGE_NGINX}/logs/:/var/log/nginx/"
@@ -25,6 +21,8 @@ services:
             - ./nginx/config/nginxconfig.io/:/etc/nginx/nginxconfig.io/
 
     fpm:
+        env_file:
+            - ./../.env
         container_name: "${APP_NAME:-pzadmin}_fpm"
         build: ./fpm
         networks:
@@ -33,21 +31,35 @@ services:
             - "${DOCKER_SOCKET}:/var/run/docker.sock:www-data"
             - "${STORAGE_APP}:/var/www/html"
 #           - "${STORAGE_FPM}/logs/fpm-php.www.log:/var/log/fpm-php.www.log:ro"
-            - ./fpm/config/www.conf:/usr/local/etc/php-fom.d/www.conf
-
-    php:
-        container_name: "${APP_NAME:-pzadmin}_php"
-        build: ./php
-        volumes:
-            - "${STORAGE_APP}:/var/www/html"
+            - ./fpm/config/www.conf:/usr/local/etc/php-fpm.d/www.conf
 
     php-setup:
         container_name: "${APP_NAME:-pzadmin}_php-setup"
         build: ./php
-        depends_on:
-            - php
-        restart: "no"
-        entrypoint: ["bash", "/root/scripts/setup.sh"]
+        networks:
+            - backend
+        restart: no
+        entrypoint: ["bash", "/usr/local/bin/scripts/setup.sh"]
+        volumes:
+            - "${STORAGE_APP}:/var/www/html"
+
+    php-queue:
+        container_name: "${APP_NAME:-pzadmin}_php-queue"
+        build: ./php
+        networks:
+            - backend
+        restart: always
+        entrypoint: [ "bash", "/usr/local/bin/scripts/laravel_queue.sh" ]
+        volumes:
+            - "${STORAGE_APP}:/var/www/html"
+
+    php-scheduler:
+        container_name: "${APP_NAME:-pzadmin}_php-scheduler"
+        build: ./php
+        networks:
+            - backend
+        restart: always
+        entrypoint: [ "bash", "/usr/local/bin/scripts/laravel_scheduler.sh" ]
         volumes:
             - "${STORAGE_APP}:/var/www/html"
 
@@ -56,10 +68,8 @@ services:
         build: ./php
         networks:
             - backend
-        depends_on:
-            - php-setup
         restart: "always"
-        entrypoint: [ "bash", "/root/scripts/vite_dev.sh", "-d", "${APP_VITE_DEV}"]
+        entrypoint: [ "bash", "/usr/local/bin/scripts/vite_dev.sh", "-d", "${APP_VITE_DEV}"]
         volumes:
             - "${STORAGE_APP}:/var/www/html"
 
@@ -68,10 +78,8 @@ services:
         build: ./php
         networks:
             - backend
-        depends_on:
-            - php-setup
         restart: "always"
-        entrypoint: [ "bash", "/root/scripts/laravel_reverb.sh" ]
+        entrypoint: [ "bash", "/usr/local/bin/scripts/laravel_reverb.sh" ]
         volumes:
             - "${STORAGE_APP}:/var/www/html"
 
@@ -80,10 +88,12 @@ services:
         restart: unless-stopped
         build: ./zomboid
         env_file:
-            - .env
+            - ./../.env
         ports:
             - "${ZOMBOID_PORT_1}:16261/udp"
             - "${ZOMBOID_PORT_2}:16262/udp"
+            - "${ZOMBOID_STEAM_PORT_1}:8766"
+            - "${ZOMBOID_STEAM_PORT_2}:8767"
             - "${ZOMBOID_RCON_PORT}:27015"
         volumes:
             # Server data

@@ -26,4 +26,7 @@ interface PlayersStateInterface extends PaginationInterface<PlayerInterface>{
 interface PlayerInterface
 {
     name: string;
+    username: string;
+    is_dead: boolean;
+    steam_id: string|null;
 }

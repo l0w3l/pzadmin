@@ -6,6 +6,15 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
+    server: {
+
+        host: '0.0.0.0',
+        port: 5173,
+        hmr: {
+            host: '0.0.0.0',
+            port: 5173,
+        }
+    },
     plugins: [
         laravel({
             input: 'resources/js/app.ts',
