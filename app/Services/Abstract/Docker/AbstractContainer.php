@@ -20,7 +20,6 @@ abstract readonly class AbstractContainer implements ContainerInterface
     {
         try {
             $containerData = $this->dockerClientResponseHandler->containerInspect($this->containerId);
-            dump($containerData);
         } catch (ContainerNotFoundException) {
             return ContainerStatusEnum::DOWN;
         }

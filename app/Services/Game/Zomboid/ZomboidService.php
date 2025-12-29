@@ -6,7 +6,6 @@ namespace App\Services\Game\Zomboid;
 
 use App\Data\Game\ServerData;
 use App\Enums\Docker\ContainerActionEnum;
-use App\Enums\Models\Game\ServerEnum;
 use App\Repositories\Game\Server\ServerRepositoryInterface;
 use App\Services\Abstract\AbstractService;
 use App\Services\Game\Zomboid\Docker\ZomboidDockerContainer;
@@ -20,7 +19,9 @@ class ZomboidService extends AbstractService implements ZomboidServiceInterface
 
     public function getServer(): ServerData
     {
-        return $this->serverRepository->findServer(ServerEnum::ZOMBOID);
+        $serverStatus = $this->zomboidDockerContainer->status();
+
+        return new ServerData($serverStatus);
     }
 
     public function updateStatus(?callable $onChange = null): void

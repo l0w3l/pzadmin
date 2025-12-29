@@ -11,6 +11,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "lowel/docker-api-php-sdk": "^1.1",
+        "lowel/laravel-service-maker": "^1.0",
         "spatie/laravel-data": "^4.8"
     },
     "require-dev": {

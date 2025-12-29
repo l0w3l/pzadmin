@@ -2,7 +2,7 @@
 
 namespace App\Exceptions\Repositories\Game\Log;
 
-use App\Data\Game\LogData;
+use App\Data\Game\Log\LogData;
 use App\Exceptions\CheckedException;
 
 class LogDataNotFoundException extends CheckedException

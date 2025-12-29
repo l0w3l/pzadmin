@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'ip' => env('ZOMBOID_IP', 'localhost'),
+    'ip' => env('ZOMBOID_HOST_IP', 'localhost'),
     'port' => env('ZOMBOID_PORT_1', env('ZOMBOID_PORT_2', 'none')),
 
     'logs' => [
