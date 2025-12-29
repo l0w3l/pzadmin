@@ -15,6 +15,6 @@ class PlayerData extends Data
         readonly public mixed $isDead,
         readonly public ?string $steamid = null,
     ) {
-        $this->username = $username[0].'**'.$username[-1];
+        $this->username = $username;
     }
 }

@@ -28,9 +28,8 @@ services:
         networks:
             - backend
         volumes:
-            - "${DOCKER_SOCKET}:/var/run/docker.sock:www-data"
+            - "${DOCKER_SOCKET}:/var/run/docker.sock"
             - "${STORAGE_APP}:/var/www/html"
-#           - "${STORAGE_FPM}/logs/fpm-php.www.log:/var/log/fpm-php.www.log:ro"
             - ./fpm/config/www.conf:/usr/local/etc/php-fpm.d/www.conf
 
     php-setup:

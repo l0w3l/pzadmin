@@ -4,6 +4,7 @@ WORKDIR /var/www/html
 
 ARG HOST_UID=1000
 ARG HOST_GID=1000
+ARG DOCKER_GID=976
 
 RUN apt-get update && apt-get install -y \
     libbz2-dev \
@@ -22,7 +23,9 @@ RUN apt-get update && apt-get install -y \
 
 
 RUN groupadd -g ${HOST_GID} app \
- && useradd -u ${HOST_UID} -g app -m app
+  && groupadd -g ${DOCKER_GID} docker \
+  && useradd -u ${HOST_UID} -g app -G docker -m app
+
 
 RUN sed -i \
   -e "s/user = www-data/user = app/" \
