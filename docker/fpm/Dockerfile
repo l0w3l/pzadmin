@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
     libmagickwand-dev \
     curl \
  && docker-php-ext-configure gd --with-jpeg --with-webp \
- && docker-php-ext-install pdo mbstring exif pcntl bcmath gd zip bz2 \
+ && docker-php-ext-install gmp pdo mbstring exif pcntl bcmath gd zip bz2 \
  && pecl install redis imagick \
  && docker-php-ext-enable redis imagick \
  && rm -rf /var/lib/apt/lists/*

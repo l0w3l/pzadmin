@@ -31,7 +31,7 @@ class CasinoInlineButton extends AbstractCallbackButton
             $from = Extrasense::update()->callbackQuery->from;
             $fromName = trim("{$from->firstName} {$from->lastName}");
 
-            sleep(5);
+            sleep(3);
 
             if (! empty($casinoList) and str_contains($casinoList, $fromName)) {
                 $formattedList = [];
@@ -54,7 +54,7 @@ class CasinoInlineButton extends AbstractCallbackButton
 
             SpiritBox::editMessageText("{$originalHeader}\n{$casinoList}", chatId: Extrasense::chat()->id, messageId: Extrasense::message()->messageId, replyMarkup: Extrasense::message()->replyMarkup);
 
-            dump(SpiritBox::deleteMessage(Extrasense::chat()->id, $message->messageId));
+            SpiritBox::deleteMessage(Extrasense::chat()->id, $message->messageId);
         };
     }
 

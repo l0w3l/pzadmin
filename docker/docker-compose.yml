@@ -96,11 +96,11 @@ services:
         env_file:
             - ./../.env
         ports:
-            - "${ZOMBOID_PORT_1}:16261/udp"
-            - "${ZOMBOID_PORT_2}:16262/udp"
-            - "${ZOMBOID_STEAM_PORT_1}:8766"
-            - "${ZOMBOID_STEAM_PORT_2}:8767"
-            - "${ZOMBOID_RCON_PORT}:27015"
+            - "16261:16261/udp"
+            - "16262:16262/udp"
+            - "8766:8766"
+            - "8767:8767"
+            - "27015:27015"
         volumes:
             # Server data
             - "${STORAGE_ZOMBOID_DATA}:/root/Zomboid"
