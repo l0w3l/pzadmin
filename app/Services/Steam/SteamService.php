@@ -6,13 +6,12 @@ namespace App\Services\Steam;
 
 use App\Data\Steam\GetPlayerSummaries\PlayerSummaryData;
 use GuzzleHttp\Client;
-use Illuminate\Support\Collection;
 use Lowel\LaravelServiceMaker\Services\AbstractService;
-use App\Services\Steam\SteamServiceInterface;
 
 class SteamService extends AbstractService implements SteamServiceInterface
 {
     protected Client $client;
+
     public function __construct()
     {
         $this->client = new Client([
@@ -27,12 +26,11 @@ class SteamService extends AbstractService implements SteamServiceInterface
             'query' => [
                 'key' => config('zomboid.steam_key'),
                 'steamids' => implode(',', $playersSteamIds),
-            ]
+            ],
         ]);
 
         $response = json_decode($response->getBody()->getContents(), true);
 
         return PlayerSummaryData::collect($response['response']['players']);
     }
-
 }

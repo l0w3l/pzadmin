@@ -11,14 +11,15 @@ use Lowel\Telepath\Facades\SpiritBox;
 
 class FakeYesShutdownOptionInlineButton extends AbstractCallbackButton
 {
-	function handle(): callable
-	{
-		return function() {
-            SpiritBox::editMessageText("Ты УВЕРЕН, что хочешь выключить сервер?", chatId: Extrasense::chat()->id, messageId: Extrasense::message()->messageId, replyMarkup: ZomboidInlineKeyboardFactory::shutdownConfirmation()->build());
+    public function handle(): callable
+    {
+        return function () {
+            SpiritBox::editMessageText('Ты УВЕРЕН, что хочешь выключить сервер?', chatId: Extrasense::chat()->id, messageId: Extrasense::message()->messageId, replyMarkup: ZomboidInlineKeyboardFactory::shutdownConfirmation()->build());
         };
-	}
-	function text(array $args = []): int|string|callable
-	{
-		return 'Да';
-	}
+    }
+
+    public function text(array $args = []): int|string|callable
+    {
+        return 'Да';
+    }
 }

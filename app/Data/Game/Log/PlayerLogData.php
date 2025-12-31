@@ -12,7 +12,5 @@ class PlayerLogData extends Data
         public readonly string $steamId,
         public readonly string $guid,
         public readonly PlayerOnlineStatusEnum $online
-    )
-    {
-    }
+    ) {}
 }

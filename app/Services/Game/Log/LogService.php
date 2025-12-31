@@ -10,7 +10,6 @@ use App\Data\Game\Log\PlayerLogData;
 use App\Data\Game\Log\PlayerOnlineStatusEnum;
 use App\Repositories\Game\Log\LogInstanceEnum;
 use App\Repositories\Game\Log\LogRepositoryInterface;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Lowel\LaravelServiceMaker\Services\AbstractService;
 

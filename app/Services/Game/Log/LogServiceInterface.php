@@ -6,7 +6,6 @@ namespace App\Services\Game\Log;
 
 use App\Data\Game\Log\LogData;
 use App\Data\Game\PlayerData;
-use Illuminate\Support\Collection;
 use Lowel\LaravelServiceMaker\Services\ServiceInterface;
 
 interface LogServiceInterface extends ServiceInterface

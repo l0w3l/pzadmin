@@ -16,6 +16,8 @@ return [
         'ttl' => (int) env('TELEPATH_CONVERSATION_TIMEOUT', 60),
     ],
 
+    'chat_id' => env('TELEPATH_CHAT_ID', ''),
+
     /*
      * Routes path
      */

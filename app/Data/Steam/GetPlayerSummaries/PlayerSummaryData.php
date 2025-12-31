@@ -12,7 +12,5 @@ class PlayerSummaryData extends Data
         public readonly string $steamid,
         public readonly string $personaname,
         public readonly ?string $profileurl = null,
-    )
-    {
-    }
+    ) {}
 }

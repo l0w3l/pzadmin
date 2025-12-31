@@ -15,10 +15,7 @@ use Lowel\Docker\ClientFactory as DockerClientFactory;
 use Lowel\Telepath\Core\Router\Keyboard\Buttons\Inline\AbstractCallbackButton;
 use Lowel\Telepath\Facades\Extrasense;
 use Lowel\Telepath\Facades\SpiritBox;
-use Phptg\BotApi\TelegramBotApi;
-use Phptg\BotApi\Type\Chat;
 use Phptg\BotApi\Type\LinkPreviewOptions;
-use Phptg\BotApi\Type\ReplyKeyboardRemove;
 
 class RefreshInlineButton extends AbstractCallbackButton
 {
@@ -43,7 +40,7 @@ class RefreshInlineButton extends AbstractCallbackButton
                 $keyboard = ZomboidInlineKeyboardFactory::isDead()->build();
             } elseif ($containerInspectResult->isRestarting() || $containerHealthStatus !== 'healthy') {
                 $message = __('telepath.start.pending');
-                $keyboard = ZomboidInlineKeyboardFactory::isPending()->copy([...ZomboidInlineKeyboardFactory::isPending()->toArray(), ...ZomboidInlineKeyboardFactory::nothing()->toArray()])->build();;
+                $keyboard = ZomboidInlineKeyboardFactory::isPending()->copy([...ZomboidInlineKeyboardFactory::isPending()->toArray(), ...ZomboidInlineKeyboardFactory::nothing()->toArray()])->build();
             } elseif ($containerInspectResult->isRunning() && $containerHealthStatus === 'healthy') {
                 $uptime = Carbon::parse($containerInspectResult->state['StartedAt'])->diffAsCarbonInterval(now())->forHumans();
                 $logPlayers = $logsService->getPlayersInfo();
@@ -55,8 +52,7 @@ class RefreshInlineButton extends AbstractCallbackButton
                     PlayerOnlineStatusEnum::OFFLINE => 1,
                 });
 
-
-                $players = "";
+                $players = '';
                 foreach ($logPlayers as $logPlayer) {
                     foreach ($steamPlayers as $steamPlayer) {
                         if ($steamPlayer->steamid === $logPlayer->steamId) {
@@ -65,7 +61,7 @@ class RefreshInlineButton extends AbstractCallbackButton
                     }
                 }
 
-                if ($players !== "") {
+                if ($players !== '') {
                     $players = "\n{$players}";
                 }
 
@@ -76,7 +72,7 @@ class RefreshInlineButton extends AbstractCallbackButton
                 $keyboard = ZomboidInlineKeyboardFactory::isDead()->copy([...ZomboidInlineKeyboardFactory::isDead()->toArray(), ...ZomboidInlineKeyboardFactory::nothing()->toArray()])->build();
             }
 
-            SpiritBox::editMessageText($message, chatId: $chatId, messageId: $messageId, parseMode: "HTML", replyMarkup: $keyboard, linkPreviewOptions: new LinkPreviewOptions(true));
+            SpiritBox::editMessageText($message, chatId: $chatId, messageId: $messageId, parseMode: 'HTML', replyMarkup: $keyboard, linkPreviewOptions: new LinkPreviewOptions(true));
         };
     }
 

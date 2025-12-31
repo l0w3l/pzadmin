@@ -14,9 +14,9 @@ use Lowel\Telepath\Facades\SpiritBox;
 
 class YesShutdownInlineButton extends AbstractCallbackButton
 {
-	function handle(): callable
-	{
-		return function() {
+    public function handle(): callable
+    {
+        return function () {
             $dockerClientFactory = App::make(DockerClientFactory::class);
             $dockerClient = $dockerClientFactory->getClientWithHandler();
 
@@ -27,11 +27,12 @@ class YesShutdownInlineButton extends AbstractCallbackButton
 
             $dockerClient->containerStop(config('app.name').'_zomboid');
 
-            (new RefreshInlineButton())->handle()();
-		};
-	}
-	function text(array $args = []): int|string|callable
-	{
-		return 'Да';
-	}
+            (new RefreshInlineButton)->handle()();
+        };
+    }
+
+    public function text(array $args = []): int|string|callable
+    {
+        return 'Да';
+    }
 }

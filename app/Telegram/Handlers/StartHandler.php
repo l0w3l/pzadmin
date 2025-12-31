@@ -6,9 +6,6 @@ namespace App\Telegram\Handlers;
 
 use App\Data\Game\Log\PlayerLogData;
 use App\Data\Game\Log\PlayerOnlineStatusEnum;
-use App\Data\Game\PlayerData;
-use App\Data\Steam\GetPlayerSummaries\PlayerSummaryData;
-use App\Models\Game\Player;
 use App\Services\Game\Log\LogServiceInterface;
 use App\Services\Steam\SteamServiceInterface;
 use App\Telegram\Keyboards\Inline\Zomboid\ZomboidInlineKeyboardFactory;
@@ -49,7 +46,7 @@ class StartHandler extends AbstractTelegramHandler
             $keyboard = ZomboidInlineKeyboardFactory::isDead()->build();
         } elseif ($containerInspectResult->isRestarting() || $containerHealthStatus !== 'healthy') {
             $message = __('telepath.start.pending');
-            $keyboard = ZomboidInlineKeyboardFactory::isPending()->copy([...ZomboidInlineKeyboardFactory::isPending()->toArray(), ...ZomboidInlineKeyboardFactory::nothing()->toArray()])->build();;
+            $keyboard = ZomboidInlineKeyboardFactory::isPending()->copy([...ZomboidInlineKeyboardFactory::isPending()->toArray(), ...ZomboidInlineKeyboardFactory::nothing()->toArray()])->build();
         } elseif ($containerInspectResult->isRunning() && $containerHealthStatus === 'healthy') {
             $uptime = Carbon::parse($containerInspectResult->state['StartedAt'])->diffAsCarbonInterval(now())->forHumans();
             $logPlayers = $logsService->getPlayersInfo();
@@ -61,8 +58,7 @@ class StartHandler extends AbstractTelegramHandler
                 PlayerOnlineStatusEnum::OFFLINE => 1,
             });
 
-
-            $players = "";
+            $players = '';
             foreach ($logPlayers as $logPlayer) {
                 foreach ($steamPlayers as $steamPlayer) {
                     if ($steamPlayer->steamid === $logPlayer->steamId) {
@@ -71,7 +67,7 @@ class StartHandler extends AbstractTelegramHandler
                 }
             }
 
-            if ($players !== "") {
+            if ($players !== '') {
                 $players = "\n{$players}";
             }
 
@@ -82,6 +78,6 @@ class StartHandler extends AbstractTelegramHandler
             $keyboard = ZomboidInlineKeyboardFactory::isDead()->copy([...ZomboidInlineKeyboardFactory::isDead()->toArray(), ...ZomboidInlineKeyboardFactory::nothing()->toArray()])->build();
         }
 
-        SpiritBox::sendMessage($chatId, $message, replyMarkup: $keyboard, parseMode: "HTML", linkPreviewOptions: new LinkPreviewOptions(true));
+        SpiritBox::sendMessage($chatId, $message, replyMarkup: $keyboard, parseMode: 'HTML', linkPreviewOptions: new LinkPreviewOptions(true));
     }
 }

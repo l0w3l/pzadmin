@@ -9,8 +9,6 @@ use Lowel\Docker\ClientFactory as DockerClientFactory;
 use Lowel\Telepath\Core\Router\Keyboard\Buttons\Inline\AbstractCallbackButton;
 use Lowel\Telepath\Facades\Extrasense;
 use Lowel\Telepath\Facades\SpiritBox;
-use Phptg\BotApi\TelegramBotApi;
-use Phptg\BotApi\Type\Chat;
 
 class StartInlineButton extends AbstractCallbackButton
 {
@@ -27,7 +25,7 @@ class StartInlineButton extends AbstractCallbackButton
 
             $dockerClient->containerStart(config('app.name').'_zomboid');
 
-            (new RefreshInlineButton())->handle()();
+            (new RefreshInlineButton)->handle()();
         };
     }
 

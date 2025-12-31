@@ -6,7 +6,7 @@ namespace App\Data\Game\Log;
 
 enum PlayerOnlineStatusEnum: string
 {
-    case ONLINE = "🟢";
-    case OFFLINE = "🔴";
-    case LOADING = "🟡";
+    case ONLINE = '🟢';
+    case OFFLINE = '🔴';
+    case LOADING = '🟡';
 }

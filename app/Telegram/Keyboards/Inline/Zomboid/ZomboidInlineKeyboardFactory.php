@@ -26,14 +26,14 @@ class ZomboidInlineKeyboardFactory implements KeyboardFactoryInterface
     {
         $builder = new InlineKeyboardBuilder;
 
-        return $builder->row(new StopInlineButton, new RefreshInlineButton, new EmptyInlineButton());
+        return $builder->row(new StopInlineButton, new RefreshInlineButton, new EmptyInlineButton);
     }
 
     public static function isActive(): KeyboardBuilderInterface
     {
         $builder = new InlineKeyboardBuilder;
 
-        return $builder->row(new StopInlineButton,  new RefreshInlineButton, new RestartInlineButton);
+        return $builder->row(new StopInlineButton, new RefreshInlineButton, new RestartInlineButton);
     }
 
     public static function isDead(): KeyboardBuilderInterface
@@ -47,41 +47,41 @@ class ZomboidInlineKeyboardFactory implements KeyboardFactoryInterface
     {
         $builder = new InlineKeyboardBuilder;
 
-        return $builder->row(new FakeYesRestartOptionInlineButton(), new NoOptionInlineButton());
+        return $builder->row(new FakeYesRestartOptionInlineButton, new NoOptionInlineButton);
     }
 
     public static function restartConfirmation(): KeyboardBuilderInterface
     {
         $builder = new InlineKeyboardBuilder;
 
-        return $builder->row(new NoOptionInlineButton(), new YesRestartInlineButton());
+        return $builder->row(new NoOptionInlineButton, new YesRestartInlineButton);
     }
 
     public static function fakeYesShutdownConfirmation(): KeyboardBuilderInterface
     {
         $builder = new InlineKeyboardBuilder;
 
-        return $builder->row(new FakeYesShutdownOptionInlineButton(), new NoOptionInlineButton());
+        return $builder->row(new FakeYesShutdownOptionInlineButton, new NoOptionInlineButton);
     }
 
     public static function shutdownConfirmation(): KeyboardBuilderInterface
     {
         $builder = new InlineKeyboardBuilder;
 
-        return $builder->row(new NoOptionInlineButton(), new YesShutdownInlineButton());
+        return $builder->row(new NoOptionInlineButton, new YesShutdownInlineButton);
     }
 
     public static function nothing(): KeyboardBuilderInterface
     {
         $builder = new InlineKeyboardBuilder;
 
-        return $builder->column(new NothingInlineButton(), new CasinoInlineButton());
+        return $builder->column(new NothingInlineButton, new CasinoInlineButton);
     }
 
     public function make(): KeyboardBuilderInterface
     {
         $builder = new InlineKeyboardBuilder;
 
-        return $builder->row(new StartInlineButton, new StopInlineButton, new RestartInlineButton, new RefreshInlineButton, new NoOptionInlineButton(), new YesRestartInlineButton(), new YesShutdownInlineButton(), new FakeYesRestartOptionInlineButton(), new FakeYesShutdownOptionInlineButton(), new NothingInlineButton(), new CasinoInlineButton());
+        return $builder->row(new StartInlineButton, new StopInlineButton, new RestartInlineButton, new RefreshInlineButton, new NoOptionInlineButton, new YesRestartInlineButton, new YesShutdownInlineButton, new FakeYesRestartOptionInlineButton, new FakeYesShutdownOptionInlineButton, new NothingInlineButton, new CasinoInlineButton);
     }
 }
