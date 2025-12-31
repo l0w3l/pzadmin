@@ -6,7 +6,7 @@ namespace App\Data\Game\Log;
 
 use Spatie\LaravelData\Data;
 
-class LogItem extends Data
+class LogItemData extends Data
 {
     public function __construct(
         readonly public int $id,

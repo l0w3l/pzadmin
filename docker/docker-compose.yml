@@ -86,6 +86,13 @@ services:
         container_name: "${APP_NAME:-pzadmin}_zomboid"
         restart: unless-stopped
         build: ./zomboid
+        healthcheck:
+            test:
+                - CMD-SHELL
+                - grep -q '\*\*\* SERVER STARTED \*\*\*\*' /root/Zomboid/server-console.txt
+            interval: 3s
+            retries: 10
+            start_period: 0s
         env_file:
             - ./../.env
         ports:

@@ -12,6 +12,7 @@
         "laravel/tinker": "^2.9",
         "lowel/docker-api-php-sdk": "^1.1",
         "lowel/laravel-service-maker": "^1.0",
+        "lowel/telepath": "^0.4.0",
         "spatie/laravel-data": "^4.8"
     },
     "require-dev": {

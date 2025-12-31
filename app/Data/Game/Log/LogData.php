@@ -9,7 +9,7 @@ class LogData extends Data
 {
     public function __construct(
         readonly public string $md5,
-        #[DataCollectionOf(LogItem::class)]
+        #[DataCollectionOf(LogItemData::class)]
         readonly public array $logItems,
     ) {}
 }

@@ -1,0 +1,22 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Telegram\Keyboards\Inline\Zomboid\Buttons\Confirmation;
+
+use App\Telegram\Keyboards\Inline\Zomboid\Buttons\RefreshInlineButton;
+use Lowel\Telepath\Core\Router\Keyboard\Buttons\Inline\AbstractCallbackButton;
+
+class NoOptionInlineButton extends AbstractCallbackButton
+{
+	function handle(): callable
+	{
+		return function() {
+            (new RefreshInlineButton())->handle()();
+		};
+	}
+	function text(array $args = []): int|string|callable
+	{
+		return 'Нет';
+	}
+}

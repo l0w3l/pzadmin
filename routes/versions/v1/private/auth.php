@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
-//Route::prefix('/auth')->name('auth.')->group(function () {
+// Route::prefix('/auth')->name('auth.')->group(function () {
 //    Route::get('/', [AuthController::class, 'index'])->name('index');
 //
 //    Route::prefix('/tokens')->name('tokens.')->group(function () {
@@ -14,4 +14,4 @@ use Illuminate\Support\Facades\Route;
 //    });
 //
 //    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-//});
+// });
