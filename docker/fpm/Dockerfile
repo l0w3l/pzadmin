@@ -2,14 +2,15 @@ FROM php:8.3-fpm
 
 WORKDIR /var/www/html
 
-ARG HOST_UID=1000
-ARG HOST_GID=1000
-ARG DOCKER_GID=976
+ARG HOST_UID
+ARG HOST_GID
+ARG DOCKER_GID
 
 RUN apt-get update && apt-get install -y \
     libbz2-dev \
     zlib1g-dev \
     libpng-dev \
+    libgmp-dev \
     libpq-dev \
     libonig-dev \
     libzip-dev \

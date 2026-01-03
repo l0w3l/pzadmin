@@ -39,6 +39,10 @@ class LogService extends AbstractService implements LogServiceInterface
             if (strlen($steamId = Str::match('/Steam client ([0-9]+) is initiating a connection/', $logItem->message)) > 0) {
                 $lastSteamId = (int) $steamId;
 
+                if ($players[$steamId] ?? false) {
+                    continue;
+                }
+
                 $players[$steamId] = [
                     'steamId' => $lastSteamId,
                     'guid' => null,

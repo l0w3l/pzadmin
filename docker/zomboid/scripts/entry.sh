@@ -111,6 +111,11 @@ if [ -n "${ZOMBOID_PORT_1}" ]; then
   ARGS="${ARGS} -port ${ZOMBOID_PORT_1}"
 fi
 
+# Set the DefaultUDPPort for the server. Example: 16261
+if [ -n "${ZOMBOID_PORT_2}" ]; then
+  ARGS="${ARGS} -udpport ${ZOMBOID_PORT_2}"
+fi
+
 # Option to enable/disable VAC on Steam servers. On the server command-line use -steamvac true/false. In the server's INI file, use STEAMVAC=true/false.
 if [ -n "${ZOMBOID_STEAM_VAC}" ]; then
   ARGS="${ARGS} -steamvac ${ZOMBOID_STEAM_VAC,,}"
@@ -147,6 +152,6 @@ fi
 export LD_LIBRARY_PATH="${STEAMAPPDIR}/jre64/lib:${LD_LIBRARY_PATH}"
 
 ## Fix the permissions in the data and workshop folders
-chown -R 1000:1000 /home/steam/pz-dedicated/steamapps/workshop /home/steam/Zomboid
+chown -R 1000:1000 "${STEAMAPPDIR}/steamapps/workshop" "${HOMEDIR}/Zomboid"
 
 su - root -c "export LD_LIBRARY_PATH=\"${STEAMAPPDIR}/jre64/lib:${LD_LIBRARY_PATH}\" && cd ${STEAMAPPDIR} && pwd && ./start-server.sh ${ARGS}"

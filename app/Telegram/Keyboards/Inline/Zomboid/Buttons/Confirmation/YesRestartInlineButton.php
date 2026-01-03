@@ -25,7 +25,8 @@ class YesRestartInlineButton extends AbstractCallbackButton
 
             SpiritBox::editMessageText(__('telepath.keyboards.zomboid.status.restarting'), chatId: $chatId, messageId: $messageId, replyMarkup: ZomboidInlineKeyboardFactory::nothing()->build());
 
-            $dockerClient->containerRestart(config('app.name').'_zomboid');
+            $dockerClient->containerStop(config('app.name').'_zomboid');
+            $dockerClient->containerStart(config('app.name').'_zomboid');
 
             (new RefreshInlineButton)->handle()();
         };

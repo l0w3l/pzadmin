@@ -24,7 +24,12 @@ services:
         env_file:
             - ./../.env
         container_name: "${APP_NAME:-pzadmin}_fpm"
-        build: ./fpm
+        build:
+            context: ./fpm
+            args:
+                HOST_UID: ${HOST_UID}
+                HOST_GID: ${HOST_GID}
+                DOCKER_GID: ${DOCKER_GID}
         networks:
             - backend
         volumes:
