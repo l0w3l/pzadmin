@@ -45,7 +45,7 @@ class LogService extends AbstractService implements LogServiceInterface
                     if (preg_match('/\[(.+)] (\d+) ".+" fully connected \(\d+,\d+,\d+\)\./', $logDataItem->message, $matches)) {
                         $player = $players->firstWhere('steamId', $matches[2] ?? null);
 
-                        if (($mathces[1] ?? false) && $player->higherThatUpdatedAt($matches[1])) {
+                        if (($mathces[1] ?? false) && $player?->higherThatUpdatedAt($matches[1])) {
                             $player?->setOnline()
                                 ->setUpdatedAt($matches[1]);
                         }
@@ -53,7 +53,7 @@ class LogService extends AbstractService implements LogServiceInterface
                         || preg_match('/\[(.+)] Connection disconnect index=\d+ guid=\d+ id=(\d+)\./', $logDataItem->message, $matches)) {
                         $player = $players->firstWhere('steamId', $matches[2] ?? null);
 
-                        if (($matches[1] ?? false) && $player->higherThatUpdatedAt($matches[1])) {
+                        if (($matches[1] ?? false) && $player?->higherThatUpdatedAt($matches[1])) {
                             $player?->setOffline()
                                 ->setUpdatedAt($matches[1]);
                         }
