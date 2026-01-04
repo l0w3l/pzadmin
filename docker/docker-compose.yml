@@ -100,8 +100,11 @@ services:
             test:
                 - CMD-SHELL
                 - |
+                    if [ ! -f /root/Zomboid/.server_healthy ]; then
+                      exit 1
+                    fi
+
                     if grep -q '\*\*\* SERVER STARTED \*\*\*\*' /root/Zomboid/server-console.txt; then
-                      touch /root/Zomboid/.server_healthy
                       exit 0
                     else
                       exit 1
