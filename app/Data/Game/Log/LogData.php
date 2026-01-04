@@ -8,8 +8,8 @@ use Spatie\LaravelData\Data;
 class LogData extends Data
 {
     public function __construct(
-        readonly public string $md5,
-        #[DataCollectionOf(LogItem::class)]
-        readonly public array $logItems,
+        public readonly string $md5,
+        #[DataCollectionOf(LogItemData::class)]
+        public readonly array $logItems,
     ) {}
 }

@@ -11,7 +11,7 @@ use Illuminate\Pagination\AbstractPaginator;
 class PlayerService extends AbstractService implements PlayerServiceInterface
 {
     public function __construct(
-        readonly protected PlayerRepositoryInterface $playerRepository
+        protected readonly PlayerRepositoryInterface $playerRepository
     ) {}
 
     public function getAllPlayersWithPagination(): AbstractPaginator

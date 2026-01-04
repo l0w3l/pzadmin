@@ -24,7 +24,12 @@ services:
         env_file:
             - ./../.env
         container_name: "${APP_NAME:-pzadmin}_fpm"
-        build: ./fpm
+        build:
+            context: ./fpm
+            args:
+                HOST_UID: ${HOST_UID}
+                HOST_GID: ${HOST_GID}
+                DOCKER_GID: ${DOCKER_GID}
         networks:
             - backend
         volumes:
@@ -52,16 +57,6 @@ services:
         volumes:
             - "${STORAGE_APP}:/var/www/html"
 
-    php-scheduler:
-        container_name: "${APP_NAME:-pzadmin}_php-scheduler"
-        build: ./php
-        networks:
-            - backend
-        restart: always
-        entrypoint: [ "bash", "/usr/local/bin/scripts/laravel_scheduler.sh" ]
-        volumes:
-            - "${STORAGE_APP}:/var/www/html"
-
     php-vite-dev:
         container_name: "${APP_NAME:-pzadmin}_php-vite-dev"
         build: ./php
@@ -82,18 +77,40 @@ services:
         volumes:
             - "${STORAGE_APP}:/var/www/html"
 
+    scheduler:
+        container_name: "${APP_NAME:-pzadmin}_php-scheduler"
+        build:
+            context: ./scheduler
+            args:
+                HOST_UID: ${HOST_UID}
+                HOST_GID: ${HOST_GID}
+                DOCKER_GID: ${DOCKER_GID}
+        networks:
+            - backend
+        restart: always
+        entrypoint: [ "bash", "/usr/local/bin/scripts/laravel_scheduler.sh" ]
+        volumes:
+            - "${DOCKER_SOCKET}:/var/run/docker.sock"
+            - "${STORAGE_APP}:/var/www/html"
     zomboid:
         container_name: "${APP_NAME:-pzadmin}_zomboid"
         restart: unless-stopped
         build: ./zomboid
+        healthcheck:
+            test:
+                - CMD-SHELL
+                - grep -q '\*\*\* SERVER STARTED \*\*\*\*' /root/Zomboid/server-console.txt
+            interval: 3s
+            retries: 10
+            start_period: 0s
         env_file:
             - ./../.env
         ports:
-            - "${ZOMBOID_PORT_1}:16261/udp"
-            - "${ZOMBOID_PORT_2}:16262/udp"
-            - "${ZOMBOID_STEAM_PORT_1}:8766"
-            - "${ZOMBOID_STEAM_PORT_2}:8767"
-            - "${ZOMBOID_RCON_PORT}:27015"
+            - "16261:16261/udp"
+            - "16262:16262/udp"
+            - "8766:8766"
+            - "8767:8767"
+            - "27015:27015"
         volumes:
             # Server data
             - "${STORAGE_ZOMBOID_DATA}:/root/Zomboid"
