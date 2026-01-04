@@ -47,7 +47,8 @@ class LogService extends AbstractService implements LogServiceInterface
 
                         $player?->setOnline()
                             ->setUpdatedAt($matches[1]);
-                    } elseif (preg_match('/\[(.+)] (\d+) ".+" disconnected player \(\d+,\d+,\d+\)\./', $logDataItem->message, $matches)) {
+                    } elseif (preg_match('/\[(.+)] (\d+) ".+" disconnected player \(\d+,\d+,\d+\)\./', $logDataItem->message, $matches)
+                        || preg_match('/\[(.+)] Connection disconnect index=\d+ guid=\d+ id=(\d+)\./', $logDataItem->message, $matches)) {
                         $player = $players->firstWhere('steamId', $matches[2] ?? null);
 
                         $player?->setOffline()
@@ -58,7 +59,9 @@ class LogService extends AbstractService implements LogServiceInterface
         }
 
         return $this->sortPlayerLogDataCollection(
-            $players->all()
+            $this->sortByUpdateAt(
+                $players->all()
+            )
         );
     }
 
@@ -87,5 +90,14 @@ class LogService extends AbstractService implements LogServiceInterface
         }
 
         return [...$online, ...$loading, ...$offline];
+    }
+
+    private function sortByUpdateAt(array $playerLogDataCollection): array
+    {
+        usort($playerLogDataCollection, function ($a, $b) {
+            return $b->updatedAt > $a->updatedAt;
+        });
+
+        return $playerLogDataCollection;
     }
 }
