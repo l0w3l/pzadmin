@@ -22,7 +22,7 @@ class PlayerLogData extends Data
     {
         $matches = [];
 
-        preg_match('/\[(.+)] (\d+) "(\w+)" allowed to join\.$/', $logString, $matches);
+        preg_match('/\[(.+)] (\d+) "(.+)" allowed to join\.$/', $logString, $matches);
 
         $dateString = $matches[1] ?? null;
         $steamId = $matches[2] ?? null;

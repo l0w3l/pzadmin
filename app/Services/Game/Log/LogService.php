@@ -42,12 +42,12 @@ class LogService extends AbstractService implements LogServiceInterface
                 } else {
                     $matches = [];
 
-                    if (preg_match('/\[(.+)] (\d+) "\w+" fully connected \(\d+,\d+,\d+\)\./', $logDataItem->message, $matches)) {
+                    if (preg_match('/\[(.+)] (\d+) ".+" fully connected \(\d+,\d+,\d+\)\./', $logDataItem->message, $matches)) {
                         $player = $players->firstWhere('steamId', $matches[2] ?? null);
 
                         $player?->setOnline()
                             ->setUpdatedAt($matches[1]);
-                    } elseif (preg_match('/\[(.+)] (\d+) "\w+" disconnected player \(\d+,\d+,\d+\)\./', $logDataItem->message, $matches)) {
+                    } elseif (preg_match('/\[(.+)] (\d+) ".+" disconnected player \(\d+,\d+,\d+\)\./', $logDataItem->message, $matches)) {
                         $player = $players->firstWhere('steamId', $matches[2] ?? null);
 
                         $player?->setOffline()
