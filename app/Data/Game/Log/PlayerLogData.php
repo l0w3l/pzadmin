@@ -36,6 +36,11 @@ class PlayerLogData extends Data
         }
     }
 
+    public function higherThatUpdatedAt(string $dateString): bool
+    {
+        return $this->updatedAt < \DateTimeImmutable::createFromFormat('d-m-y H:i:s.u', $dateString);
+    }
+
     public function setUpdatedAt(string $dateString): self
     {
         $this->updatedAt = \DateTimeImmutable::createFromFormat('d-m-y H:i:s.u', $dateString);
