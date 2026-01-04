@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Telegram\Handlers;
 
-use App\Data\Game\Log\PlayerOnlineStatusEnum;
 use App\Enums\Docker\ContainerStatusEnum;
 use App\Services\Game\Log\LogServiceInterface;
 use App\Services\Game\Zomboid\ZomboidServiceInterface;

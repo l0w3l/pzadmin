@@ -7,7 +7,6 @@ namespace App\Repositories\Game\Log;
 use App\Data\Game\Log\LogData;
 use App\Data\Game\Log\LogItemData;
 use Generator;
-use Illuminate\Support\Facades\File;
 use Lowel\LaravelServiceMaker\Repositories\AbstractRepository;
 use SplFileObject;
 use Symfony\Component\Finder\Finder;

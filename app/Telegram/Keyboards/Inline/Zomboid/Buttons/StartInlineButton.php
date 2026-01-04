@@ -28,8 +28,7 @@ class StartInlineButton extends AbstractCallbackButton
     }
 
     /**
-     * @param string[] $args
-     * @return int|string|callable
+     * @param  string[]  $args
      */
     public function text(array $args = []): int|string|callable
     {

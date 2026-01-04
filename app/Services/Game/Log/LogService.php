@@ -58,7 +58,7 @@ class LogService extends AbstractService implements LogServiceInterface
         }
 
         return $this->sortPlayerLogDataCollection(
-            PlayerLogData::collect($players->toArray())
+            $players->all()
         );
     }
 
