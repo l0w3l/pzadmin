@@ -11,7 +11,7 @@ class OnlyForChatMiddleware extends AbstractTelegramMiddleware
 {
     public function __invoke(callable $callback): void
     {
-        if (Extrasense::chat()->id == config('telepath.chat_id')) {
+        if (Extrasense::chat()->id == config('telepath.chat_id') || in_array(Extrasense::user()->id, Extrasense::profile()->whitelist)) {
             $callback();
         }
     }
