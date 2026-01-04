@@ -59,6 +59,37 @@ class LogService extends AbstractService implements LogServiceInterface
             }
         }
 
-        return PlayerLogData::collect(array_values($players));
+        $players = array_filter($players, fn (array $player) => $player['guid'] ?? false);
+
+        return $this->sortPlayerLogDataCollection(
+            PlayerLogData::collect(array_values($players))
+        );
+    }
+
+    /**
+     * @param  PlayerLogData[]  $playerLogDataCollection
+     * @return PlayerLogData[]
+     */
+    private function sortPlayerLogDataCollection(array $playerLogDataCollection): array
+    {
+        $online = [];
+        $loading = [];
+        $offline = [];
+
+        foreach ($playerLogDataCollection as $playerLogData) {
+            switch ($playerLogData->online) {
+                case PlayerOnlineStatusEnum::ONLINE:
+                    $online[] = $playerLogData;
+                    break;
+                case PlayerOnlineStatusEnum::OFFLINE:
+                    $loading[] = $playerLogData;
+                    break;
+                case PlayerOnlineStatusEnum::LOADING:
+                    $offline[] = $playerLogData;
+                    break;
+            }
+        }
+
+        return [...$online, ...$loading, ...$offline];
     }
 }

@@ -19,41 +19,23 @@ class ZomboidService extends AbstractService implements ZomboidServiceInterface
 
     public function getServer(): ServerData
     {
-        $serverStatus = $this->zomboidDockerContainer->status();
+        $serverInspection = $this->zomboidDockerContainer->status();
 
-        return new ServerData($serverStatus);
-    }
-
-    public function updateStatus(?callable $onChange = null): void
-    {
-        $serverData = $this->getServer();
-        $newStatusEnum = $this->zomboidDockerContainer->status();
-
-        if ($serverData->status !== $newStatusEnum) {
-            $onChange(
-                $this->serverRepository->updateStatus($serverData->name, $newStatusEnum)
-            );
-        }
+        return ServerData::fromInspectionResult($serverInspection);
     }
 
     public function doStart(): bool
     {
-        $result = $this->zomboidDockerContainer->operate(ContainerActionEnum::UP);
-
-        return $result->isOk();
+        return $this->zomboidDockerContainer->operate(ContainerActionEnum::UP);
     }
 
     public function doDown(): bool
     {
-        $result = $this->zomboidDockerContainer->operate(ContainerActionEnum::DOWN);
-
-        return $result->isOk();
+        return $this->zomboidDockerContainer->operate(ContainerActionEnum::DOWN);
     }
 
     public function doRestart(): bool
     {
-        $result = $this->zomboidDockerContainer->operate(ContainerActionEnum::RESTART);
-
-        return $result->isOk();
+        return $this->zomboidDockerContainer->operate(ContainerActionEnum::RESTART);
     }
 }

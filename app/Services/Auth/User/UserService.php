@@ -12,7 +12,7 @@ use App\Services\Abstract\AbstractService;
 class UserService extends AbstractService implements UserServiceInterface
 {
     public function __construct(
-        readonly UserRepositoryInterface $userRepository
+        public readonly UserRepositoryInterface $userRepository
     ) {}
 
     public function authenticated(): UserData

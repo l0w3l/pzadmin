@@ -13,11 +13,6 @@ interface ZomboidServiceInterface
 {
     public function getServer(): ServerData;
 
-    /**
-     * @param  null|callable(ServerData $serverData): void  $onChange
-     */
-    public function updateStatus(?callable $onChange = null): void;
-
     public function doStart(): bool;
 
     public function doDown(): bool;

@@ -14,8 +14,8 @@ class LoginData extends Data
     public function __construct(
         string $username,
         #[\SensitiveParameter]
-        readonly public string $password,
-        readonly public bool $remember_me = false,
+        public readonly string $password,
+        public readonly bool $remember_me = false,
     ) {
         $this->username = Str::lower($username);
     }

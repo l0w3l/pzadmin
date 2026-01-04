@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace App\Telegram\Keyboards\Inline\Zomboid;
 
-use App\Telegram\Keyboards\Inline\Zomboid\Buttons\CasinoInlineButton;
 use App\Telegram\Keyboards\Inline\Zomboid\Buttons\Confirmation\FakeYesRestartOptionInlineButton;
 use App\Telegram\Keyboards\Inline\Zomboid\Buttons\Confirmation\FakeYesShutdownOptionInlineButton;
 use App\Telegram\Keyboards\Inline\Zomboid\Buttons\Confirmation\NoOptionInlineButton;
 use App\Telegram\Keyboards\Inline\Zomboid\Buttons\Confirmation\YesRestartInlineButton;
 use App\Telegram\Keyboards\Inline\Zomboid\Buttons\Confirmation\YesShutdownInlineButton;
-use App\Telegram\Keyboards\Inline\Zomboid\Buttons\EmptyInlineButton;
-use App\Telegram\Keyboards\Inline\Zomboid\Buttons\NothingInlineButton;
 use App\Telegram\Keyboards\Inline\Zomboid\Buttons\RefreshInlineButton;
 use App\Telegram\Keyboards\Inline\Zomboid\Buttons\RestartInlineButton;
 use App\Telegram\Keyboards\Inline\Zomboid\Buttons\StartInlineButton;
@@ -26,7 +23,7 @@ class ZomboidInlineKeyboardFactory implements KeyboardFactoryInterface
     {
         $builder = new InlineKeyboardBuilder;
 
-        return $builder->row(new StopInlineButton, new RefreshInlineButton, new EmptyInlineButton);
+        return $builder->row(new StopInlineButton, new RefreshInlineButton);
     }
 
     public static function isActive(): KeyboardBuilderInterface
@@ -71,17 +68,10 @@ class ZomboidInlineKeyboardFactory implements KeyboardFactoryInterface
         return $builder->row(new NoOptionInlineButton, new YesShutdownInlineButton);
     }
 
-    public static function nothing(): KeyboardBuilderInterface
-    {
-        $builder = new InlineKeyboardBuilder;
-
-        return $builder->column(new NothingInlineButton, new CasinoInlineButton);
-    }
-
     public function make(): KeyboardBuilderInterface
     {
         $builder = new InlineKeyboardBuilder;
 
-        return $builder->row(new StartInlineButton, new StopInlineButton, new RestartInlineButton, new RefreshInlineButton, new NoOptionInlineButton, new YesRestartInlineButton, new YesShutdownInlineButton, new FakeYesRestartOptionInlineButton, new FakeYesShutdownOptionInlineButton, new NothingInlineButton, new CasinoInlineButton);
+        return $builder->row();
     }
 }

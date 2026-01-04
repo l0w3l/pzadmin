@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return [
     'start' => [
-        'active' => "🧟 Сервер активен 🌟\n:players\nАптайм: :time",
+        'active' => "🧟 Сервер активен 🌟\n\n:players\nIP: <code>:ip</code>\nPORT: <code>:port</code>\nUPTIME: :time",
         'pending' => '⌛ Сервер собирается 🚧',
         'down' => '☠️ Сервер выключен 😴',
         'unknown' => '❓ Статус сервера неизвестен 🤔',

@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Services\Abstract\Docker;
 
 use App\Enums\Docker\ContainerActionEnum;
-use App\Enums\Docker\ContainerStatusEnum;
 use Lowel\Docker\ClientResponseHandlerInterface as DockerClientResponseHandlerInterface;
-use Lowel\Docker\Exceptions\ContainerNotFoundException;
+use Lowel\Docker\Response\DTO\Container;
 
 abstract readonly class AbstractContainer implements ContainerInterface
 {
@@ -16,35 +15,17 @@ abstract readonly class AbstractContainer implements ContainerInterface
         protected string $containerId,
     ) {}
 
-    public function status(): ContainerStatusEnum
+    public function status(): Container
     {
-        try {
-            $containerData = $this->dockerClientResponseHandler->containerInspect($this->containerId);
-        } catch (ContainerNotFoundException) {
-            return ContainerStatusEnum::DOWN;
-        }
-
-        if ($containerData->isRestarting()) {
-            return ContainerStatusEnum::RESTARTING;
-        } elseif ($containerData->isPaused()) {
-            return ContainerStatusEnum::PAUSED;
-        } elseif ($containerData->isDead() || $containerData->isStopped()) {
-            return ContainerStatusEnum::DOWN;
-        } elseif ($containerData->isRunning()) {
-            return ContainerStatusEnum::ACTIVE;
-        } else {
-            return ContainerStatusEnum::ERROR;
-        }
+        return $this->dockerClientResponseHandler->containerInspect($this->containerId);
     }
 
-    public function operate(ContainerActionEnum $action): ContainerResponseInterface
+    public function operate(ContainerActionEnum $action): bool
     {
-        $result = match ($action) {
+        return match ($action) {
             ContainerActionEnum::UP => $this->dockerClientResponseHandler->containerStart($this->containerId),
             ContainerActionEnum::DOWN => $this->dockerClientResponseHandler->containerStop($this->containerId),
             ContainerActionEnum::RESTART => $this->dockerClientResponseHandler->containerRestart($this->containerId)
         };
-
-        return new ContainerResponse($result);
     }
 }

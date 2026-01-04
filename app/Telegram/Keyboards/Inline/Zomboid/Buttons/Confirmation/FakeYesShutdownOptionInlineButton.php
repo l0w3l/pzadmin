@@ -6,7 +6,6 @@ namespace App\Telegram\Keyboards\Inline\Zomboid\Buttons\Confirmation;
 
 use App\Telegram\Keyboards\Inline\Zomboid\ZomboidInlineKeyboardFactory;
 use Lowel\Telepath\Core\Router\Keyboard\Buttons\Inline\AbstractCallbackButton;
-use Lowel\Telepath\Facades\Extrasense;
 use Lowel\Telepath\Facades\SpiritBox;
 
 class FakeYesShutdownOptionInlineButton extends AbstractCallbackButton
@@ -14,7 +13,10 @@ class FakeYesShutdownOptionInlineButton extends AbstractCallbackButton
     public function handle(): callable
     {
         return function () {
-            SpiritBox::editMessageText('Ты УВЕРЕН, что хочешь выключить сервер?', chatId: Extrasense::chat()->id, messageId: Extrasense::message()->messageId, replyMarkup: ZomboidInlineKeyboardFactory::shutdownConfirmation()->build());
+            SpiritBox::editMessageText(
+                'Ты УВЕРЕН, что хочешь выключить сервер?',
+                replyMarkup: ZomboidInlineKeyboardFactory::shutdownConfirmation()
+            );
         };
     }
 

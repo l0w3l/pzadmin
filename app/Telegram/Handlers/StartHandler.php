@@ -4,80 +4,75 @@ declare(strict_types=1);
 
 namespace App\Telegram\Handlers;
 
-use App\Data\Game\Log\PlayerLogData;
-use App\Data\Game\Log\PlayerOnlineStatusEnum;
+use App\Enums\Docker\ContainerStatusEnum;
 use App\Services\Game\Log\LogServiceInterface;
+use App\Services\Game\Zomboid\ZomboidServiceInterface;
 use App\Services\Steam\SteamServiceInterface;
 use App\Telegram\Keyboards\Inline\Zomboid\ZomboidInlineKeyboardFactory;
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
-use Lowel\Docker\ClientFactory as DockerClientFactory;
 use Lowel\Telepath\Core\Router\Handler\AbstractTelegramHandler;
-use Lowel\Telepath\Exceptions\ChatNotFoundInCurrentContextException;
-use Lowel\Telepath\Exceptions\UpdateNotFoundInCurrentContextException;
-use Lowel\Telepath\Facades\Extrasense;
+use Lowel\Telepath\Core\Router\Keyboard\KeyboardBuilderInterface;
 use Lowel\Telepath\Facades\SpiritBox;
 use Phptg\BotApi\Type\LinkPreviewOptions;
 
 class StartHandler extends AbstractTelegramHandler
 {
     /**
-     * @throws ChatNotFoundInCurrentContextException
-     * @throws BindingResolutionException
-     * @throws UpdateNotFoundInCurrentContextException
      * @throws Exception
      */
     public function __invoke(): void
     {
+        $this->lazyHandler(fn (string $message, KeyboardBuilderInterface $keyboardBuilder) => \Cache::forever('telepath.messages.start', SpiritBox::sendMessage($message, parseMode: 'HTML', linkPreviewOptions: new LinkPreviewOptions(true), replyMarkup: $keyboardBuilder)));
+    }
+
+    /**
+     * @param  callable(string, KeyboardBuilderInterface):mixed  $lazyHandler
+     *
+     * @throws BindingResolutionException
+     * @throws Exception
+     */
+    public function lazyHandler(callable $lazyHandler): void
+    {
         $logsService = App::make(LogServiceInterface::class);
         $steamService = App::make(SteamServiceInterface::class);
-        $dockerClientFactory = App::make(DockerClientFactory::class);
-        $dockerClient = $dockerClientFactory->getClientWithHandler();
+        $zomboidService = App::make(ZomboidServiceInterface::class);
 
-        $containerInspectResult = $dockerClient->containerInspect(config('app.name').'_zomboid');
-        $containerHealthStatus = $containerInspectResult->state['Health']['Status'] ?? null;
+        $serverData = $zomboidService->getServer();
 
-        $chatId = Extrasense::chat()->id;
-
-        if ($containerInspectResult->isDead() || $containerInspectResult->isStopped() || $containerInspectResult->isPaused()) {
+        if ($serverData->status === ContainerStatusEnum::DOWN) {
             $message = __('telepath.start.down');
-            $keyboard = ZomboidInlineKeyboardFactory::isDead()->build();
-        } elseif ($containerInspectResult->isRestarting() || $containerHealthStatus !== 'healthy') {
+            $keyboard = ZomboidInlineKeyboardFactory::isDead();
+        } elseif ($serverData->status === ContainerStatusEnum::PENDING) {
             $message = __('telepath.start.pending');
-            $keyboard = ZomboidInlineKeyboardFactory::isPending()->copy([...ZomboidInlineKeyboardFactory::isPending()->toArray(), ...ZomboidInlineKeyboardFactory::nothing()->toArray()])->build();
-        } elseif ($containerInspectResult->isRunning() && $containerHealthStatus === 'healthy') {
-            $uptime = Carbon::parse($containerInspectResult->state['StartedAt'])->diffAsCarbonInterval(now())->forHumans();
-            $logPlayers = $logsService->getPlayersInfo();
-            $steamPlayers = $steamService->getPlayerSummaries(array_map(fn (PlayerLogData $playerLogData) => $playerLogData->steamId, $logPlayers));
-
-            usort($logPlayers, fn (PlayerLogData $playerLogData) => match ($playerLogData->online) {
-                PlayerOnlineStatusEnum::ONLINE => -1,
-                PlayerOnlineStatusEnum::LOADING => 0,
-                PlayerOnlineStatusEnum::OFFLINE => 1,
-            });
+            $keyboard = ZomboidInlineKeyboardFactory::isPending();
+        } elseif ($serverData->status === ContainerStatusEnum::ACTIVE) {
+            $playerDataCollection = $logsService->getPlayersInfo();
+            $steamPlayers = $steamService->getPlayerSummariesForPlayerLogData(...$playerDataCollection);
 
             $players = '';
-            foreach ($logPlayers as $logPlayer) {
-                foreach ($steamPlayers as $steamPlayer) {
-                    if ($steamPlayer->steamid === $logPlayer->steamId) {
-                        $players .= sprintf('- %s <a href="%s">%s</a>'.PHP_EOL, $logPlayer->online->value, $steamPlayer->profileurl, $steamPlayer->personaname);
-                    }
-                }
+            foreach ($playerDataCollection as $index => $playerData) {
+                $steamPlayer = $steamPlayers[$index];
+
+                $players .= sprintf(
+                    '- %s <a href="%s">%s</a>'.PHP_EOL,
+                    $playerData->online->value, $steamPlayer->profileurl, $steamPlayer->personaname
+                );
             }
 
-            if ($players !== '') {
-                $players = "\n{$players}";
-            }
-
-            $message = __('telepath.start.active', ['time' => $uptime, 'players' => $players]);
-            $keyboard = ZomboidInlineKeyboardFactory::isActive()->build();
+            $message = __('telepath.start.active', [
+                'time' => $serverData->uptime->forHumans(short: true),
+                'ip' => $serverData->ip,
+                'port' => $serverData->port,
+                'players' => $players,
+            ]);
+            $keyboard = ZomboidInlineKeyboardFactory::isActive();
         } else {
             $message = __('telepath.start.unknown');
-            $keyboard = ZomboidInlineKeyboardFactory::isDead()->copy([...ZomboidInlineKeyboardFactory::isDead()->toArray(), ...ZomboidInlineKeyboardFactory::nothing()->toArray()])->build();
+            $keyboard = ZomboidInlineKeyboardFactory::isDead();
         }
 
-        SpiritBox::sendMessage($chatId, $message, replyMarkup: $keyboard, parseMode: 'HTML', linkPreviewOptions: new LinkPreviewOptions(true));
+        $lazyHandler($message, $keyboard);
     }
 }

@@ -9,11 +9,11 @@ class PlayerData extends Data
     public readonly string $username;
 
     public function __construct(
-        readonly public int $id,
-        readonly public string $name,
+        public readonly int $id,
+        public readonly string $name,
         string $username,
-        readonly public mixed $isDead,
-        readonly public ?string $steamid = null,
+        public readonly mixed $isDead,
+        public readonly ?string $steamid = null,
     ) {
         $this->username = $username;
     }

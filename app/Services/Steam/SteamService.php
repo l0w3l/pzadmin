@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Steam;
 
+use App\Data\Game\Log\PlayerLogData;
 use App\Data\Steam\GetPlayerSummaries\PlayerSummaryData;
 use GuzzleHttp\Client;
 use Lowel\LaravelServiceMaker\Services\AbstractService;
@@ -32,5 +33,16 @@ class SteamService extends AbstractService implements SteamServiceInterface
         $response = json_decode($response->getBody()->getContents(), true);
 
         return PlayerSummaryData::collect($response['response']['players']);
+    }
+
+    public function getPlayerSummariesForPlayerLogData(PlayerLogData ...$playerDataCollection): array
+    {
+        $playerSteamIds = [];
+
+        foreach ($playerDataCollection as $playerData) {
+            $playerSteamIds[] = $playerData->steamId;
+        }
+
+        return $this->getPlayerSummaries($playerSteamIds);
     }
 }

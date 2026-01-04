@@ -57,16 +57,6 @@ services:
         volumes:
             - "${STORAGE_APP}:/var/www/html"
 
-    php-scheduler:
-        container_name: "${APP_NAME:-pzadmin}_php-scheduler"
-        build: ./php
-        networks:
-            - backend
-        restart: always
-        entrypoint: [ "bash", "/usr/local/bin/scripts/laravel_scheduler.sh" ]
-        volumes:
-            - "${STORAGE_APP}:/var/www/html"
-
     php-vite-dev:
         container_name: "${APP_NAME:-pzadmin}_php-vite-dev"
         build: ./php
@@ -87,6 +77,21 @@ services:
         volumes:
             - "${STORAGE_APP}:/var/www/html"
 
+    scheduler:
+        container_name: "${APP_NAME:-pzadmin}_php-scheduler"
+        build:
+            context: ./scheduler
+            args:
+                HOST_UID: ${HOST_UID}
+                HOST_GID: ${HOST_GID}
+                DOCKER_GID: ${DOCKER_GID}
+        networks:
+            - backend
+        restart: always
+        entrypoint: [ "bash", "/usr/local/bin/scripts/laravel_scheduler.sh" ]
+        volumes:
+            - "${DOCKER_SOCKET}:/var/run/docker.sock"
+            - "${STORAGE_APP}:/var/www/html"
     zomboid:
         container_name: "${APP_NAME:-pzadmin}_zomboid"
         restart: unless-stopped

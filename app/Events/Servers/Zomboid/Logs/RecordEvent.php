@@ -18,7 +18,7 @@ class RecordEvent implements ShouldBroadcast
      * @param  Collection<int, LogData>|null  $logs
      */
     public function __construct(
-        readonly private ?Collection $logs = null
+        private readonly ?Collection $logs = null
     ) {}
 
     public function broadcastAs(): string

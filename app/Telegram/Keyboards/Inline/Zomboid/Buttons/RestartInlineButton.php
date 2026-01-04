@@ -6,7 +6,6 @@ namespace App\Telegram\Keyboards\Inline\Zomboid\Buttons;
 
 use App\Telegram\Keyboards\Inline\Zomboid\ZomboidInlineKeyboardFactory;
 use Lowel\Telepath\Core\Router\Keyboard\Buttons\Inline\AbstractCallbackButton;
-use Lowel\Telepath\Facades\Extrasense;
 use Lowel\Telepath\Facades\SpiritBox;
 use Phptg\BotApi\TelegramBotApi;
 use Phptg\BotApi\Type\Chat;
@@ -16,7 +15,7 @@ class RestartInlineButton extends AbstractCallbackButton
     public function handle(): callable
     {
         return function (TelegramBotApi $api, Chat $chat) {
-            SpiritBox::editMessageText('Перезапустить сервер?', chatId: Extrasense::chat()->id, messageId: Extrasense::message()->messageId, replyMarkup: ZomboidInlineKeyboardFactory::fakeYesRestartConfirmation()->build());
+            SpiritBox::editMessageText('Перезапустить сервер?', replyMarkup: ZomboidInlineKeyboardFactory::fakeYesRestartConfirmation());
         };
     }
 
