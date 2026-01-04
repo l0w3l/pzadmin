@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm -f /root/Zomboid/.server_healthy
+
 cd ${STEAMAPPDIR}
 
 #####################################

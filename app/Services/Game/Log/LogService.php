@@ -10,7 +10,7 @@ use App\Data\Game\Log\PlayerLogData;
 use App\Data\Game\Log\PlayerOnlineStatusEnum;
 use App\Repositories\Game\Log\LogInstanceEnum;
 use App\Repositories\Game\Log\LogRepositoryInterface;
-use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use Lowel\LaravelServiceMaker\Services\AbstractService;
 
 class LogService extends AbstractService implements LogServiceInterface
@@ -21,48 +21,44 @@ class LogService extends AbstractService implements LogServiceInterface
 
     public function readServerConsole(int $limit = 20, int $offset = 0): LogData
     {
-        return $this->logRepository->parse(LogInstanceEnum::SERVER_CONSOLE, $limit, $offset);
+        return $this->logRepository->parse(LogInstanceEnum::SERVER_CONSOLE->path(), $limit, $offset);
     }
 
     public function getPlayersInfo(): array
     {
-        $limit = PHP_INT_MAX;
-        $offset = 0;
+        $userLogs = $this->logRepository->parseNnAllSubDirectories(base_path('/docker/zomboid/storage/data/Logs/'), '*user.txt');
 
-        $logsData = $this->readServerConsole($limit, $offset);
+        /** @var Collection<int, PlayerLogData> $players */
+        $players = collect();
+        foreach ($userLogs as $userLog) {
+            $logsData = $this->logRepository->parse($userLog->getPathname(), PHP_INT_MAX);
 
-        $players = [];
-        $lastSteamId = null;
+            /** @var LogItemData $logDataItem */
+            foreach ($logsData->logItems as $logDataItem) {
+                $playerLogData = PlayerLogData::fromLogString($logDataItem->message);
 
-        /** @var LogItemData $logItem */
-        foreach ($logsData->logItems as $logItem) {
-            if (strlen($steamId = Str::match('/Steam client ([0-9]+) is initiating a connection/', $logItem->message)) > 0) {
-                $lastSteamId = (int) $steamId;
+                if ($playerLogData && $players->where('steamId', $playerLogData->steamId)->isEmpty()) {
+                    $players->push($playerLogData);
+                } else {
+                    $matches = [];
 
-                if ($players[$steamId] ?? false) {
-                    continue;
+                    if (preg_match('/\[(.+)] (\d+) "\w+" fully connected \(\d+,\d+,\d+\)\./', $logDataItem->message, $matches)) {
+                        $player = $players->firstWhere('steamId', $matches[2] ?? null);
+
+                        $player?->setOnline()
+                            ->setUpdatedAt($matches[1]);
+                    } elseif (preg_match('/\[(.+)] (\d+) "\w+" disconnected player \(\d+,\d+,\d+\)\./', $logDataItem->message, $matches)) {
+                        $player = $players->firstWhere('steamId', $matches[2] ?? null);
+
+                        $player?->setOffline()
+                            ->setUpdatedAt($matches[1]);
+                    }
                 }
-
-                $players[$steamId] = [
-                    'steamId' => $lastSteamId,
-                    'guid' => null,
-                    'online' => PlayerOnlineStatusEnum::LOADING,
-                ];
-            } elseif (strlen($guid = Str::match('/Connected new client ([0-9]+) ID/', $logItem->message)) > 0) {
-                $players[$lastSteamId]['guid'] = $guid;
-            } elseif (strlen(Str::match('/connection: guid=([0-9]+) \[RakNet] "connection-lost"/', $logItem->message)) > 0) {
-                $players[$lastSteamId]['online'] = PlayerOnlineStatusEnum::OFFLINE;
-            } elseif (strlen(Str::match('/connection: guid=([0-9]+) \[disconnect] "receive-disconnect"/', $logItem->message)) > 0) {
-                $players[$lastSteamId]['online'] = PlayerOnlineStatusEnum::OFFLINE;
-            } elseif (strlen(Str::match('/connection: guid=([0-9]+) \[fully-connected] ""/', $logItem->message)) > 0) {
-                $players[$lastSteamId]['online'] = PlayerOnlineStatusEnum::ONLINE;
             }
         }
 
-        $players = array_filter($players, fn (array $player) => $player['guid'] ?? false);
-
         return $this->sortPlayerLogDataCollection(
-            PlayerLogData::collect(array_values($players))
+            PlayerLogData::collect($players->toArray())
         );
     }
 

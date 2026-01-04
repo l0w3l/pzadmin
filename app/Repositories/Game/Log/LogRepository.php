@@ -6,16 +6,19 @@ namespace App\Repositories\Game\Log;
 
 use App\Data\Game\Log\LogData;
 use App\Data\Game\Log\LogItemData;
+use Generator;
+use Illuminate\Support\Facades\File;
 use Lowel\LaravelServiceMaker\Repositories\AbstractRepository;
 use SplFileObject;
+use Symfony\Component\Finder\Finder;
 
 class LogRepository extends AbstractRepository implements LogRepositoryInterface
 {
-    public function parse(LogInstanceEnum $logInstanceEnum, int $limit = 20, int $offset = 0): LogData
+    public function parse(string $filePath, int $limit = 20, int $offset = 0): LogData
     {
         return new LogData(
-            md5_file($logInstanceEnum->path()),
-            $this->readFileLines($logInstanceEnum->path(), $limit, $offset),
+            md5_file($filePath),
+            $this->readFileLines($filePath, $limit, $offset),
         );
     }
 
@@ -45,5 +48,17 @@ class LogRepository extends AbstractRepository implements LogRepositoryInterface
         }
 
         return $result;
+    }
+
+    public function parseNnAllSubDirectories(string $directoryPath, string $relativeFileName): Generator
+    {
+        $finder = Finder::create()
+            ->files()
+            ->in($directoryPath)
+            ->name($relativeFileName);
+
+        foreach ($finder as $file) {
+            yield $file;
+        }
     }
 }

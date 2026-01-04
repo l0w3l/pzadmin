@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Telegram\Handlers;
 
+use App\Data\Game\Log\PlayerOnlineStatusEnum;
 use App\Enums\Docker\ContainerStatusEnum;
 use App\Services\Game\Log\LogServiceInterface;
 use App\Services\Game\Zomboid\ZomboidServiceInterface;
@@ -55,10 +56,7 @@ class StartHandler extends AbstractTelegramHandler
             foreach ($playerDataCollection as $index => $playerData) {
                 $steamPlayer = $steamPlayers[$index];
 
-                $players .= sprintf(
-                    '- %s <a href="%s">%s</a>'.PHP_EOL,
-                    $playerData->online->value, $steamPlayer->profileurl, $steamPlayer->personaname
-                );
+                $players .= $playerData->toString($steamPlayer);
             }
 
             $message = __('telepath.start.active', [

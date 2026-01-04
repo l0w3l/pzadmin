@@ -99,7 +99,13 @@ services:
         healthcheck:
             test:
                 - CMD-SHELL
-                - grep -q '\*\*\* SERVER STARTED \*\*\*\*' /root/Zomboid/server-console.txt
+                - |
+                    if grep -q '\*\*\* SERVER STARTED \*\*\*\*' /root/Zomboid/server-console.txt; then
+                      touch /root/Zomboid/.server_healthy
+                      exit 0
+                    else
+                      exit 1
+                    fi
             interval: 3s
             retries: 10
             start_period: 0s
