@@ -43,6 +43,17 @@ class SteamService extends AbstractService implements SteamServiceInterface
             $playerSteamIds[] = $playerData->steamId;
         }
 
-        return $this->getPlayerSummaries($playerSteamIds);
+        $playerSummary = $this->getPlayerSummaries($playerSteamIds);
+
+        $syncOrder = [];
+        foreach ($playerDataCollection as $playerData) {
+            foreach ($playerSummary as $playerSummaries) {
+                if ($playerSummaries->steamid === $playerData->steamId) {
+                    $syncOrder[] = $playerSummaries;
+                }
+            }
+        }
+
+        return $syncOrder;
     }
 }

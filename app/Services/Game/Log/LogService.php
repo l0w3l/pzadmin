@@ -81,10 +81,10 @@ class LogService extends AbstractService implements LogServiceInterface
                 case PlayerOnlineStatusEnum::ONLINE:
                     $online[] = $playerLogData;
                     break;
-                case PlayerOnlineStatusEnum::OFFLINE:
+                case PlayerOnlineStatusEnum::LOADING:
                     $loading[] = $playerLogData;
                     break;
-                case PlayerOnlineStatusEnum::LOADING:
+                case PlayerOnlineStatusEnum::OFFLINE:
                     $offline[] = $playerLogData;
                     break;
             }
