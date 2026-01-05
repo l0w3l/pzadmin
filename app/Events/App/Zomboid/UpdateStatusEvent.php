@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\Servers\Zomboid;
+namespace App\Events\App\Zomboid;
 
 use App\Enums\Docker\ContainerStatusEnum;
 use Illuminate\Broadcasting\Channel;
@@ -9,7 +9,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class StatusEvent implements ShouldBroadcast
+class UpdateStatusEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

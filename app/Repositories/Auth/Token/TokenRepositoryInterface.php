@@ -7,8 +7,8 @@ namespace App\Repositories\Auth\Token;
 use App\Data\Auth\TokenData;
 use App\Data\Auth\UserData;
 use App\Exceptions\Auth\TokenNotFoundException;
-use App\Repositories\Abstract\RepositoryInterface;
 use DateTimeInterface;
+use Lowel\LaravelServiceMaker\Repositories\RepositoryInterface;
 
 interface TokenRepositoryInterface extends RepositoryInterface
 {

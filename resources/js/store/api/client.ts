@@ -1,4 +1,6 @@
 import axios, {AxiosResponse} from "axios";
+import {useAuthStore} from "@/store/auth/";
+import router from "@/router";
 
 const apiClient = axios.create({
     baseURL: '/api/v1',
@@ -6,9 +8,13 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config: any) => {
+    const authStore = useAuthStore();
+    const token = authStore.token;
+    const type = authStore.type;
+
     return {
         ...config,
-        headers: {Accept: 'application/json' }
+        headers: {...config.headers, Authorization: `${type} ${token}`, Accept: 'application/json' }
     }
 })
 

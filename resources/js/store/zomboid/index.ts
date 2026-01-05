@@ -24,6 +24,12 @@ export const useZomboidStore = defineStore("server", {
         {
             this.status = status;
         },
+        async start(): Promise<void> {
+            await apiClient.zomboid.start();
+        },
+        async down(): Promise<void> {
+            await apiClient.zomboid.down();
+        },
     }
 })
 

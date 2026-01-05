@@ -7,7 +7,7 @@ namespace App\Repositories\Auth\Invite;
 use App\Data\Auth\InviteData;
 use App\Exceptions\Auth\InviteLimitException;
 use App\Exceptions\Auth\InviteNotFoundException;
-use App\Repositories\Abstract\RepositoryInterface;
+use Lowel\LaravelServiceMaker\Repositories\RepositoryInterface;
 
 interface InviteRepositoryInterface extends RepositoryInterface
 {

@@ -10,9 +10,9 @@ use App\Exceptions\Auth\TokenNotFoundException;
 use App\Exceptions\Auth\UserNotFoundException;
 use App\Models\Auth\PersonalAccessToken;
 use App\Models\Auth\User;
-use App\Repositories\Abstract\AbstractRepository;
 use Carbon\Carbon;
 use DateTimeInterface;
+use Lowel\LaravelServiceMaker\Repositories\AbstractRepository;
 
 class TokenRepository extends AbstractRepository implements TokenRepositoryInterface
 {
