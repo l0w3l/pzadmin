@@ -26,7 +26,7 @@ class LogService extends AbstractService implements LogServiceInterface
 
     public function getPlayersInfo(): array
     {
-        $userLogs = $this->logRepository->parseNnAllSubDirectories(base_path('/docker/zomboid/storage/data/Logs/'), '*user.txt');
+        $userLogs = $this->logRepository->parseAllSubDirectories(base_path('/docker/zomboid/storage/data/Logs/'), '*user.txt');
 
         /** @var Collection<int, PlayerLogData> $players */
         $players = collect();
@@ -40,23 +40,17 @@ class LogService extends AbstractService implements LogServiceInterface
                 if ($playerLogData && $players->where('steamId', $playerLogData->steamId)->isEmpty()) {
                     $players->push($playerLogData);
                 } else {
-                    $matches = [];
-
                     if (preg_match('/\[(.+)] (\d+) ".+" fully connected \(\d+,\d+,\d+\)\./', $logDataItem->message, $matches)) {
-                        $player = $players->firstWhere('steamId', $matches[2] ?? null);
+                        $player = $players->firstWhere('steamId', $matches[2]);
 
-                        if (($mathces[1] ?? false) && $player?->higherThatUpdatedAt($matches[1])) {
-                            $player?->setOnline()
-                                ->setUpdatedAt($matches[1]);
-                        }
+                        $player?->setOnline()
+                            ->setUpdatedAt($matches[1]);
                     } elseif (preg_match('/\[(.+)] (\d+) ".+" disconnected player \(\d+,\d+,\d+\)\./', $logDataItem->message, $matches)
                         || preg_match('/\[(.+)] Connection disconnect index=\d+ guid=\d+ id=(\d+)\./', $logDataItem->message, $matches)) {
-                        $player = $players->firstWhere('steamId', $matches[2] ?? null);
+                        $player = $players->firstWhere('steamId', $matches[2]);
 
-                        if (($matches[1] ?? false) && $player?->higherThatUpdatedAt($matches[1])) {
-                            $player?->setOffline()
-                                ->setUpdatedAt($matches[1]);
-                        }
+                        $player?->setOffline()
+                            ->setUpdatedAt($matches[1]);
                     }
                 }
             }

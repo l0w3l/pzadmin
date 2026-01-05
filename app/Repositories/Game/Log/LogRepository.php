@@ -6,10 +6,12 @@ namespace App\Repositories\Game\Log;
 
 use App\Data\Game\Log\LogData;
 use App\Data\Game\Log\LogItemData;
+use DateTimeImmutable;
 use Generator;
 use Lowel\LaravelServiceMaker\Repositories\AbstractRepository;
 use SplFileObject;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 class LogRepository extends AbstractRepository implements LogRepositoryInterface
 {
@@ -49,11 +51,20 @@ class LogRepository extends AbstractRepository implements LogRepositoryInterface
         return $result;
     }
 
-    public function parseNnAllSubDirectories(string $directoryPath, string $relativeFileName): Generator
+    public function parseAllSubDirectories(string $directoryPath, string $relativeFileName): Generator
     {
         $finder = Finder::create()
             ->files()
             ->in($directoryPath)
+            ->sort(function (SplFileInfo $a, SplFileInfo $b) {
+                preg_match('/(\d{4}-\d{2}-\d{2}_\d{2}-\d{2})/', $a->getPathname(), $ma);
+                preg_match('/(\d{4}-\d{2}-\d{2}_\d{2}-\d{2})/', $b->getPathname(), $mb);
+
+                $ta = DateTimeImmutable::createFromFormat('Y-m-d_H-i', $ma[1])->getTimestamp();
+                $tb = DateTimeImmutable::createFromFormat('Y-m-d_H-i', $mb[1])->getTimestamp();
+
+                return $ta <=> $tb;
+            })
             ->name($relativeFileName);
 
         foreach ($finder as $file) {

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "" > /root/Zomboid/server-console.txt
+
 rm -f /root/Zomboid/.server_healthy
 
 cd ${STEAMAPPDIR}

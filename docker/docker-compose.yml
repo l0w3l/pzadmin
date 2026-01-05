@@ -101,17 +101,18 @@ services:
                 - CMD-SHELL
                 - |
                     if [ ! -f /root/Zomboid/.server_healthy ]; then
-                      exit 1
+                        if grep -q '\*\*\* SERVER STARTED \*\*\*\*' /root/Zomboid/server-console.txt; then
+                            touch /root/Zomboid/.server_healthy
+                        else
+                            exit 1
+                        fi
                     fi
 
-                    if grep -q '\*\*\* SERVER STARTED \*\*\*\*' /root/Zomboid/server-console.txt; then
-                      exit 0
-                    else
-                      exit 1
-                    fi
+                    exit 0
+
             interval: 3s
-            retries: 10
-            start_period: 0s
+            retries: 1
+            start_period: 10s
         env_file:
             - ./../.env
         ports:

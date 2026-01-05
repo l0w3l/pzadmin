@@ -16,5 +16,5 @@ interface LogRepositoryInterface extends RepositoryInterface
     /**
      * @return Generator<SplFileInfo>
      */
-    public function parseNnAllSubDirectories(string $directoryPath, string $relativeFileName): Generator;
+    public function parseAllSubDirectories(string $directoryPath, string $relativeFileName): Generator;
 }
