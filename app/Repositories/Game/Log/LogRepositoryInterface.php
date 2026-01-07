@@ -13,8 +13,12 @@ interface LogRepositoryInterface extends RepositoryInterface
 {
     public function parse(string $filePath, int $limit = 20, int $offset = 0): LogData;
 
+    public function parseReverse(string $filePath, int $limit = 20, int $offset = 0): LogData;
+
     /**
      * @return Generator<SplFileInfo>
      */
     public function parseAllSubDirectories(string $directoryPath, string $relativeFileName): Generator;
+
+    public function getMD5Of(string $filePath): string;
 }

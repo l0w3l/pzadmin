@@ -14,6 +14,6 @@ final readonly class LogsController extends Controller
 
     public function console(): Response
     {
-        return $this->json($this->logService->getServerConsoleLogs());
+        return $this->json($this->logService->readServerConsole());
     }
 }

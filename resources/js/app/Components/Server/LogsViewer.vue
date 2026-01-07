@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-import {nextTick, computed, onBeforeMount, onMounted, onUnmounted, ref, StyleValue} from "vue";
-import {useZomboidLogsStore, ZomboidLogInterface} from "@/store/zomboid/logs";
+import {nextTick, computed, onBeforeMount, onMounted, onUnmounted, ref} from "vue";
+import {useZomboidLogsStore} from "@/store/zomboid/logs";
 import {ChannelProxy} from "@/classes/Events/ChannelProxy";
 import {Event} from "@/classes/Events/Event";
 
@@ -11,10 +11,8 @@ const channelProxy = new ChannelProxy('servers.zomboid.logs');
 
 const logs = useZomboidLogsStore();
 
-const styles = computed<StyleValue>(() => ({
+const styles = computed(() => ({
     display: (globalWidth.value < 786) ? "none": "block",
-    height: (globalWidth.value > 1023) ? "480px": "560px",
-    "min-width": (globalWidth.value > 1023) ? "802px": "560px",
 }));
 
 onBeforeMount(() => {
@@ -27,16 +25,18 @@ onMounted(async () => {
     if (scrollWindow.value) {
         const scrollWindowValue = scrollWindow.value;
 
-        await logs.fetch();
+        if (!logs.isFetched) {
+            await logs.fetchConsole();
+        }
 
         scrollWindowValue.scrollTop = scrollWindowValue.scrollHeight;
 
         channelProxy.addEvent(
-            new Event('.record', async (_handler?: unknown) => {
+            new Event('.console', async (_handler?: unknown) => {
                 const ifScrollHeightWasInTheEndOfList =
                     (scrollWindowValue.scrollTop + scrollWindowValue.clientHeight) >= scrollWindowValue.scrollHeight;
 
-                await logs.fetch();
+                await logs.fetchConsole();
 
                 await nextTick(() => {
                     if (ifScrollHeightWasInTheEndOfList) {
@@ -52,17 +52,71 @@ onUnmounted(() => {
     channelProxy.destroy();
 })
 
+const logsList = computed<string>((): string => {
+    return logs.getConsoleLogs.reduce((acc, item) => acc + "\n" + item.toString(), '');
+})
+
 </script>
 
+
 <template>
-    <div ref="scrollWindow" class="bg-gray-300 overflow-x-scroll" :style="styles">
-        <div class="text-black font-mono mx-3 my-5 overflow-x-visible">
-            <span v-for="(log, index) in logs.getLogs" :key="index" class="text-sm font-mono block overflow-x-visible" v-html="log.toString()">
-            </span>
+    <div
+        class="
+            bg-gray-100 border border-gray-300 rounded overflow-hidden
+            h-[200px]
+            lg:h-[800px]
+            xl:h-[600px]
+            2xl:h-[650px]
+        "
+        :style="styles"
+    >
+        <div
+            ref="scrollWindow"
+            contenteditable="true"
+            spellcheck="false"
+            @beforeinput.prevent
+            @paste.prevent
+            class="
+        h-full
+        px-3 py-2
+        font-mono text-sm text-black
+        outline-none cursor-text
+        whitespace-pre
+        overflow-x-auto overflow-y-auto
+        scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200
+      "
+        >
+            {{ logsList }}
+<!--      <span-->
+<!--          v-for="(log, index) in logs.getConsoleLogs"-->
+<!--          :key="index"-->
+<!--          class="block whitespace-pre"-->
+<!--          v-html="log.toString()"-->
+<!--      />-->
         </div>
     </div>
 </template>
 
 <style scoped>
+/* Tailwind-style кастомизация scrollbars */
+.scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
 
+.scrollbar-thumb-gray-400::-webkit-scrollbar-thumb {
+    background-color: #9ca3af; /* Tailwind gray-400 */
+    border-radius: 3px;
+}
+
+.scrollbar-track-gray-200::-webkit-scrollbar-track {
+    background-color: #e5e7eb; /* Tailwind gray-200 */
+    border-radius: 3px;
+}
+
+/* Firefox */
+.scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #9ca3af #e5e7eb;
+}
 </style>

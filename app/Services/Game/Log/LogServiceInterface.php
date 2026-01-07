@@ -10,7 +10,8 @@ use Lowel\LaravelServiceMaker\Services\ServiceInterface;
 
 interface LogServiceInterface extends ServiceInterface
 {
-    public function readServerConsole(int $limit = 20, int $offset = 0): LogData;
+    public function readServerConsole(int $limit = PHP_INT_MAX, int $offset = 0): LogData;
+    public function getServerConsoleMD5(): string;
 
     /**
      * @return PlayerLogData[]

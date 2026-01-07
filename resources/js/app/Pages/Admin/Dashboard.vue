@@ -41,38 +41,57 @@ const onMenuItemSelect = (key: string) => {
 
 <template>
     <AdminLayout>
-        <div class="flex flex-col mt-12">
-            <div class="flex flex-row px-5">
-                <div>
+        <div class="mt-12">
+            <div class="grid grid-cols-[auto_1fr] w-full gap-14 px-4">
+                <aside
+                    class="
+    overflow-hidden
+    transition-all
+    duration-300
+    border-r
+    w-16
+    hover:w-64
+    xl:hover:w-72
+  "
+                >
                     <el-menu
                         :default-active="data.selectedMenu"
                         @select="onMenuItemSelect"
                     >
-                        <el-menu-item index="console">CONSOLE</el-menu-item>
-                        <el-menu-item index="players">PLAYERS</el-menu-item>
+                        <el-menu-item index="console">
+                            CONSOLE
+                        </el-menu-item>
+
+                        <el-menu-item index="players">
+                            PLAYERS
+                        </el-menu-item>
+
                         <el-sub-menu index="settings">
                             <template #title>
                                 SETTINGS
                             </template>
+
                             <el-menu-item-group title="GAME">
-                                <el-menu-item index="mods">MODS</el-menu-item>
+                                <el-menu-item index="mods">
+                                    MODS
+                                </el-menu-item>
                             </el-menu-item-group>
                         </el-sub-menu>
                     </el-menu>
-                </div>
+                </aside>
 
-                <div class="flex justify-center items-center w-full">
-                    <div v-if="data.selectedMenu === 'console'">
-                        <div class="flex flex-col justify-center">
-                            <div>
-                                <LogsViewer />
-                            </div>
-                            <div class="flex justify-center mt-14">
-                                <ServerStatus />
-                            </div>
-                            <div class="flex justify-center mt-14">
-                                <ServerSwitch />
-                            </div>
+
+
+                <div class="grd grid-cols-1 items-center">
+                    <div v-if="data.selectedMenu === 'console'" class="grid grid-rows-[auto_5rem_5rem] justify-stretch">
+                        <div class="w-full overflow-hidden">
+                            <LogsViewer />
+                        </div>
+                        <div class="flex justify-center mt-14 w-full">
+                            <ServerStatus />
+                        </div>
+                        <div class="flex justify-center mt-14 w-full">
+                            <ServerSwitch />
                         </div>
                     </div>
                     <div v-else>

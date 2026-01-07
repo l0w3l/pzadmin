@@ -43,6 +43,10 @@ export default {
             apiClient.get('/zomboid/start'),
         down: async (): Promise<void> =>
             apiClient.get('/zomboid/down'),
+        logs: {
+            console: async <T>(): Promise<T> =>
+                apiClient.get<ResponseData<T>>('/zomboid/logs/console').then(({ data}) => data.data),
+        },
         players: {
             index: async <T>(): Promise<T> =>
                 apiClient.get<T>('/zomboid/players').then(({ data }) => data)

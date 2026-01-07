@@ -19,9 +19,14 @@ class LogService extends AbstractService implements LogServiceInterface
         public LogRepositoryInterface $logRepository,
     ) {}
 
-    public function readServerConsole(int $limit = 20, int $offset = 0): LogData
+    public function readServerConsole(int $limit = 500, int $offset = 0): LogData
     {
-        return $this->logRepository->parse(LogInstanceEnum::SERVER_CONSOLE->path(), $limit, $offset);
+        return $this->logRepository->parseReverse(LogInstanceEnum::SERVER_CONSOLE->path(), $limit, $offset);
+    }
+
+    public function getServerConsoleMD5(): string
+    {
+        return $this->logRepository->getMD5Of(LogInstanceEnum::SERVER_CONSOLE->path());
     }
 
     public function getPlayersInfo(): array

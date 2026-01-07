@@ -3,64 +3,58 @@ import apiClient from "@/store/api/";
 
 export const useZomboidLogsStore = defineStore('logs', {
     state: (): ZomboidLogStoreInterface => ({
-        data: []
+        console: {
+            md5: "",
+            logItems: []
+        }
     }),
     getters: {
-        getLogs: (state: ZomboidLogStoreInterface): ZomboidLogDecorator[] =>
-            state.data.map<ZomboidLogDecorator>((log: ZomboidLogInterface) => new ZomboidLogDecorator(log)),
+        getConsoleLogs: (state: ZomboidLogStoreInterface): ZomboidLogDecorator[] =>
+            state.console.logItems.map<ZomboidLogDecorator>((log: ZomboidLogDataItemInterface) => new ZomboidLogDecorator(log)),
+        isFetched: (state: ZomboidLogStoreInterface): boolean =>
+            state.console.logItems.length > 0,
     },
     actions: {
-        async fetch(): Promise<void>
+        async fetchConsole(): Promise<void>
         {
-            // const logs: ZomboidLogStoreInterface = await apiClient.zomboid.logs.console<ZomboidLogStoreInterface>()
+            const console: ZomboidLogDataInterface = await apiClient.zomboid.logs.console<ZomboidLogDataInterface>()
 
-            // this.$patch(logs);
+            this.setConsole(console);
         },
-        setData(logs: ZomboidLogInterface[]): void {
-            this.$patch({
-                data: logs
-            });
+        setConsole(logs: ZomboidLogDataInterface): void {
+            this.$patch((state: ZomboidLogStoreInterface) =>
+                state.console = logs
+            );
         },
     }
 });
 
 class ZomboidLogDecorator
 {
-    private readonly log: ZomboidLogInterface;
+    private readonly log: ZomboidLogDataItemInterface;
 
-    constructor(log: ZomboidLogInterface) {
+    constructor(log: ZomboidLogDataItemInterface) {
         this.log = log;
     }
 
-    getMessage(): string {
-        if ((typeof this.log.message === "undefined") && (typeof this.log.scope === "undefined") && (typeof this.log.type === "string")) {
-            return this.getType();
-        } else {
-            return this.log.message ?? '';
-        }
-    }
-
-    getScope(): string {
-        return this.log.scope ?? '';
-    }
-
-    getType(): string {
-        return this.log.type ?? '';
-    }
-
     toString(): string {
-        return `${this.getType()},\t${this.getScope()}:\t${this.getMessage()}`;
+        return this.log.message;
     }
 }
 
 interface ZomboidLogStoreInterface
 {
-    data: ZomboidLogInterface[];
+    console: ZomboidLogDataInterface,
 }
 
-export interface ZomboidLogInterface
+interface ZomboidLogDataInterface
 {
-    message: string;
-    scope: string;
-    type: string;
+    md5: string,
+    logItems: ZomboidLogDataItemInterface[];
+}
+
+export interface ZomboidLogDataItemInterface
+{
+    id: number,
+    message: string
 }

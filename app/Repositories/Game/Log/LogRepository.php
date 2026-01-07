@@ -18,8 +18,16 @@ class LogRepository extends AbstractRepository implements LogRepositoryInterface
     public function parse(string $filePath, int $limit = 20, int $offset = 0): LogData
     {
         return new LogData(
-            md5_file($filePath),
+            $this->getMD5Of($filePath),
             $this->readFileLines($filePath, $limit, $offset),
+        );
+    }
+
+    public function parseReverse(string $filePath, int $limit = 20, int $offset = 0): LogData
+    {
+        return new LogData(
+            $this->getMD5Of($filePath),
+            $this->readFileLinesFromEnd($filePath, $limit, $offset),
         );
     }
 
@@ -30,25 +38,53 @@ class LogRepository extends AbstractRepository implements LogRepositoryInterface
     {
         $result = [];
 
-        $fh = new SplFileObject($filepath, 'r');
-        $fh->setFlags(
+        $file = new SplFileObject($filepath, 'r');
+        $file->setFlags(
             SplFileObject::DROP_NEW_LINE |
-            SplFileObject::SKIP_EMPTY
+            SplFileObject::SKIP_EMPTY,
         );
 
-        $fh->seek($offset);
+        $file->seek($offset);
 
         $count = 0;
-        while (! $fh->eof() && $count < $limit) {
-            $line = $fh->current();
+        while (! $file->eof() && $count < $limit) {
+            $line = $file->current();
             if ($line !== false) {
                 $result[] = new LogItemData($count + $offset, $line);
                 $count++;
             }
-            $fh->next();
+            $file->next();
         }
 
         return $result;
+    }
+
+    public function readFileLinesFromEnd(string $path, int $limit = 50, int $offset = 0): array
+    {
+        $file = new SplFileObject($path, 'r');
+        $file->setFlags(
+            SplFileObject::DROP_NEW_LINE |
+            SplFileObject::SKIP_EMPTY,
+        );
+
+        $file->seek(PHP_INT_MAX);
+
+        $lastLine = $file->key();
+        $start = max(0, $lastLine - $offset - $limit + 1);
+        $end = max(0, $lastLine - $offset);
+
+        $lines = [];
+
+        for ($i = $start; $i <= $end; $i++) {
+            $file->seek($i);
+            $line = $file->current();
+
+            if ($line !== false) {
+                $lines[] = new LogItemData($i, $line);
+            }
+        }
+
+        return $lines;
     }
 
     public function parseAllSubDirectories(string $directoryPath, string $relativeFileName): Generator
@@ -70,5 +106,10 @@ class LogRepository extends AbstractRepository implements LogRepositoryInterface
         foreach ($finder as $file) {
             yield $file;
         }
+    }
+
+    public function getMD5Of(string $filePath): string
+    {
+        return md5_file($filePath);
     }
 }

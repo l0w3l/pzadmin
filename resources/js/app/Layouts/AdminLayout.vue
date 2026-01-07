@@ -33,8 +33,6 @@ const loadingStatus = computed<boolean>((): boolean => props.loading || data.loa
 const authStore = useAuthStore();
 const router = useRouter();
 
-
-
 /**
  * redirect non-authenticated users on login page
  */
