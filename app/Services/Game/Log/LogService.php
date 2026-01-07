@@ -19,7 +19,7 @@ class LogService extends AbstractService implements LogServiceInterface
         public LogRepositoryInterface $logRepository,
     ) {}
 
-    public function readServerConsole(int $limit = 500, int $offset = 0): LogData
+    public function readServerConsole(int $limit = PHP_INT_MAX, int $offset = 0): LogData
     {
         return $this->logRepository->parseReverse(LogInstanceEnum::SERVER_CONSOLE->path(), $limit, $offset);
     }

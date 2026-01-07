@@ -15,7 +15,7 @@ class UpdateConsoleEvent implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'console';
+        return 'console.update';
     }
 
     /**
@@ -26,7 +26,7 @@ class UpdateConsoleEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('servers.zomboid.logs'),
+            new Channel('zomboid.logs'),
         ];
     }
 }

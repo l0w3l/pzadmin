@@ -3,7 +3,6 @@ import '../css/app.css';
 import 'element-plus/dist/index.css';
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import 'element-plus/theme-chalk/dark/css-vars.css';
-import './echo';
 
 import { createApp } from 'vue';
 import ElementPlus from 'element-plus';

@@ -7,7 +7,7 @@ import {Event} from "@/classes/Events/Event";
 
 const globalWidth = ref<number>(window.innerWidth);
 const scrollWindow = ref<HTMLDivElement>();
-const channelProxy = new ChannelProxy('servers.zomboid.logs');
+const channelProxy = new ChannelProxy('zomboid.logs');
 
 const logs = useZomboidLogsStore();
 
@@ -32,7 +32,7 @@ onMounted(async () => {
         scrollWindowValue.scrollTop = scrollWindowValue.scrollHeight;
 
         channelProxy.addEvent(
-            new Event('.console', async (_handler?: unknown) => {
+            new Event('.console.update', async (_handler?: unknown) => {
                 const ifScrollHeightWasInTheEndOfList =
                     (scrollWindowValue.scrollTop + scrollWindowValue.clientHeight) >= scrollWindowValue.scrollHeight;
 

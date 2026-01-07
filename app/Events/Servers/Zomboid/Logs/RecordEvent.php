@@ -34,7 +34,7 @@ class RecordEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('servers.zomboid.logs'),
+            new Channel('zomboid.logs'),
         ];
     }
 

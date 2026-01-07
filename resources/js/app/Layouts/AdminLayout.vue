@@ -2,11 +2,11 @@
 
 import Loader from "@/app/Components/Loader.vue";
 import PageLayout from "@/app/Layouts/Base/PageLayout.vue";
-import {computed, defineProps} from "vue";
+import {computed} from "vue";
 import {onBeforeMount, reactive} from "vue";
 import {useAuthStore} from "@/store/auth/";
 import {useRouter} from "vue-router";
-import {UserInterface, useUserStore} from "@/store/auth/user";
+import {UserInterface} from "@/store/auth/user";
 import UsernameMenu from "@/app/Components/Menu/UsernameMenu.vue";
 
 interface AdminLayoutPropsInterface {

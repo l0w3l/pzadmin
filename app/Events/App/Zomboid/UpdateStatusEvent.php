@@ -33,7 +33,7 @@ class UpdateStatusEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('servers.zomboid'),
+            new Channel('zomboid'),
         ];
     }
 
