@@ -55,6 +55,13 @@ class PlayerLogData extends Data
         return $this;
     }
 
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
     public function setOnline(): self
     {
         $this->online = PlayerOnlineStatusEnum::ONLINE;

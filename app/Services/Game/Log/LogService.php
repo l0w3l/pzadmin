@@ -49,6 +49,7 @@ class LogService extends AbstractService implements LogServiceInterface
                         $player = $players->firstWhere('steamId', $matches[2]);
 
                         $player?->setOnline()
+                            ->setName($matches[2])
                             ->setUpdatedAt($matches[1]);
                     } elseif (preg_match('/\[(.+)] (\d+) ".+" disconnected player \(\d+,\d+,\d+\)\./', $logDataItem->message, $matches)
                         || preg_match('/\[(.+)] Connection disconnect index=\d+ guid=\d+ id=(\d+)\./', $logDataItem->message, $matches)) {
