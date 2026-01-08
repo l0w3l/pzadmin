@@ -45,11 +45,11 @@ class LogService extends AbstractService implements LogServiceInterface
                 if ($playerLogData && $players->where('steamId', $playerLogData->steamId)->isEmpty()) {
                     $players->push($playerLogData);
                 } else {
-                    if (preg_match('/\[(.+)] (\d+) ".+" fully connected \(\d+,\d+,\d+\)\./', $logDataItem->message, $matches)) {
+                    if (preg_match('/\[(.+)] (\d+) "(.+)" fully connected \(\d+,\d+,\d+\)\./', $logDataItem->message, $matches)) {
                         $player = $players->firstWhere('steamId', $matches[2]);
 
                         $player?->setOnline()
-                            ->setName($matches[2])
+                            ->setName($matches[3])
                             ->setUpdatedAt($matches[1]);
                     } elseif (preg_match('/\[(.+)] (\d+) ".+" disconnected player \(\d+,\d+,\d+\)\./', $logDataItem->message, $matches)
                         || preg_match('/\[(.+)] Connection disconnect index=\d+ guid=\d+ id=(\d+)\./', $logDataItem->message, $matches)) {
