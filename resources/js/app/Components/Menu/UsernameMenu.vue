@@ -17,7 +17,7 @@ const authStore = useAuthStore();
 
 const username = computed<string>(() => {
     if (data.user) {
-        const username = data.user.username;
+        const username: string = data.user.username;
 
         if (username.length < 10) {
             return username

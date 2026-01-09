@@ -8,7 +8,7 @@ export const useUserStore = defineStore('user', {
     actions: {
         async lazyGetUser(): Promise<UserInterface> {
             if (!this.user) {
-                this.user = await api.users.auth<UserInterface>();
+                this.user = await api.auth.index<UserInterface>();
 
                 return this.user;
             }

@@ -2,7 +2,7 @@
 
 namespace App\Events\App\Zomboid;
 
-use App\Enums\Docker\ContainerStatusEnum;
+use App\Services\Docker\Enums\ContainerStatusEnum;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;

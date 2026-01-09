@@ -30,7 +30,7 @@ final readonly class AuthController extends Controller
     {
         $userData = $this->userService->authenticated();
 
-        return $this->json($userData);
+        return response()->json($userData);
     }
 
     public function ping(): Response
@@ -40,7 +40,7 @@ final readonly class AuthController extends Controller
 
     public function regenerate(): Response
     {
-        return $this->json($this->tokenService->regenerate(), Response::HTTP_ACCEPTED);
+        return response()->json($this->tokenService->regenerate(), Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -52,7 +52,7 @@ final readonly class AuthController extends Controller
 
         $tokenData = $this->tokenService->authenticate($loginData);
 
-        return $this->json($tokenData, Response::HTTP_ACCEPTED);
+        return response()->json($tokenData, Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -82,6 +82,6 @@ final readonly class AuthController extends Controller
             $registrationData
         ));
 
-        return $this->json($tokenData, Response::HTTP_ACCEPTED);
+        return response()->json($tokenData, Response::HTTP_ACCEPTED);
     }
 }

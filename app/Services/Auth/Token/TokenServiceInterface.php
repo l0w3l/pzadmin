@@ -7,8 +7,9 @@ namespace App\Services\Auth\Token;
 use App\Data\Auth\LoginData;
 use App\Data\Auth\TokenData;
 use Illuminate\Auth\AuthenticationException;
+use Lowel\LaravelServiceMaker\Services\ServiceInterface;
 
-interface TokenServiceInterface
+interface TokenServiceInterface extends ServiceInterface
 {
     /**
      * @throws AuthenticationException

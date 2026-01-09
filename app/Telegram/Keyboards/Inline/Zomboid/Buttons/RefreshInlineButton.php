@@ -22,6 +22,9 @@ class RefreshInlineButton extends AbstractCallbackButton
         };
     }
 
+    /**
+     * @param  array<empty>  $args
+     */
     public function text(array $args = []): int|string|callable
     {
         return __('telepath.keyboards.zomboid.buttons.refresh');

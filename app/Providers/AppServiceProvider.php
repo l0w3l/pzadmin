@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        /** @phpstan-ignore-next-line  */
         Relation::enforceMorphMap([
             PersonalAccessToken::TOKENABLE_USER => User::class,
         ]);

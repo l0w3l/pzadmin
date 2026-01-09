@@ -26,6 +26,9 @@ class YesShutdownInlineButton extends AbstractCallbackButton
         };
     }
 
+    /**
+     * @param  array<empty>  $args
+     */
     public function text(array $args = []): int|string|callable
     {
         return 'Да';

@@ -20,6 +20,6 @@ final readonly class UsersController extends Controller
     {
         $user = $this->userService->authenticated();
 
-        return $this->json($user, Response::HTTP_ACCEPTED);
+        return response()->json($user, Response::HTTP_ACCEPTED);
     }
 }

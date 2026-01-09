@@ -7,7 +7,7 @@ namespace App\Services\Auth\User;
 use App\Data\Auth\RegistrationData;
 use App\Data\Auth\UserData;
 use App\Repositories\Auth\User\UserRepositoryInterface;
-use App\Services\Abstract\AbstractService;
+use Lowel\LaravelServiceMaker\Services\AbstractService;
 
 class UserService extends AbstractService implements UserServiceInterface
 {

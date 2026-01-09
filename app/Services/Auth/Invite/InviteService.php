@@ -7,7 +7,7 @@ namespace App\Services\Auth\Invite;
 use App\Data\Auth\InviteData;
 use App\Exceptions\Auth\InviteLimitException;
 use App\Repositories\Auth\Invite\InviteRepositoryInterface;
-use App\Services\Abstract\AbstractService;
+use Lowel\LaravelServiceMaker\Services\AbstractService;
 
 class InviteService extends AbstractService implements InviteServiceInterface
 {

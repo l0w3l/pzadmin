@@ -21,9 +21,9 @@ final readonly class VerifyController extends Controller
         try {
             $this->authService->verifyInviteHash($hash);
 
-            return $this->noContent();
+            return response()->noContent();
         } catch (InviteNotFoundException) {
-            return $this->notFound();
+            return response(status: Response::HTTP_NOT_FOUND);
         }
 
     }
@@ -33,9 +33,9 @@ final readonly class VerifyController extends Controller
         try {
             $this->userService->findUserByUsername($username);
 
-            return $this->notFound();
+            return response(status: Response::HTTP_NOT_FOUND);
         } catch (UserNotFoundException) {
-            return $this->noContent();
+            return response()->noContent();
         }
     }
 
@@ -44,9 +44,9 @@ final readonly class VerifyController extends Controller
         try {
             $this->userService->findUserByEmail($email);
 
-            return $this->notFound();
+            return response(status: Response::HTTP_NOT_FOUND);
         } catch (UserNotFoundException) {
-            return $this->noContent();
+            return response()->noContent();
         }
     }
 }

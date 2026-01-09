@@ -8,6 +8,9 @@ use Lowel\LaravelServiceMaker\Services\ServiceFactoryInterface;
 
 class SteamServiceFactory implements ServiceFactoryInterface
 {
+    /**
+     * @param  array<empty>  $params
+     */
     public function get(array $params = []): SteamServiceInterface
     {
         return new SteamService;

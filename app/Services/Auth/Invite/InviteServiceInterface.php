@@ -7,8 +7,9 @@ namespace App\Services\Auth\Invite;
 use App\Data\Auth\InviteData;
 use App\Exceptions\Auth\InviteLimitException;
 use App\Exceptions\Auth\InviteNotFoundException;
+use Lowel\LaravelServiceMaker\Services\ServiceInterface;
 
-interface InviteServiceInterface
+interface InviteServiceInterface extends ServiceInterface
 {
     public function createInvite(int $limit): InviteData;
 

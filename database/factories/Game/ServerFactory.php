@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Factories\Game;
 
-use App\Enums\Docker\ContainerStatusEnum;
 use App\Enums\Models\Game\ServerEnum;
+use App\Services\Docker\Enums\ContainerStatusEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ServerFactory extends Factory

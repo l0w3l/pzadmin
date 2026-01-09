@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Zomboid;
 
 use App\Http\Controllers\Controller;
-use App\Services\Game\Player\PlayerServiceInterface;
+use App\Services\Zomboid\Player\PlayerServiceInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final readonly class PlayersController extends Controller
@@ -16,6 +16,6 @@ final readonly class PlayersController extends Controller
     {
         $pagination = $this->playerService->getAllPlayersWithPagination();
 
-        return $this->json($pagination);
+        return response()->json($pagination);
     }
 }

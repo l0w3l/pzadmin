@@ -2,7 +2,6 @@
 
 namespace App\Events\App\Zomboid\Logs;
 
-use App\Enums\Docker\ContainerStatusEnum;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;

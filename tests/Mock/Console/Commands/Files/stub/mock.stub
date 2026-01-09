@@ -1,1 +1,0 @@
-<?php {{ namespace }} {{classname}} {{extend_classname }} {{ extend_use}} namespace class extend_clas extend_use

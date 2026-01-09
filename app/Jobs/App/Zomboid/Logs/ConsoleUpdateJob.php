@@ -3,10 +3,7 @@
 namespace App\Jobs\App\Zomboid\Logs;
 
 use App\Events\App\Zomboid\Logs\UpdateConsoleEvent;
-use App\Events\App\Zomboid\UpdateStatusEvent;
-use App\Repositories\Game\Log\LogInstanceEnum;
-use App\Services\Game\Log\LogServiceInterface;
-use App\Services\Game\Zomboid\ZomboidServiceInterface;
+use App\Services\Zomboid\Log\LogServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

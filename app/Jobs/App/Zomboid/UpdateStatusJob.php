@@ -3,7 +3,7 @@
 namespace App\Jobs\App\Zomboid;
 
 use App\Events\App\Zomboid\UpdateStatusEvent;
-use App\Services\Game\Zomboid\ZomboidServiceInterface;
+use App\Services\Zomboid\ZomboidServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

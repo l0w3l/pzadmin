@@ -2,7 +2,7 @@
 
 namespace App\Events\Servers\Zomboid\Logs;
 
-use App\Data\Game\Log\LogData;
+use App\Data\Zomboid\Log\LogData;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
