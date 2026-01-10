@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import apiClient from "@/store/api";
+import apiClient, {ServerStateInterface, ServerStatusEnum} from "@/store/api";
 
 export const useZomboidStore = defineStore("server", {
     state: (): ServerStateInterface => ({
@@ -17,7 +17,7 @@ export const useZomboidStore = defineStore("server", {
     },
     actions: {
         async fetch(): Promise<void> {
-            this.$state = await apiClient.zomboid.index<ServerStateInterface>();
+            this.$state = await apiClient.zomboid.index();
         },
 
         setStatus(status: ServerStatusEnum): void
@@ -32,12 +32,3 @@ export const useZomboidStore = defineStore("server", {
         },
     }
 })
-
-interface ServerStateInterface
-{
-    ip: string;
-    port: number;
-    status: ServerStatusEnum;
-}
-
-type ServerStatusEnum = '...' | 'active' | 'down' | 'pending' | 'restarting' | 'paused' | 'error';

@@ -29,7 +29,9 @@ class ConsoleUpdateJob implements ShouldQueue
         $newMd5 = $logsService->getServerConsoleMD5();
 
         if ($oldMd5 !== $newMd5) {
-            UpdateConsoleEvent::dispatch();
+            $lastId = $logsService->readServerConsole(1)->lastId;
+
+            UpdateConsoleEvent::dispatch($lastId);
 
             Cache::set(self::CACHE_KEY, $newMd5);
         }

@@ -9,7 +9,7 @@ const server = useZomboidStore();
 const channelProxy = new ChannelProxy('zomboid');
 
 onMounted(async () => {
-    setTimeout(server.fetch, 1000);
+    await server.fetch();
 
     channelProxy.addEvent(new Event('.status', async (handler: any) => {
         server.setStatus(handler.status);

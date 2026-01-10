@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import client from "@/store/api";
+import client, {AuthStateInterface} from "@/store/api";
 
 export const useAuthStore = defineStore('auth', {
     state: (): AuthStateInterface => ({
@@ -30,7 +30,7 @@ export const useAuthStore = defineStore('auth', {
             this._startRegenerateProcess();
         },
         async regenerate(): Promise<void> {
-            const authState: AuthStateInterface = await client.auth.tokens.regenerate<AuthStateInterface>();
+            const authState: AuthStateInterface = await client.auth.tokens.regenerate();
 
             this._setAuthState(authState);
         },
@@ -44,7 +44,7 @@ export const useAuthStore = defineStore('auth', {
             await client.auth.verify.email(email);
         },
         async login(loginForm: LoginFormInterface): Promise<void> {
-            const authState: AuthStateInterface = await client.auth.login<AuthStateInterface>(
+            const authState: AuthStateInterface = await client.auth.login(
                 loginForm.username.toLowerCase(), loginForm.password, loginForm.remember_me ?? false
             )
 
@@ -106,14 +106,6 @@ export const useAuthStore = defineStore('auth', {
     },
 });
 
-
-interface AuthStateInterface
-{
-    type: string;
-    token: string;
-    expires_at: Date;
-    regenerate_timeout_index: number|null;
-}
 
 export interface LoginFormInterface {
     username: string;

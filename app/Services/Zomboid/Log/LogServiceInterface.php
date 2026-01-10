@@ -12,6 +12,8 @@ interface LogServiceInterface extends ServiceInterface
 {
     public function readServerConsole(int $limit = PHP_INT_MAX, int $offset = 0): LogData;
 
+    public function readServerConsoleCursor(int $leftRange, int $rightRange): LogData;
+
     public function getServerConsoleMD5(): string;
 
     /**

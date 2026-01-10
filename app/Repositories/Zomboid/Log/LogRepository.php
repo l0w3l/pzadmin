@@ -17,17 +17,31 @@ class LogRepository extends AbstractRepository implements LogRepositoryInterface
 {
     public function parse(string $filePath, int $limit = 20, int $offset = 0): LogData
     {
+        $logItems = $this->readFileLines($filePath, $limit, $offset);
+
         return new LogData(
             $this->getMD5Of($filePath),
-            $this->readFileLines($filePath, $limit, $offset),
+            $logItems,
         );
     }
 
     public function parseReverse(string $filePath, int $limit = 20, int $offset = 0): LogData
     {
+        $logItems = $this->readFileLinesFromEnd($filePath, $limit, $offset);
+
         return new LogData(
             $this->getMD5Of($filePath),
-            $this->readFileLinesFromEnd($filePath, $limit, $offset),
+            $logItems,
+        );
+    }
+
+    public function parseCursor(string $filePath, int $leftSide, int $rightSide = PHP_INT_MAX): LogData
+    {
+        $logItems = $this->readFileLinesCursor($filePath, $leftSide, $rightSide);
+
+        return new LogData(
+            $this->getMD5Of($filePath),
+            $logItems,
         );
     }
 
@@ -73,8 +87,39 @@ class LogRepository extends AbstractRepository implements LogRepositoryInterface
         $file->seek(PHP_INT_MAX);
 
         $lastLine = $file->key();
-        $start = max(0, $lastLine - $offset - $limit + 1);
-        $end = max(0, $lastLine - $offset);
+        $start = max(0, $lastLine - $offset - $limit);
+        $end = max(-1, $lastLine - $offset);
+
+        $lines = [];
+
+        for ($i = $start; $i <= $end; $i++) {
+            $file->seek($i);
+            $line = $file->current();
+
+            if ($line !== false) {
+                $lines[] = new LogItemData($i, $line);
+            }
+        }
+
+        return $lines;
+    }
+
+    /**
+     * @return LogItemData[]
+     */
+    private function readFileLinesCursor(string $filePath, int $leftSide, int $rightSide = PHP_INT_MAX): array
+    {
+        $file = new SplFileObject($filePath, 'r');
+        $file->setFlags(
+            SplFileObject::DROP_NEW_LINE |
+            SplFileObject::SKIP_EMPTY,
+        );
+
+        $file->seek(PHP_INT_MAX);
+
+        $lastLine = $file->key();
+        $start = max(-1, $leftSide + 1);
+        $end = $rightSide > $lastLine ? $lastLine : max(0, $rightSide);
 
         $lines = [];
 

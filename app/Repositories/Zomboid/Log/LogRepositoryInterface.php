@@ -15,6 +15,8 @@ interface LogRepositoryInterface extends RepositoryInterface
 
     public function parseReverse(string $filePath, int $limit = 20, int $offset = 0): LogData;
 
+    public function parseCursor(string $filePath, int $leftSide, int $rightSide = PHP_INT_MAX): LogData;
+
     /**
      * @return Generator<SplFileInfo>
      */

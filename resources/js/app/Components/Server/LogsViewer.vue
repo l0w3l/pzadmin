@@ -1,25 +1,14 @@
 <script setup lang="ts">
 
-import {nextTick, computed, onBeforeMount, onMounted, onUnmounted, ref} from "vue";
-import {useZomboidLogsStore} from "@/store/zomboid/logs";
+import {computed, nextTick, onMounted, onUnmounted, ref} from "vue";
+import {useZomboidLogsStore, ZomboidLogDecorator} from "@/store/zomboid/logs";
 import {ChannelProxy} from "@/classes/Events/ChannelProxy";
 import {Event} from "@/classes/Events/Event";
+import {useVirtualList} from "@vueuse/core";
 
-const globalWidth = ref<number>(window.innerWidth);
-const scrollWindow = ref<HTMLDivElement>();
 const channelProxy = new ChannelProxy('zomboid.logs');
 
 const logs = useZomboidLogsStore();
-
-const styles = computed(() => ({
-    display: (globalWidth.value < 786) ? "none": "block",
-}));
-
-onBeforeMount(() => {
-    window.addEventListener('resize', () => {
-        globalWidth.value = window.innerWidth;
-    });
-});
 
 onMounted(async () => {
     if (scrollWindow.value) {
@@ -27,20 +16,21 @@ onMounted(async () => {
 
         if (!logs.isFetched) {
             await logs.fetchConsole();
+            scrollTo(logs.lastId);
         }
 
         scrollWindowValue.scrollTop = scrollWindowValue.scrollHeight;
 
         channelProxy.addEvent(
-            new Event('.console.update', async (_handler?: unknown) => {
+            new Event('.console.update', async (handler: any) => {
                 const ifScrollHeightWasInTheEndOfList =
                     (scrollWindowValue.scrollTop + scrollWindowValue.clientHeight) >= scrollWindowValue.scrollHeight;
 
-                await logs.fetchConsole();
+                await logs.updateConsole(handler.lastId);
 
                 await nextTick(() => {
                     if (ifScrollHeightWasInTheEndOfList) {
-                        scrollWindowValue.scrollTop = scrollWindowValue.scrollHeight;
+                        scrollTo(logs.lastId);
                     }
                 });
             })
@@ -52,47 +42,52 @@ onUnmounted(() => {
     channelProxy.destroy();
 })
 
-const logsList = computed<string>((): string => {
-    return logs.getConsoleLogs.reduce((acc, item) => acc + "\n" + item.toString(), '');
-})
+const {list, containerProps, wrapperProps, scrollTo} = useVirtualList(computed<ZomboidLogDecorator[]>(() => logs.getConsoleLogs), {itemHeight: 20});
+const scrollWindow = containerProps.ref;
 
 </script>
-
 
 <template>
     <div
         class="
+            hidden
+            lg:block
             bg-gray-100 border border-gray-300 rounded overflow-hidden
             h-[200px]
             lg:h-[800px]
             xl:h-[600px]
             2xl:h-[650px]
         "
-        :style="styles"
+        v-bind="containerProps"
     >
+
         <div
-            ref="scrollWindow"
             contenteditable="true"
             spellcheck="false"
             @beforeinput.prevent
             @paste.prevent
             class="
         h-full
-        px-3 py-2
+        px-3
         font-mono text-sm text-black
         outline-none cursor-text
         whitespace-pre
         overflow-x-auto overflow-y-auto
         scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200
       "
+            v-bind="wrapperProps"
         >
-            {{ logsList }}
-<!--      <span-->
-<!--          v-for="(log, index) in logs.getConsoleLogs"-->
-<!--          :key="index"-->
-<!--          class="block whitespace-pre"-->
-<!--          v-html="log.toString()"-->
-<!--      />-->
+
+            <div
+                v-for="(log) in list"
+                :key="log.data.instance.id"
+                style="height: 20px"
+            >
+                <p v-if="log.data.isWarning" class="bg-yellow-100 text-yellow-800 block whitespace-pre" v-html="log.data.toString()" />
+                <p v-else-if="log.data.isError" class="bg-red-100 text-red-800 block whitespace-pre" v-html="log.data.toString()" />
+                <p v-else class="block whitespace-pre" v-html="log.data.toString()"/>
+            </div>
+
         </div>
     </div>
 </template>

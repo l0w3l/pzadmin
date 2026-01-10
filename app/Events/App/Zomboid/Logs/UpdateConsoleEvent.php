@@ -12,9 +12,23 @@ class UpdateConsoleEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public function __construct(
+        private readonly int $lastId
+    ) {}
+
     public function broadcastAs(): string
     {
         return 'console.update';
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    public function broadcastWith(): array
+    {
+        return [
+            'lastId' => $this->lastId,
+        ];
     }
 
     /**

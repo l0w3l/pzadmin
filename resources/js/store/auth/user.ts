@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import api from "@/store/api";
+import api, {UserInterface} from "@/store/api";
 
 export const useUserStore = defineStore('user', {
     state: (): UserStoreInterface => ({
@@ -8,7 +8,7 @@ export const useUserStore = defineStore('user', {
     actions: {
         async lazyGetUser(): Promise<UserInterface> {
             if (!this.user) {
-                this.user = await api.auth.index<UserInterface>();
+                this.user = await api.auth.index();
 
                 return this.user;
             }
@@ -20,10 +20,4 @@ export const useUserStore = defineStore('user', {
 
 interface UserStoreInterface {
     user?: UserInterface;
-}
-
-export interface UserInterface {
-    username: string;
-    email: string;
-    created_at: string;
 }
