@@ -6,8 +6,8 @@ import {computed} from "vue";
 import {onBeforeMount, reactive} from "vue";
 import {useAuthStore} from "@/store/auth/";
 import {useRouter} from "vue-router";
-import {UserInterface} from "@/store/auth/user";
 import UsernameMenu from "@/app/Components/Menu/UsernameMenu.vue";
+import {UserInterface} from "@/store/api";
 
 interface AdminLayoutPropsInterface {
     /** @var boolean field for pages that require some global loading preparations */

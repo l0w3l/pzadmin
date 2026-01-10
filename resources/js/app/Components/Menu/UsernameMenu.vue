@@ -1,9 +1,10 @@
 <script setup lang="ts">
 
-import {UserInterface, useUserStore} from "@/store/auth/user";
+import {useUserStore} from "@/store/auth/user";
 import {computed, onMounted, reactive} from "vue";
 import {useAuthStore} from "@/store/auth/";
 import {useRouter} from "vue-router";
+import {UserInterface} from "@/store/api";
 
 interface UsernameDropdownDataInterface {
     user?: UserInterface;

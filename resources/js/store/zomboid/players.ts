@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {LinkInterface, Pagination, PaginationInterface} from "@/classes/Pagination";
-import client, {PlayersStateInterface} from "@/store/api";
+import client, {PlayerInterface, PlayersStateInterface} from "@/store/api";
 
 export const usePlayersStore = defineStore('players', {
     state: (): PlayersStateInterface => Object.assign({}, new Pagination<PlayerInterface>()),

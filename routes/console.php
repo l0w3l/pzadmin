@@ -6,5 +6,5 @@ use App\Jobs\Telegram\UpdateStatusJob;
 use Illuminate\Support\Facades\Schedule;
 
 Schedule::job(UpdateStatusJob::class)->everyFiveSeconds();
-Schedule::job(ZomboidUpdateStatusJob::class)->everyFiveSeconds();
+Schedule::job(ZomboidUpdateStatusJob::class)->everySecond();
 Schedule::job(ConsoleUpdateJob::class)->everySecond();
