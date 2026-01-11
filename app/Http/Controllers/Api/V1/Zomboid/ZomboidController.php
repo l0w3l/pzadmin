@@ -28,7 +28,7 @@ final readonly class ZomboidController extends Controller
 
     public function down(): Response
     {
-        $this->zomboidService->doDown();
+        $this->zomboidService->doStop();
 
         return $this->accepted();
     }

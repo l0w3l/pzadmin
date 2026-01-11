@@ -7,12 +7,14 @@ namespace App\Services\Zomboid;
 use App\Data\Zomboid\ServerData;
 use App\Services\Docker\DockerServiceInterface;
 use App\Services\Docker\Enums\ContainerActionEnum;
+use App\Services\Zomboid\Rcon\RconServiceFactory;
 use Lowel\LaravelServiceMaker\Services\AbstractService;
 
 class ZomboidService extends AbstractService implements ZomboidServiceInterface
 {
     public function __construct(
         public DockerServiceInterface $zomboidDockerContainer,
+        public RconServiceFactory $rconServiceFactory,
     ) {}
 
     public function getServer(): ServerData
@@ -27,13 +29,15 @@ class ZomboidService extends AbstractService implements ZomboidServiceInterface
         return $this->zomboidDockerContainer->operate(ContainerActionEnum::UP);
     }
 
-    public function doDown(): bool
+    public function doStop(): bool
     {
+        $this->rconServiceFactory->zomboid()->save();
+
         return $this->zomboidDockerContainer->operate(ContainerActionEnum::DOWN);
     }
 
     public function doRestart(): bool
     {
-        return $this->zomboidDockerContainer->operate(ContainerActionEnum::RESTART);
+        return $this->doStop() && $this->doStart();
     }
 }

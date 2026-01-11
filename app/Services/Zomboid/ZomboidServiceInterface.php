@@ -16,7 +16,7 @@ interface ZomboidServiceInterface extends ServiceInterface
 
     public function doStart(): bool;
 
-    public function doDown(): bool;
+    public function doStop(): bool;
 
     public function doRestart(): bool;
 }
