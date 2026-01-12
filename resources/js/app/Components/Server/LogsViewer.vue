@@ -73,7 +73,6 @@ const scrollWindow = containerProps.ref;
         outline-none cursor-text
         whitespace-pre
         overflow-x-auto overflow-y-auto
-        scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200
       "
             v-bind="wrapperProps"
         >

@@ -62,7 +62,10 @@ export class ZomboidLogDecorator
 
     constructor(log: ConsoleLogDataItemInterface) {
         this.instance = log;
-        this.message = log.message.trim();
+        this.message = log.message.trim().replace(/t:(\d{13}),/g, (_, ts) => {
+            const d = new Date(Number(ts));
+            return `[${d.toISOString().replace('T', ' ').replace('Z', ' UTC')}]`;
+        }).replace(/(f:\d+,)/g, '');
         this.isWarning = this.instance.message.includes('WARN');
         this.isError = this.instance.message.includes('ERROR');
     }
