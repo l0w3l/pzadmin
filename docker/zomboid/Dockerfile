@@ -17,7 +17,7 @@ RUN mkdir -p "${STEAMAPPDIR}"
 RUN chown -R "${USER}:${USER}" "${STEAMAPPDIR}"
 RUN steamcmd +force_install_dir "${STEAMAPPDIR}" \
                                     +login anonymous \
-                                    +app_update "${STEAMAPPID}" -beta 42.13.1 \
+                                    +app_update "${STEAMAPPID}" -beta unstable \
                                     +quit
 
 # Copy the entry point file
