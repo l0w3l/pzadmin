@@ -33,7 +33,7 @@ class ConsoleUpdateJob implements ShouldQueue
 
             UpdateConsoleEvent::dispatch($lastId);
 
-            Cache::set(self::CACHE_KEY, $newMd5);
+            Cache::forever(self::CACHE_KEY, $newMd5);
         }
     }
 }

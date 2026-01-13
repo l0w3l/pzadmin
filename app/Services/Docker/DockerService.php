@@ -8,7 +8,7 @@ use App\Services\Docker\Enums\ContainerActionEnum;
 use Illuminate\Support\Facades\App;
 use Lowel\Docker\ClientFactory as DockerClientFactory;
 use Lowel\Docker\ClientResponseHandlerInterface as DockerClientResponseHandlerInterface;
-use Lowel\Docker\Response\DTO\Container;
+use Lowel\Docker\Response\DTO\Inspect\Container;
 use Lowel\LaravelServiceMaker\Services\AbstractService;
 
 class DockerService extends AbstractService implements DockerServiceInterface

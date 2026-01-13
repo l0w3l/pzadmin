@@ -6,7 +6,7 @@ use App\Services\Docker\Enums\ContainerStatusEnum;
 use Carbon\CarbonInterface;
 use Carbon\CarbonInterval;
 use Illuminate\Support\Carbon;
-use Lowel\Docker\Response\DTO\Container;
+use Lowel\Docker\Response\DTO\Inspect\Container;
 use Spatie\LaravelData\Data;
 
 final class ServerData extends Data
@@ -26,16 +26,15 @@ final class ServerData extends Data
 
     public static function fromInspectionResult(Container $serverInspection): self
     {
-        $containerHealthStatus = $serverInspection->state['Health']['Status'] ?? null;
-        $startedAt = Carbon::parse($serverInspection->state['StartedAt'] ?? null);
+        $startedAt = Carbon::parse($serverInspection->State->StartedAt);
         $uptime = $startedAt->diffAsCarbonInterval(now());
 
         $statusEnum = ContainerStatusEnum::ERROR;
-        if ($serverInspection->isDead() || $serverInspection->isStopped() || $serverInspection->isPaused()) {
+        if ($serverInspection->State->Paused || $serverInspection->State->Dead || $serverInspection->State->OOMKilled || $serverInspection->State->ExitCode !== 0) {
             $statusEnum = ContainerStatusEnum::DOWN;
-        } elseif ($serverInspection->isRestarting() || $containerHealthStatus !== 'healthy') {
+        } elseif ($serverInspection->State->Restarting || $serverInspection->State->Health->Status !== 'healthy') {
             $statusEnum = ContainerStatusEnum::PENDING;
-        } elseif ($serverInspection->isRunning()) {
+        } elseif ($serverInspection->State->Running) {
             $statusEnum = ContainerStatusEnum::ACTIVE;
         }
 
