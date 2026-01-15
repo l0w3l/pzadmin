@@ -25,7 +25,11 @@ class StartHandler extends AbstractTelegramHandler
      */
     public function __invoke(): void
     {
-        $this->lazyHandler(fn (string $message, KeyboardBuilderInterface $keyboardBuilder) => \Cache::forever('telepath.messages.start', SpiritBox::sendMessage($message, parseMode: 'HTML', messageThreadId: Extrasense::message()->messageThreadId, linkPreviewOptions: new LinkPreviewOptions(true), replyMarkup: $keyboardBuilder)));
+        $this->lazyHandler(function (string $message, KeyboardBuilderInterface $keyboardBuilder) {
+            $message = SpiritBox::sendMessage($message, parseMode: 'HTML', messageThreadId: Extrasense::message()->messageThreadId, linkPreviewOptions: new LinkPreviewOptions(true), replyMarkup: $keyboardBuilder);
+
+            \Cache::forever('telepath.messages.start', $message);
+        });
     }
 
     /**

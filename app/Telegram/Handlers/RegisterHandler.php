@@ -14,7 +14,6 @@ class RegisterHandler extends AbstractTelegramHandler
 {
     public function __invoke(TelegramBotApi $telegramBotApi, Update $update): void
     {
-        dump($update);
         Cache::forever('chat.registered', $update);
 
         SpiritBox::deleteMessage();

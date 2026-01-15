@@ -15,7 +15,9 @@ class RefreshInlineButton extends AbstractCallbackButton
     public function handle(): callable
     {
         return function () {
-            SpiritBox::editMessageText(__('telepath.keyboards.zomboid.status.refreshing'));
+            $message = SpiritBox::editMessageText(__('telepath.keyboards.zomboid.status.refreshing'));
+
+            \Cache::forever('telepath.messages.start', $message);
 
             (new StartHandler)
                 ->lazyHandler(fn (string $message, KeyboardBuilderInterface $keyboardBuilder) => SpiritBox::editMessageText($message, parseMode: 'HTML', linkPreviewOptions: new LinkPreviewOptions(true), replyMarkup: $keyboardBuilder));
