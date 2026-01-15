@@ -14,6 +14,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\App;
 use Lowel\Telepath\Core\Router\Handler\AbstractTelegramHandler;
 use Lowel\Telepath\Core\Router\Keyboard\KeyboardBuilderInterface;
+use Lowel\Telepath\Facades\Extrasense;
 use Lowel\Telepath\Facades\SpiritBox;
 use Phptg\BotApi\Type\LinkPreviewOptions;
 
@@ -24,7 +25,7 @@ class StartHandler extends AbstractTelegramHandler
      */
     public function __invoke(): void
     {
-        $this->lazyHandler(fn (string $message, KeyboardBuilderInterface $keyboardBuilder) => \Cache::forever('telepath.messages.start', SpiritBox::sendMessage($message, parseMode: 'HTML', linkPreviewOptions: new LinkPreviewOptions(true), replyMarkup: $keyboardBuilder)));
+        $this->lazyHandler(fn (string $message, KeyboardBuilderInterface $keyboardBuilder) => \Cache::forever('telepath.messages.start', SpiritBox::sendMessage($message, parseMode: 'HTML', messageThreadId: Extrasense::message()->messageThreadId, linkPreviewOptions: new LinkPreviewOptions(true), replyMarkup: $keyboardBuilder)));
     }
 
     /**

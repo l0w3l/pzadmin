@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Telegram\Handlers\RegisterHandler;
 use App\Telegram\Handlers\StartHandler;
 use App\Telegram\Keyboards\Inline\Zomboid\Buttons\Confirmation\FakeYesRestartOptionInlineButton;
 use App\Telegram\Keyboards\Inline\Zomboid\Buttons\Confirmation\FakeYesShutdownOptionInlineButton;
@@ -28,4 +29,6 @@ Telepath::middleware(OnlyForChatMiddleware::class)->group(function () {
     Telepath::buttons(
         new StartInlineButton, new RefreshInlineButton, new NoOptionInlineButton, new YesRestartInlineButton, new YesShutdownInlineButton
     )->middleware(EnableLiveReloadMiddleware::class);
+
+    Telepath::onMessage(RegisterHandler::class, "\/register(".Extrasense::profile()->username.')?');
 });
