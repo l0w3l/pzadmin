@@ -19,8 +19,8 @@ use App\Telegram\Middlewares\OnlyForChatMiddleware;
 use Lowel\Telepath\Facades\Telepath;
 
 Telepath::middleware(OnlyForChatMiddleware::class)->group(function () {
-    Telepath::onCommand('/start', StartHandler::class);
-    Telepath::onCommand('/register', RegisterHandler::class);
+    Telepath::onCommand('start', StartHandler::class);
+    Telepath::onCommand('register', RegisterHandler::class);
 
     Telepath::buttons(
         new StopInlineButton, new RestartInlineButton, new FakeYesRestartOptionInlineButton, new FakeYesShutdownOptionInlineButton

@@ -23,6 +23,10 @@ class SteamService extends AbstractService implements SteamServiceInterface
 
     public function getPlayerSummaries(array $playersSteamIds): array
     {
+        if (empty($playersSteamIds)) {
+            return [];
+        }
+
         $response = $this->client->get('ISteamUser/GetPlayerSummaries/v2/', [
             'query' => [
                 'key' => config('zomboid.steam_key'),

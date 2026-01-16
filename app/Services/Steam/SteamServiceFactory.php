@@ -13,6 +13,6 @@ class SteamServiceFactory implements ServiceFactoryInterface
      */
     public function get(array $params = []): SteamServiceInterface
     {
-        return new SteamService;
+        return new SteamProxyService;
     }
 }
