@@ -44,9 +44,9 @@ while getopts 'bf' opt; do
 done
 
 
-docker compose down scheduler
+docker compose down scheduler queue
 docker compose \
   --env-file .env \
   --env-file "${STORAGE_APP}/.env" \
   -f docker-compose.yml \
-  up scheduler -d "${DOCKER_ARGS[@]}"
+  up scheduler queue -d "${DOCKER_ARGS[@]}"

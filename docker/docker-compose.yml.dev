@@ -47,14 +47,29 @@ services:
         volumes:
             - "${STORAGE_APP}:/var/www/html"
 
-    php-queue:
-        container_name: "${APP_NAME:-pzadmin}_php-queue"
-        build: ./php
+    queue:
+        container_name: "${APP_NAME:-pzadmin}_queue"
+        build:
+            context: ./queue
+            args:
+                HOST_UID: ${HOST_UID}
+                HOST_GID: ${HOST_GID}
+                DOCKER_GID: ${DOCKER_GID}
+        logging:
+            options:
+                max-size: "10m"
+                max-file: "3"
+        deploy:
+            resources:
+                limits:
+                    cpus: "0.5"
+                    memory: "200m"
         networks:
             - backend
         restart: always
         entrypoint: [ "bash", "/usr/local/bin/scripts/laravel_queue.sh" ]
         volumes:
+            - "${DOCKER_SOCKET}:/var/run/docker.sock"
             - "${STORAGE_APP}:/var/www/html"
 
     php-vite-dev:
