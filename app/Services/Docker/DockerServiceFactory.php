@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services\Docker;
 
-use App\Enums\Models\Game\ServerEnum;
 use Lowel\LaravelServiceMaker\Services\ServiceFactoryInterface;
 
 class DockerServiceFactory implements ServiceFactoryInterface
@@ -23,6 +22,6 @@ class DockerServiceFactory implements ServiceFactoryInterface
 
     public function zomboid(): DockerServiceInterface
     {
-        return new DockerService(ServerEnum::ZOMBOID->name());
+        return new DockerService(config('zomboid.docker.name'));
     }
 }

@@ -148,8 +148,12 @@ class LogRepository extends AbstractRepository implements LogRepositoryInterface
                 $tb = DateTimeImmutable::createFromFormat('Y-m-d_H-i', $mb[1])->getTimestamp();
 
                 return $ta <=> $tb;
-            })
-            ->name($relativeFileName);
+            })->filter(function (SplFileInfo $file) {
+                preg_match('/(\d{4}-\d{2}-\d{2}_\d{2}-\d{2})/', $file->getPathname(), $ma);
+                $ta = DateTimeImmutable::createFromFormat('Y-m-d_H-i', $ma[1]);
+
+                return now()->subWeek() < $ta;
+            })->name($relativeFileName);
 
         foreach ($finder as $file) {
             yield $file;

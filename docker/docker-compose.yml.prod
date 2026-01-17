@@ -1,13 +1,21 @@
 services:
     nginx:
-        env_file:
-            - ./../.env
-        container_name: "${APP_NAME:-pzadmin}_nginx"
+        container_name: "${APP_SERVER_NAME:-pzadmin}_nginx"
         build: ./nginx
+        deploy:
+            resources:
+                limits:
+                    cpus: "0.5"
+                    memory: "50m"
+        logging:
+            driver: json-file
+            options:
+                max-size: "10m"
+                max-file: "3"
         ports:
-            - "${APP_HTTP:-80}:80"
-            - "${APP_HTTPS:-443}:443"
-            - "8080:8080"
+            - "${NGINX_HTTP:-80}:80"
+            - "${NGINX_HTTPS:-443}:443"
+            - "${VITE_REVERB_PORT:-8080}:8080"
             - "${INERTIA_PORT:-13714}:13714"
         networks:
             - backend
@@ -20,15 +28,24 @@ services:
             - ./nginx/config/nginxconfig.io/:/etc/nginx/nginxconfig.io/
 
     fpm:
-        env_file:
-            - ./../.env
-        container_name: "${APP_NAME:-pzadmin}_fpm"
+        container_name: "${APP_SERVER_NAME:-pzadmin}_fpm"
         build:
             context: ./fpm
             args:
                 HOST_UID: ${HOST_UID}
                 HOST_GID: ${HOST_GID}
                 DOCKER_GID: ${DOCKER_GID}
+
+        logging:
+            driver: json-file
+            options:
+                max-size: "10m"
+                max-file: "3"
+        deploy:
+            resources:
+                limits:
+                    cpus: "0.5"
+                    memory: "200m"
         networks:
             - backend
         volumes:
@@ -37,7 +54,7 @@ services:
             - ./fpm/config/www.conf:/usr/local/etc/php-fpm.d/www.conf
 
     php-setup:
-        container_name: "${APP_NAME:-pzadmin}_php-setup"
+        container_name: "${APP_SERVER_NAME:-pzadmin}_php-setup"
         build: ./php
         networks:
             - backend
@@ -46,34 +63,39 @@ services:
         volumes:
             - "${STORAGE_APP}:/var/www/html"
 
-        queue:
-            container_name: "${APP_NAME:-pzadmin}_queue"
-            build:
-                context: ./queue
-                args:
-                    HOST_UID: ${HOST_UID}
-                    HOST_GID: ${HOST_GID}
-                    DOCKER_GID: ${DOCKER_GID}
-            logging:
-                options:
-                    max-size: "1m"
-                    max-file: "3"
-            deploy:
-                resources:
-                    limits:
-                        cpus: "0.5"
-                        memory: "100m"
-            networks:
-                - backend
-            restart: always
-            entrypoint: [ "bash", "/usr/local/bin/scripts/laravel_queue.sh" ]
-            volumes:
-                - "${DOCKER_SOCKET}:/var/run/docker.sock"
-                - "${STORAGE_APP}:/var/www/html"
+    queue:
+        container_name: "${APP_SERVER_NAME:-pzadmin}_queue"
+        build:
+            context: ./queue
+            args:
+                HOST_UID: ${HOST_UID}
+                HOST_GID: ${HOST_GID}
+                DOCKER_GID: ${DOCKER_GID}
+        logging:
+            options:
+                max-size: "10m"
+                max-file: "3"
+        deploy:
+            resources:
+                limits:
+                    cpus: "0.5"
+                    memory: "100m"
+        networks:
+            - backend
+        restart: always
+        entrypoint: [ "bash", "/usr/local/bin/scripts/laravel_queue.sh" ]
+        volumes:
+            - "${DOCKER_SOCKET}:/var/run/docker.sock"
+            - "${STORAGE_APP}:/var/www/html"
 
     php-laravel-reverb:
-        container_name: "${APP_NAME:-pzadmin}_php-laravel-reverb"
+        container_name: "${APP_SERVER_NAME:-pzadmin}_php-laravel-reverb"
         build: ./php
+        deploy:
+            resources:
+                limits:
+                    cpus: "0.5"
+                    memory: "100m"
         networks:
             - backend
         restart: "always"
@@ -82,7 +104,7 @@ services:
             - "${STORAGE_APP}:/var/www/html"
 
     scheduler:
-        container_name: "${APP_NAME:-pzadmin}_php-scheduler"
+        container_name: "${APP_SERVER_NAME:-pzadmin}_php-scheduler"
         build:
             context: ./scheduler
             args:
@@ -90,9 +112,10 @@ services:
                 HOST_GID: ${HOST_GID}
                 DOCKER_GID: ${DOCKER_GID}
         logging:
-            options:
-                max-size: "1m"
-                max-file: "3"
+                    driver: json-file
+                    options:
+                        max-size: "10m"
+                        max-file: "3"
         deploy:
             resources:
                 limits:
@@ -105,12 +128,16 @@ services:
         volumes:
             - "${DOCKER_SOCKET}:/var/run/docker.sock"
             - "${STORAGE_APP}:/var/www/html"
-    zomboid:
-        container_name: "${APP_NAME:-pzadmin}_zomboid"
+
+zomboid:
+        container_name: "${APP_SERVER_NAME:-pzadmin}_zomboid"
         restart: unless-stopped
-        build: ./zomboid
-        networks:
-            - backend
+        build:
+            context: ./zomboid
+            args:
+                ZOMBOID_BETA: ${ZOMBOID_BETA}
+        env_file:
+            - .env
         healthcheck:
             test:
                 - CMD-SHELL
@@ -128,14 +155,16 @@ services:
             interval: 3s
             retries: 1
             start_period: 10s
-        env_file:
-            - ./../.env
+        networks:
+            - backend
         ports:
             - "${ZOMBOID_PORT_1}:16261/udp"
             - "${ZOMBOID_PORT_2}:16262/udp"
             - "${ZOMBOID_STEAM_PORT_1}:8766"
             - "${ZOMBOID_STEAM_PORT_2}:8767"
         volumes:
+            # Entry
+            - ./zomboid/scripts:/server/scripts
             # Server data
             - "${STORAGE_ZOMBOID_DATA}:/root/Zomboid"
             # Workshop mods folder

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Data\Zomboid\Log;
 
 use App\Data\Steam\GetPlayerSummaries\PlayerSummaryData;
-use App\Models\Game\Player;
+use App\Models\Zomboid\Player;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Data;
 
@@ -69,7 +69,7 @@ class PlayerLogData extends Data
         return $this;
     }
 
-    public function toString(PlayerSummaryData $playerSummaryData): string
+    public function toStringByPlayerSummoryData(PlayerSummaryData $playerSummaryData): string
     {
         return match ($this->online) {
             PlayerOnlineStatusEnum::ONLINE => sprintf(
@@ -83,6 +83,24 @@ class PlayerLogData extends Data
             PlayerOnlineStatusEnum::OFFLINE => sprintf(
                 '- %s <a href="%s">%s</a> (%s)'.PHP_EOL,
                 $this->online->value, $playerSummaryData->profileurl, $playerSummaryData->personaname, Carbon::createFromInterface($this->updatedAt)->diffForHumans(['minimumUnit' => 'minutes'], short: true)
+            ),
+        };
+    }
+
+    public function toString(): string
+    {
+        return match ($this->online) {
+            PlayerOnlineStatusEnum::ONLINE => sprintf(
+                '- %s %s (%s)'.PHP_EOL,
+                $this->online->value, $this->name, Player::whereUsername($this->name)->first()->name ?? 'unknown'
+            ),
+            PlayerOnlineStatusEnum::LOADING => sprintf(
+                '- %s %s'.PHP_EOL,
+                $this->online->value, $this->name
+            ),
+            PlayerOnlineStatusEnum::OFFLINE => sprintf(
+                '- %s %s (%s)'.PHP_EOL,
+                $this->online->value, $this->name, Carbon::createFromInterface($this->updatedAt)->diffForHumans(['minimumUnit' => 'minutes'], short: true)
             ),
         };
     }

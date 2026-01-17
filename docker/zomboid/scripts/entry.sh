@@ -26,8 +26,8 @@ fi
 ARGS=""
 
 # Set the server memory. Units are accepted (1024m=1Gig, 2048m=2Gig, 4096m=4Gig): Example: 1024m
-if [ -n "${ZOMBOID_MEMORY}" ]; then
-  ARGS="${ARGS} -Xmx8g -Xms8g"
+if [ -n "${ZOMBOID_XMX}" ] && [ -n "${ZOMBOID_XMS}" ]; then
+  ARGS="${ARGS} -Xmx${ZOMBOID_XMX} -Xms${ZOMBOID_XMS}"
 fi
 
 # Option to perform a Soft Reset

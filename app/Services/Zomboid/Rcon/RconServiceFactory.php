@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services\Zomboid\Rcon;
 
-use App\Enums\Models\Game\ServerEnum;
 use Lowel\LaravelServiceMaker\Services\ServiceFactoryInterface;
 
 class RconServiceFactory implements ServiceFactoryInterface
@@ -23,6 +22,6 @@ class RconServiceFactory implements ServiceFactoryInterface
 
     public function zomboid(): RconServiceInterface
     {
-        return new RconService(ServerEnum::ZOMBOID->value, config('zomboid.rcon.port'), config('zomboid.rcon.password'));
+        return new RconService(config('zomboid.docker.socket'), config('zomboid.rcon.port'), config('zomboid.rcon.password'));
     }
 }

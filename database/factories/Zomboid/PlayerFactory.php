@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Database\Factories\Game;
+namespace Database\Factories\Zomboid;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 

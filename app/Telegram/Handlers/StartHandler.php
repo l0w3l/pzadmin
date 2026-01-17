@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Telegram\Handlers;
 
+use App\Exceptions\Services\Steam\SteamKeyNotFoundException;
 use App\Services\Docker\Enums\ContainerStatusEnum;
-use App\Services\Steam\SteamServiceInterface;
+use App\Services\Steam\SteamServiceFactory;
 use App\Services\Zomboid\Log\LogServiceInterface;
 use App\Services\Zomboid\ZomboidServiceInterface;
 use App\Telegram\Keyboards\Inline\Zomboid\ZomboidInlineKeyboardFactory;
@@ -41,7 +42,6 @@ class StartHandler extends AbstractTelegramHandler
     public function lazyHandler(callable $lazyHandler): void
     {
         $logsService = App::make(LogServiceInterface::class);
-        $steamService = App::make(SteamServiceInterface::class);
         $zomboidService = App::make(ZomboidServiceInterface::class);
 
         $serverData = $zomboidService->getServer();
@@ -54,13 +54,22 @@ class StartHandler extends AbstractTelegramHandler
             $keyboard = ZomboidInlineKeyboardFactory::isPending();
         } elseif ($serverData->status === ContainerStatusEnum::ACTIVE) {
             $playerDataCollection = $logsService->getPlayersInfo();
-            $steamPlayers = $steamService->getPlayerSummariesForPlayerLogData(...$playerDataCollection);
 
-            $players = '';
-            foreach ($playerDataCollection as $index => $playerData) {
-                $steamPlayer = $steamPlayers[$index];
+            try {
+                $steamPlayers = App::make(SteamServiceFactory::class)->get()->getPlayerSummariesForPlayerLogData(...$playerDataCollection);
 
-                $players .= $playerData->toString($steamPlayer);
+                $players = '';
+                foreach ($playerDataCollection as $index => $playerData) {
+                    $steamPlayer = $steamPlayers[$index];
+
+                    $players .= $playerData->toStringByPlayerSummoryData($steamPlayer);
+                }
+            } catch (SteamKeyNotFoundException $e) {
+                $players = '';
+                foreach ($playerDataCollection as $playerData) {
+
+                    $players .= $playerData->toString();
+                }
             }
 
             $message = __('telepath.start.active', [
