@@ -13,8 +13,8 @@ services:
                 max-size: "10m"
                 max-file: "3"
         ports:
-            - "${NGINX_HTTP:-80}:80"
-            - "${NGINX_HTTPS:-443}:443"
+            - "${APP_NGINX_HTTP:-80}:80"
+            - "${APP_NGINX_HTTPS:-443}:443"
             - "${VITE_REVERB_PORT:-8080}:8080"
             - "${INERTIA_PORT:-13714}:13714"
         networks:
