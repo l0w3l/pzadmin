@@ -133,6 +133,8 @@ services:
             - "${ZOMBOID_STEAM_PORT_1}:${ZOMBOID_STEAM_PORT_1}"
             - "${ZOMBOID_STEAM_PORT_2}:${ZOMBOID_STEAM_PORT_2}"
         volumes:
+            # Entry
+            - ./zomboid/scripts:/server/scripts
             # Server data
             - "${STORAGE_ZOMBOID_DATA}:/root/Zomboid"
             # Workshop mods folder
