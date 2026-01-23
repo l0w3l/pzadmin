@@ -10,8 +10,7 @@ use App\Services\Docker\DockerServiceInterface;
 use App\Services\Docker\Enums\ContainerActionEnum;
 use App\Services\Zomboid\Rcon\RconServiceFactory;
 use Lowel\LaravelServiceMaker\Services\AbstractService;
-use Phar;
-use PharData;
+use RuntimeException;
 
 class ZomboidService extends AbstractService implements ZomboidServiceInterface
 {
@@ -35,8 +34,6 @@ class ZomboidService extends AbstractService implements ZomboidServiceInterface
             $this->backup();
         }
 
-
-
         return $this->zomboidDockerContainer->operate(ContainerActionEnum::UP);
     }
 
@@ -57,18 +54,23 @@ class ZomboidService extends AbstractService implements ZomboidServiceInterface
         $sourceFolder = base_path('/docker/zomboid/storage/data');
         $archiveFile = base_path('/docker/zomboid/backups/').date('Y-m-d_H-i-s').'.tar.gz';
 
-        $tar = new PharData(str_replace('.gz', '', $archiveFile));
+        $cmd = sprintf(
+            'tar -czf %s -C %s .',
+            escapeshellarg($archiveFile),
+            escapeshellarg($sourceFolder)
+        );
 
-        $tar->buildFromDirectory($sourceFolder);
-        $tar->compress(Phar::GZ);
+        exec($cmd, $output, $code);
+
+        if ($code !== 0) {
+            throw new RuntimeException('Backup failed');
+        }
 
         ZomboidBackup::create([
             'file_path' => $archiveFile,
             'file_size' => filesize($archiveFile),
             'hash' => $this->configHash(),
         ]);
-
-        unlink(str_replace('.gz', '', $archiveFile));
 
         return $archiveFile;
     }
