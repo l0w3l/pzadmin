@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 abstract readonly class Controller
 {
     /**
-     * @param  JsonSerializable|AbstractPaginator<mixed>|array<mixed>  $data
+     * @param  JsonSerializable|AbstractPaginator<int, mixed>|array<mixed>  $data
      */
     protected function json(JsonSerializable|AbstractPaginator|array $data, int $statusCode = Response::HTTP_OK): Response
     {

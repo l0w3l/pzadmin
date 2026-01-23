@@ -4,6 +4,8 @@ ENV STEAMAPPID 380870
 ENV STEAMAPP pz
 ENV STEAMAPPDIR "${HOMEDIR}/${STEAMAPP}-dedicated"
 
+ARG ZOMBOID_BETA
+
 # Install required packages
 RUN apt-get update \
     && apt-get install -y --no-install-recommends --no-install-suggests \
@@ -15,10 +17,13 @@ RUN apt-get update \
 # Set the entry point file permissions
 RUN mkdir -p "${STEAMAPPDIR}"
 RUN chown -R "${USER}:${USER}" "${STEAMAPPDIR}"
-RUN steamcmd +force_install_dir "${STEAMAPPDIR}" \
-                                    +login anonymous \
-                                    +app_update "${STEAMAPPID}" -beta 42.13.1 \
-                                    +quit
+
+RUN steamcmd \
+      +force_install_dir "${STEAMAPPDIR}" \
+      +login anonymous \
+      +app_update "${STEAMAPPID}" \
+      ${ZOMBOID_BETA:+-beta $ZOMBOID_BETA validate} \
+      +quit
 
 # Copy the entry point file
 COPY --chown=${USER}:${USER} scripts/entry.sh /server/scripts/entry.sh
@@ -29,4 +34,4 @@ RUN mkdir -p "${HOMEDIR}/Zomboid"
 
 WORKDIR ${HOMEDIR}
 
-ENTRYPOINT ["/server/scripts/entry.sh"]
+ENTRYPOINT ["/bin/sh", "-c", "/server/scripts/entry.sh"]

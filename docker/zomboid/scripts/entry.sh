@@ -14,7 +14,7 @@ cd ${STEAMAPPDIR}
 
 if [ "${FORCEUPDATE}" == "1" ]; then
   echo "FORCEUPDATE variable is set, so the server will be updated right now"
-  bash "${STEAMCMDDIR}/steamcmd.sh" +force_install_dir "${STEAMAPPDIR}" +login anonymous +app_update "${STEAMAPPID}" -beta 42.13.1 validate +quit
+  bash "${STEAMCMDDIR}/steamcmd.sh" +force_install_dir "${STEAMAPPDIR}" +login anonymous +app_update "${STEAMAPPID}" -beta unstable validate +quit
 fi
 
 
@@ -26,8 +26,8 @@ fi
 ARGS=""
 
 # Set the server memory. Units are accepted (1024m=1Gig, 2048m=2Gig, 4096m=4Gig): Example: 1024m
-if [ -n "${ZOMBOID_MEMORY}" ]; then
-  ARGS="${ARGS} -Xmx${ZOMBOID_MEMORY} -Xms${ZOMBOID_MEMORY}"
+if [ -n "${ZOMBOID_XMX}" ] && [ -n "${ZOMBOID_XMS}" ]; then
+  ARGS="${ARGS} -Xmx${ZOMBOID_XMX} -Xms${ZOMBOID_XMS}"
 fi
 
 # Option to perform a Soft Reset

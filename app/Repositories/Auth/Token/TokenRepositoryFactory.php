@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Repositories\Auth\Token;
 
-use App\Repositories\Abstract\RepositoryFactoryInterface;
 use Illuminate\Support\Facades\App;
+use Lowel\LaravelServiceMaker\Repositories\RepositoryFactoryInterface;
 
 class TokenRepositoryFactory implements RepositoryFactoryInterface
 {

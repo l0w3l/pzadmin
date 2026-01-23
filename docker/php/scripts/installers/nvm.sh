@@ -6,7 +6,7 @@ set -e
 # Run this script like - bash script-name.sh
 
 # Define versions
-INSTALL_NODE_VER=20.11.0
+INSTALL_NODE_VER=24.12.0
 INSTALL_NVM_VER=0.39.7
 
 echo "==> Ensuring .bashrc exists and is writable"

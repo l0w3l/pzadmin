@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\V1\Zomboid;
 
 use App\Http\Controllers\Controller;
-use App\Services\Game\Zomboid\ZomboidServiceInterface;
+use App\Services\Zomboid\ZomboidServiceInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final readonly class ZomboidController extends Controller
@@ -16,7 +16,7 @@ final readonly class ZomboidController extends Controller
 
     public function index(): Response
     {
-        return $this->json($this->zomboidService->getServer());
+        return response()->json($this->zomboidService->getServer());
     }
 
     public function start(): Response
@@ -28,7 +28,7 @@ final readonly class ZomboidController extends Controller
 
     public function down(): Response
     {
-        $this->zomboidService->doDown();
+        $this->zomboidService->doStop();
 
         return $this->accepted();
     }

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders\Game;
 
-use App\Models\Game\Player;
+use App\Models\Zomboid\Player;
 use Illuminate\Database\Seeder;
 
 class PlayerSeeder extends Seeder

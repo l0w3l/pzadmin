@@ -2,8 +2,7 @@
 
 namespace App\Models\Auth;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\Factory;
+use Database\Factories\Auth\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,16 +12,14 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     /**
-     * @use HasFactory<Factory<User>>
-     * @use HasApiTokens
-     * @use Notifiable
+     * @use HasFactory<UserFactory>
      */
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'username',
@@ -35,7 +32,7 @@ class User extends Authenticatable
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $hidden = [
         'remember_token',
@@ -60,7 +57,7 @@ class User extends Authenticatable
     }
 
     /**
-     * @return HasOne<Invite>
+     * @return HasOne<Invite, $this>
      */
     public function invite(): HasOne
     {

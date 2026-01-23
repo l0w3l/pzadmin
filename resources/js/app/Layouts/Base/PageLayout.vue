@@ -4,8 +4,8 @@ import Image from "@/app/Components/Image.vue";
 </script>
 
 <template>
-    <div class="wrapper p-6 lg:pt-8 transition-colors">
-        <header class="flex flex-col lg:flex-row lg:justify-between">
+    <div class="wrapper w-full p-6 lg:pt-8 transition-colors">
+        <header class="flex flex-col lg:flex-row lg:justify-between w-full">
             <slot name="header">
                 <div class="flex flex-row justify-center items-end">
                     <slot name="header_logo_image">
@@ -20,10 +20,10 @@ import Image from "@/app/Components/Image.vue";
                 </div>
             </slot>
         </header>
-        <main>
+        <main class="w-full">
             <slot />
         </main>
-        <footer>
+        <footer class="w-full">
             <slot name="footer" />
         </footer>
     </div>

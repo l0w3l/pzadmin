@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Events\App\Zomboid\Logs;
+
+use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
+
+class UpdateConsoleEvent implements ShouldBroadcast
+{
+    use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public function __construct(
+        private readonly int $lastId
+    ) {}
+
+    public function broadcastAs(): string
+    {
+        return 'console.update';
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    public function broadcastWith(): array
+    {
+        return [
+            'lastId' => $this->lastId,
+        ];
+    }
+
+    /**
+     * Get the channels the event should broadcast on.
+     *
+     * @return array<int, Channel>
+     */
+    public function broadcastOn(): array
+    {
+        return [
+            new Channel('zomboid.logs'),
+        ];
+    }
+}

@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace App\Telegram\Handlers;
 
-use App\Enums\Docker\ContainerStatusEnum;
-use App\Services\Game\Log\LogServiceInterface;
-use App\Services\Game\Zomboid\ZomboidServiceInterface;
-use App\Services\Steam\SteamServiceInterface;
+use App\Exceptions\Services\Steam\SteamKeyNotFoundException;
+use App\Services\Docker\Enums\ContainerStatusEnum;
+use App\Services\Steam\SteamServiceFactory;
+use App\Services\Zomboid\Log\LogServiceInterface;
+use App\Services\Zomboid\ZomboidServiceInterface;
 use App\Telegram\Keyboards\Inline\Zomboid\ZomboidInlineKeyboardFactory;
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\App;
 use Lowel\Telepath\Core\Router\Handler\AbstractTelegramHandler;
 use Lowel\Telepath\Core\Router\Keyboard\KeyboardBuilderInterface;
+use Lowel\Telepath\Facades\Extrasense;
 use Lowel\Telepath\Facades\SpiritBox;
 use Phptg\BotApi\Type\LinkPreviewOptions;
 
@@ -24,7 +26,11 @@ class StartHandler extends AbstractTelegramHandler
      */
     public function __invoke(): void
     {
-        $this->lazyHandler(fn (string $message, KeyboardBuilderInterface $keyboardBuilder) => \Cache::forever('telepath.messages.start', SpiritBox::sendMessage($message, parseMode: 'HTML', linkPreviewOptions: new LinkPreviewOptions(true), replyMarkup: $keyboardBuilder)));
+        $this->lazyHandler(function (string $message, KeyboardBuilderInterface $keyboardBuilder) {
+            $message = SpiritBox::sendMessage($message, parseMode: 'HTML', messageThreadId: Extrasense::message()->messageThreadId, linkPreviewOptions: new LinkPreviewOptions(true), replyMarkup: $keyboardBuilder);
+
+            \Cache::forever('telepath.messages.start', $message);
+        });
     }
 
     /**
@@ -36,7 +42,6 @@ class StartHandler extends AbstractTelegramHandler
     public function lazyHandler(callable $lazyHandler): void
     {
         $logsService = App::make(LogServiceInterface::class);
-        $steamService = App::make(SteamServiceInterface::class);
         $zomboidService = App::make(ZomboidServiceInterface::class);
 
         $serverData = $zomboidService->getServer();
@@ -49,13 +54,22 @@ class StartHandler extends AbstractTelegramHandler
             $keyboard = ZomboidInlineKeyboardFactory::isPending();
         } elseif ($serverData->status === ContainerStatusEnum::ACTIVE) {
             $playerDataCollection = $logsService->getPlayersInfo();
-            $steamPlayers = $steamService->getPlayerSummariesForPlayerLogData(...$playerDataCollection);
 
-            $players = '';
-            foreach ($playerDataCollection as $index => $playerData) {
-                $steamPlayer = $steamPlayers[$index];
+            try {
+                $steamPlayers = App::make(SteamServiceFactory::class)->get()->getPlayerSummariesForPlayerLogData(...$playerDataCollection);
 
-                $players .= $playerData->toString($steamPlayer);
+                $players = '';
+                foreach ($playerDataCollection as $index => $playerData) {
+                    $steamPlayer = $steamPlayers[$index];
+
+                    $players .= $playerData->toStringByPlayerSummoryData($steamPlayer);
+                }
+            } catch (SteamKeyNotFoundException $e) {
+                $players = '';
+                foreach ($playerDataCollection as $playerData) {
+
+                    $players .= $playerData->toString();
+                }
             }
 
             $message = __('telepath.start.active', [

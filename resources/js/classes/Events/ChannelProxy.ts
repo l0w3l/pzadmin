@@ -1,5 +1,6 @@
 import {EventInterface} from "@/classes/Events/Event";
 import {Channel} from "laravel-echo";
+import {useEcho, useEchoPublic} from "@laravel/echo-vue";
 
 export interface ChannelProxyInterface<T>
 {
@@ -19,12 +20,13 @@ export class ChannelProxy<T> implements ChannelProxyInterface<T>
 
     constructor(channelName: string) {
         this.channelName = channelName;
-        this.channel = window.Echo.channel(channelName);
+        this.channel = useEchoPublic(channelName).channel();
         this.eventsCollection = [];
     }
 
     addEvent(event: EventInterface<T>): this {
         this.channel.listen(event.eventName, event.callable);
+
         this.eventsCollection.push(event);
 
         return this;
@@ -32,6 +34,7 @@ export class ChannelProxy<T> implements ChannelProxyInterface<T>
 
     destroy(): this {
         this.eventsCollection.map((event: EventInterface<T>) => this.channel.stopListening(event.eventName));
+
         this.eventsCollection = [];
 
         return this;

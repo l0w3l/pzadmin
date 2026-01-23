@@ -11,10 +11,10 @@ use App\Exceptions\Auth\TokenNotFoundException;
 use App\Exceptions\Auth\UserNotFoundException;
 use App\Repositories\Auth\Token\TokenRepositoryInterface;
 use App\Repositories\Auth\User\UserRepositoryInterface;
-use App\Services\Abstract\AbstractService;
 use Carbon\Carbon;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Hash;
+use Lowel\LaravelServiceMaker\Services\AbstractService;
 
 class TokenService extends AbstractService implements TokenServiceInterface
 {

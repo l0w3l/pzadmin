@@ -47,6 +47,5 @@ echo "docker compose up -d ${DOCKER_ARGS[*]}"
 
 docker compose \
   --env-file .env \
-  --env-file "${STORAGE_APP}/.env" \
   -f docker-compose.yml \
   up -d "${DOCKER_ARGS[@]}"

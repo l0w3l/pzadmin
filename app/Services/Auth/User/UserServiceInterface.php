@@ -8,8 +8,9 @@ use App\Data\Auth\RegistrationData;
 use App\Data\Auth\UserData;
 use App\Exceptions\Auth\UserNotFoundException;
 use Illuminate\Auth\AuthenticationException;
+use Lowel\LaravelServiceMaker\Services\ServiceInterface;
 
-interface UserServiceInterface
+interface UserServiceInterface extends ServiceInterface
 {
     /**
      * @throws AuthenticationException

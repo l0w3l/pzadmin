@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import Image from "@/app/Components/Image.vue";
 import Loader from "@/app/Components/Loader.vue";
-import {defineProps} from "vue";
 import Fog from "@/app/Components/Fog.vue";
 import PageLayout from "@/app/Layouts/Base/PageLayout.vue";
 import ServerStatus from "@/app/Components/Server/ServerStatus.vue";

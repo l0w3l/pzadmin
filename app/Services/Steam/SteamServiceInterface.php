@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Steam;
 
-use App\Data\Game\Log\PlayerLogData;
 use App\Data\Steam\GetPlayerSummaries\PlayerSummaryData;
+use App\Data\Zomboid\Log\PlayerLogData;
 use Lowel\LaravelServiceMaker\Services\ServiceInterface;
 
 interface SteamServiceInterface extends ServiceInterface
