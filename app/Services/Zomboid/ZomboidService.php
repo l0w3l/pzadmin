@@ -54,8 +54,11 @@ class ZomboidService extends AbstractService implements ZomboidServiceInterface
         $sourceFolder = base_path('/docker/zomboid/storage/data');
         $archiveFile = base_path('/docker/zomboid/backups/').date('Y-m-d_H-i-s').'.tar.gz';
 
+        $compressor = trim(shell_exec('command -v pigz')) ? 'pigz -1' : 'gzip -1';
+
         $cmd = sprintf(
-            'tar -czf %s -C %s .',
+            'tar -I %s -cf %s -C %s .',
+            escapeshellarg($compressor),
             escapeshellarg($archiveFile),
             escapeshellarg($sourceFolder)
         );
