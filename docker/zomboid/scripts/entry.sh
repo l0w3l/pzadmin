@@ -2,6 +2,22 @@
 
 echo "" > /root/Zomboid/server-console.txt
 
+#####################################
+#                                   #
+# Clean logs and health flag        #
+#                                   #
+#####################################
+(
+    cd /root/Zomboid/Logs/ || exit 1
+    find . \
+      -type f \
+      \( -path './logs_*/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_*_cmd.txt' \
+      -o -path './[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_??-??_cmd.txt' \
+      -o -path './logs_*/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_*_DebugLog-server.txt' \
+      -o -path './[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_??-??_DebugLog-server.txt' \) \
+      -delete
+)
+
 rm -f /root/Zomboid/.server_healthy
 
 cd ${STEAMAPPDIR}

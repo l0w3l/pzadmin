@@ -6,7 +6,7 @@ use App\Services\Auth\Invite\InviteServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 
-class makeInvite extends Command
+class MakeInviteCommand extends Command
 {
     /**
      * The name and signature of the console command.
