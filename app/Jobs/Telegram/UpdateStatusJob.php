@@ -27,21 +27,20 @@ class UpdateStatusJob implements ShouldQueue
         $messageData = Cache::get('telepath.messages.start');
 
         if ($messageData !== null) {
-            (new StartHandler)
-                ->lazyHandler(function (string $message, KeyboardBuilderInterface $keyboardBuilder) use ($messageData) {
-                    if ($message === $messageData->text) {
-                        return;
-                    }
+            StartHandler::lazyHandler(static function (string $message, KeyboardBuilderInterface $keyboardBuilder) use ($messageData) {
+                if (trim($message) === trim($messageData->text)) {
+                    return;
+                }
 
-                    SpiritBox::editMessageText(
-                        $message,
-                        chatId: $messageData->chat->id,
-                        messageId: $messageData->messageId,
-                        parseMode: 'HTML',
-                        linkPreviewOptions: new LinkPreviewOptions(true),
-                        replyMarkup: $keyboardBuilder
-                    );
-                });
+                SpiritBox::editMessageText(
+                    $message,
+                    chatId: $messageData->chat->id,
+                    messageId: $messageData->messageId,
+                    parseMode: 'HTML',
+                    linkPreviewOptions: new LinkPreviewOptions(true),
+                    replyMarkup: $keyboardBuilder
+                );
+            });
         }
     }
 }

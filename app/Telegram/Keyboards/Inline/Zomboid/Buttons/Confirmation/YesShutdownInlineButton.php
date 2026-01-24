@@ -14,7 +14,7 @@ class YesShutdownInlineButton extends AbstractCallbackButton
 {
     public function handle(): callable
     {
-        return function () {
+        return static function () {
             $zomboidService = App::make(ZomboidServiceInterface::class);
 
             SpiritBox::editMessageText(__('telepath.keyboards.zomboid.status.stopping'));

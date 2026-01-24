@@ -12,7 +12,7 @@ class StopInlineButton extends AbstractCallbackButton
 {
     public function handle(): callable
     {
-        return function () {
+        return static function () {
             SpiritBox::editMessageText('Выключить сервер?', replyMarkup: ZomboidInlineKeyboardFactory::fakeYesShutdownConfirmation());
         };
     }

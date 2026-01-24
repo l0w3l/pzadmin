@@ -7,15 +7,16 @@ namespace App\Telegram\Handlers;
 use Cache;
 use Lowel\Telepath\Core\Router\Handler\AbstractTelegramHandler;
 use Lowel\Telepath\Facades\SpiritBox;
-use Phptg\BotApi\TelegramBotApi;
 use Phptg\BotApi\Type\Update\Update;
 
 class RegisterHandler extends AbstractTelegramHandler
 {
-    public function __invoke(TelegramBotApi $telegramBotApi, Update $update): void
+    public function handler(): callable
     {
-        Cache::forever('chat.registered', $update);
+        return static function (Update $update) {
+            Cache::forever('chat.registered', $update);
 
-        SpiritBox::deleteMessage();
+            SpiritBox::deleteMessage();
+        };
     }
 }

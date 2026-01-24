@@ -12,7 +12,7 @@ class FakeYesShutdownOptionInlineButton extends AbstractCallbackButton
 {
     public function handle(): callable
     {
-        return function () {
+        return static function () {
             SpiritBox::editMessageText(
                 'Ты УВЕРЕН, что хочешь выключить сервер?',
                 replyMarkup: ZomboidInlineKeyboardFactory::shutdownConfirmation()

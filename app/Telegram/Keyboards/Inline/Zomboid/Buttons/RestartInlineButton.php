@@ -14,7 +14,7 @@ class RestartInlineButton extends AbstractCallbackButton
 {
     public function handle(): callable
     {
-        return function (TelegramBotApi $api, Chat $chat) {
+        return static function (TelegramBotApi $api, Chat $chat) {
             SpiritBox::editMessageText('Перезапустить сервер?', replyMarkup: ZomboidInlineKeyboardFactory::fakeYesRestartConfirmation());
         };
     }

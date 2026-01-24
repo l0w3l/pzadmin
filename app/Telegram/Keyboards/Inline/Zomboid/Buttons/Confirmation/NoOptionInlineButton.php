@@ -11,7 +11,7 @@ class NoOptionInlineButton extends AbstractCallbackButton
 {
     public function handle(): callable
     {
-        return function () {
+        return static function () {
             (new RefreshInlineButton)->handle()();
         };
     }

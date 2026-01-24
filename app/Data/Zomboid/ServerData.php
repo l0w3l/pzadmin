@@ -33,7 +33,7 @@ final class ServerData extends Data
         $statusEnum = ContainerStatusEnum::ERROR;
         if (app()->make(BackupServiceInterface::class)->inProgress()) {
             $statusEnum = ContainerStatusEnum::BACKUP;
-        } else if ($serverInspection->State->Paused || $serverInspection->State->Dead || $serverInspection->State->OOMKilled || $serverInspection->State->ExitCode !== 0) {
+        } elseif ($serverInspection->State->Paused || $serverInspection->State->Dead || $serverInspection->State->OOMKilled || $serverInspection->State->ExitCode !== 0) {
             $statusEnum = ContainerStatusEnum::DOWN;
         } elseif ($serverInspection->State->Restarting || $serverInspection->State->Health->Status !== 'healthy') {
             $statusEnum = ContainerStatusEnum::PENDING;

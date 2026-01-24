@@ -11,24 +11,26 @@ use Phptg\BotApi\Type\Update\Update;
 
 class OnlyForChatMiddleware extends AbstractTelegramMiddleware
 {
-    public function __invoke(callable $callback): void
+    public function handler(): callable
     {
-        /** @var ?Update $update */
-        $update = Cache::get('chat.registered');
+        return static function (callable $callback) {
+            /** @var ?Update $update */
+            $update = Cache::get('chat.registered');
 
-        if ($update !== null && $update->message !== null) {
-            $chatId = $update->message->chat->id ?? null;
-            $threadId = $update->message->messageThreadId ?? null;
+            if ($update !== null && $update->message !== null) {
+                $chatId = $update->message->chat->id ?? null;
+                $threadId = $update->message->messageThreadId ?? null;
 
-            if ($chatId === Extrasense::chat()->id && $threadId === Extrasense::message()->messageThreadId) {
-                $callback();
+                if ($chatId === Extrasense::chat()->id && $threadId === Extrasense::message()->messageThreadId) {
+                    $callback();
 
-                return;
+                    return;
+                }
             }
-        }
 
-        if (in_array(Extrasense::user()->id, Extrasense::profile()->whitelist)) {
-            $callback();
-        }
+            if (in_array(Extrasense::user()->id, Extrasense::profile()->whitelist)) {
+                $callback();
+            }
+        };
     }
 }

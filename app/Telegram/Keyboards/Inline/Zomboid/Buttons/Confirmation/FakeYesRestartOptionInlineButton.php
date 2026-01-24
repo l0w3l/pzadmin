@@ -12,7 +12,7 @@ class FakeYesRestartOptionInlineButton extends AbstractCallbackButton
 {
     public function handle(): callable
     {
-        return function () {
+        return static function () {
             SpiritBox::editMessageText(
                 'Ты УВЕРЕН, что хочешь перезапустить (!!!) сервер?',
                 replyMarkup: ZomboidInlineKeyboardFactory::restartConfirmation()

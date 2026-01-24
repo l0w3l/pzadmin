@@ -24,13 +24,15 @@ class StartHandler extends AbstractTelegramHandler
     /**
      * @throws Exception
      */
-    public function __invoke(): void
+    public function handler(): callable
     {
-        $this->lazyHandler(function (string $message, KeyboardBuilderInterface $keyboardBuilder) {
-            $message = SpiritBox::sendMessage($message, parseMode: 'HTML', messageThreadId: Extrasense::message()->messageThreadId, linkPreviewOptions: new LinkPreviewOptions(true), replyMarkup: $keyboardBuilder);
+        return static function () {
+            self::lazyHandler(static function (string $message, KeyboardBuilderInterface $keyboardBuilder) {
+                $message = SpiritBox::sendMessage($message, parseMode: 'HTML', messageThreadId: Extrasense::message()->messageThreadId, linkPreviewOptions: new LinkPreviewOptions(true), replyMarkup: $keyboardBuilder);
 
-            \Cache::forever('telepath.messages.start', $message);
-        });
+                \Cache::forever('telepath.messages.start', $message);
+            });
+        };
     }
 
     /**
@@ -39,7 +41,7 @@ class StartHandler extends AbstractTelegramHandler
      * @throws BindingResolutionException
      * @throws Exception
      */
-    public function lazyHandler(callable $lazyHandler): void
+    public static function lazyHandler(callable $lazyHandler): void
     {
         $logsService = App::make(LogServiceInterface::class);
         $zomboidService = App::make(ZomboidServiceInterface::class);
