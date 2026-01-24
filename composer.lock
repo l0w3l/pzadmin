@@ -2659,16 +2659,16 @@
         },
         {
             "name": "lowel/telepath",
-            "version": "0.5.3",
+            "version": "0.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/l0w3l/telepath.git",
-                "reference": "f921dba2d372e1a2db220f49de025b41447697de"
+                "reference": "b434cfb93d688c97bafe5e4bdeff38355403eac2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/l0w3l/telepath/zipball/f921dba2d372e1a2db220f49de025b41447697de",
-                "reference": "f921dba2d372e1a2db220f49de025b41447697de",
+                "url": "https://api.github.com/repos/l0w3l/telepath/zipball/b434cfb93d688c97bafe5e4bdeff38355403eac2",
+                "reference": "b434cfb93d688c97bafe5e4bdeff38355403eac2",
                 "shasum": ""
             },
             "require": {
@@ -2731,7 +2731,7 @@
             ],
             "support": {
                 "issues": "https://github.com/l0w3l/telepath/issues",
-                "source": "https://github.com/l0w3l/telepath/tree/0.5.3"
+                "source": "https://github.com/l0w3l/telepath/tree/0.5.4"
             },
             "funding": [
                 {
@@ -2739,7 +2739,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-01-24T15:29:04+00:00"
+            "time": "2026-01-24T16:34:32+00:00"
         },
         {
             "name": "monolog/monolog",
