@@ -9,6 +9,6 @@ class ZomboidBackup extends Model
     protected $fillable = [
         'file_path',
         'file_size',
-        'hash'
+        'hash',
     ];
 }

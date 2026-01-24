@@ -33,6 +33,13 @@ class ZomboidInlineKeyboardFactory implements KeyboardFactoryInterface
         return $builder->row(new StopInlineButton, new RefreshInlineButton, new RestartInlineButton);
     }
 
+    public static function backup(): KeyboardBuilderInterface
+    {
+        $builder = new InlineKeyboardBuilder;
+
+        return $builder->row(new RefreshInlineButton);
+    }
+
     public static function isDead(): KeyboardBuilderInterface
     {
         $builder = new InlineKeyboardBuilder;

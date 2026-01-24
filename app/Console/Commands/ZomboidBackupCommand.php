@@ -3,8 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Phar;
-use PharData;
 
 class ZomboidBackupCommand extends Command
 {
@@ -27,9 +25,9 @@ class ZomboidBackupCommand extends Command
      */
     public function handle(): void
     {
-        $zomboidService = app()->make(\App\Services\Zomboid\ZomboidServiceInterface::class);
+        $backupService = app()->make(\App\Services\Zomboid\Backup\BackupServiceInterface::class);
 
-        $backupFile = $zomboidService->backup();
+        $backupFile = $backupService->backup();
 
         $this->info('Backup created successfully.');
         $this->info($backupFile);

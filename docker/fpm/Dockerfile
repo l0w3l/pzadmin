@@ -7,6 +7,7 @@ ARG HOST_GID
 ARG DOCKER_GID
 
 RUN apt-get update && apt-get install -y \
+    pigz \
     libbz2-dev \
     zlib1g-dev \
     libpng-dev \
