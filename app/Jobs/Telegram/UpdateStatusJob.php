@@ -28,14 +28,20 @@ class UpdateStatusJob implements ShouldQueue
 
         if ($messageData !== null) {
             (new StartHandler)
-                ->lazyHandler(fn (string $message, KeyboardBuilderInterface $keyboardBuilder) => SpiritBox::editMessageText(
-                    $message,
-                    chatId: $messageData->chat->id,
-                    messageId: $messageData->messageId,
-                    parseMode: 'HTML',
-                    linkPreviewOptions: new LinkPreviewOptions(true),
-                    replyMarkup: $keyboardBuilder
-                ));
+                ->lazyHandler(function (string $message, KeyboardBuilderInterface $keyboardBuilder) use ($messageData) {
+                    if ($message === $messageData->text) {
+                        return;
+                    }
+
+                    SpiritBox::editMessageText(
+                        $message,
+                        chatId: $messageData->chat->id,
+                        messageId: $messageData->messageId,
+                        parseMode: 'HTML',
+                        linkPreviewOptions: new LinkPreviewOptions(true),
+                        replyMarkup: $keyboardBuilder
+                    );
+                });
         }
     }
 }

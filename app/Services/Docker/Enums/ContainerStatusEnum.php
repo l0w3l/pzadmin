@@ -11,6 +11,8 @@ enum ContainerStatusEnum: string
     case PENDING = 'pending';
     case RESTARTING = 'restarting';
     case PAUSED = 'paused';
+
+    case BACKUP = 'backup';
     case ERROR = 'error';
 
     public function isActive(): bool

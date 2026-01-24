@@ -46,7 +46,10 @@ class StartHandler extends AbstractTelegramHandler
 
         $serverData = $zomboidService->getServer();
 
-        if ($serverData->status === ContainerStatusEnum::DOWN) {
+        if ($serverData->status === ContainerStatusEnum::BACKUP) {
+            $message = __('telepath.start.backup');
+            $keyboard = ZomboidInlineKeyboardFactory::backup();
+        } elseif ($serverData->status === ContainerStatusEnum::DOWN) {
             $message = __('telepath.start.down');
             $keyboard = ZomboidInlineKeyboardFactory::isDead();
         } elseif ($serverData->status === ContainerStatusEnum::PENDING) {
