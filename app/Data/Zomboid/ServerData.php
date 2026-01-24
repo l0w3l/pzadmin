@@ -31,10 +31,10 @@ final class ServerData extends Data
         $uptime = $startedAt->diffAsCarbonInterval(now());
 
         $statusEnum = ContainerStatusEnum::ERROR;
-        if ($serverInspection->State->Paused || $serverInspection->State->Dead || $serverInspection->State->OOMKilled || $serverInspection->State->ExitCode !== 0) {
-            $statusEnum = ContainerStatusEnum::DOWN;
-        } elseif (app()->make(BackupServiceInterface::class)->inProgress()) {
+        if (app()->make(BackupServiceInterface::class)->inProgress()) {
             $statusEnum = ContainerStatusEnum::BACKUP;
+        } else if ($serverInspection->State->Paused || $serverInspection->State->Dead || $serverInspection->State->OOMKilled || $serverInspection->State->ExitCode !== 0) {
+            $statusEnum = ContainerStatusEnum::DOWN;
         } elseif ($serverInspection->State->Restarting || $serverInspection->State->Health->Status !== 'healthy') {
             $statusEnum = ContainerStatusEnum::PENDING;
         } elseif ($serverInspection->State->Running) {
