@@ -99,6 +99,13 @@ services:
             - "${DOCKER_SOCKET}:/var/run/docker.sock"
             - "${STORAGE_APP}:/var/www/html"
 
+    redis:
+        image: redis:7-alpine
+        container_name: "${APP_SERVER_NAME:-pzadmin}_redis"
+        restart: unless-stopped
+        networks:
+            - backend
+            
     zomboid:
         container_name: "${APP_SERVER_NAME:-pzadmin}_zomboid"
         restart: unless-stopped

@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libgmp-dev \
  && docker-php-ext-install zip pcntl gmp \
+ && pecl install redis \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
