@@ -4,22 +4,18 @@ declare(strict_types=1);
 
 namespace App\Telegram\Keyboards\Inline\Zomboid\Buttons;
 
-use App\Telegram\Handlers\StartHandler;
+use App\Telegram\Messages\StartMessageModel;
 use Lowel\Telepath\Core\Router\Keyboard\Buttons\Inline\AbstractCallbackButton;
-use Lowel\Telepath\Core\Router\Keyboard\KeyboardBuilderInterface;
-use Lowel\Telepath\Facades\SpiritBox;
-use Phptg\BotApi\Type\LinkPreviewOptions;
 
 class RefreshInlineButton extends AbstractCallbackButton
 {
     public function handle(): callable
     {
         return static function () {
-            $message = SpiritBox::editMessageText(__('telepath.keyboards.zomboid.status.refreshing'));
+            StartMessageModel::edit(__('telepath.keyboards.zomboid.status.refreshing'));
 
-            \Cache::forever('telepath.messages.start', $message);
-
-            StartHandler::lazyHandler(static fn (string $message, KeyboardBuilderInterface $keyboardBuilder) => SpiritBox::editMessageText($message, parseMode: 'HTML', linkPreviewOptions: new LinkPreviewOptions(true), replyMarkup: $keyboardBuilder));
+            StartMessageModel::enableLiveReload();
+            StartMessageModel::reload();
         };
     }
 

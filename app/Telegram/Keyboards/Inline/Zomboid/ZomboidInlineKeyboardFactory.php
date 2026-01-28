@@ -79,6 +79,6 @@ class ZomboidInlineKeyboardFactory implements KeyboardFactoryInterface
     {
         $builder = new InlineKeyboardBuilder;
 
-        return $builder->row();
+        return $builder->row(new StopInlineButton, new RefreshInlineButton, new RestartInlineButton, new StartInlineButton, new NoOptionInlineButton, new YesShutdownInlineButton, new FakeYesShutdownOptionInlineButton, new FakeYesRestartOptionInlineButton, new YesRestartInlineButton);
     }
 }

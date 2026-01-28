@@ -6,9 +6,9 @@ namespace App\Telegram\Keyboards\Inline\Zomboid\Buttons\Confirmation;
 
 use App\Services\Zomboid\ZomboidServiceInterface;
 use App\Telegram\Keyboards\Inline\Zomboid\Buttons\RefreshInlineButton;
+use App\Telegram\Messages\StartMessageModel;
 use Illuminate\Support\Facades\App;
 use Lowel\Telepath\Core\Router\Keyboard\Buttons\Inline\AbstractCallbackButton;
-use Lowel\Telepath\Facades\SpiritBox;
 
 class YesRestartInlineButton extends AbstractCallbackButton
 {
@@ -17,7 +17,7 @@ class YesRestartInlineButton extends AbstractCallbackButton
         return static function () {
             $zomboidService = App::make(ZomboidServiceInterface::class);
 
-            SpiritBox::editMessageText(__('telepath.keyboards.zomboid.status.restarting'));
+            StartMessageModel::edit(__('telepath.keyboards.zomboid.status.restarting'));
 
             $zomboidService->doRestart();
 

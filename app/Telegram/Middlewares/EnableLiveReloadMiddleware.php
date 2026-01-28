@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Telegram\Middlewares;
 
-use Cache;
+use App\Telegram\Messages\StartMessageModel;
 use Lowel\Telepath\Core\Router\Middleware\AbstractTelegramMiddleware;
-use Lowel\Telepath\Facades\Extrasense;
 
 class EnableLiveReloadMiddleware extends AbstractTelegramMiddleware
 {
@@ -15,7 +14,7 @@ class EnableLiveReloadMiddleware extends AbstractTelegramMiddleware
         return static function (callable $callback) {
             $callback();
 
-            Cache::forever('telepath.messages.start', Extrasense::message());
+            StartMessageModel::enableLiveReload();
         };
     }
 }

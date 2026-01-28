@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Telegram\Keyboards\Inline\Zomboid\Buttons;
 
 use App\Services\Zomboid\ZomboidServiceInterface;
+use App\Telegram\Messages\StartMessageModel;
 use Illuminate\Support\Facades\App;
 use Lowel\Telepath\Core\Router\Keyboard\Buttons\Inline\AbstractCallbackButton;
-use Lowel\Telepath\Facades\SpiritBox;
 
 class StartInlineButton extends AbstractCallbackButton
 {
@@ -16,7 +16,7 @@ class StartInlineButton extends AbstractCallbackButton
         return static function () {
             $zomboidService = App::make(ZomboidServiceInterface::class);
 
-            SpiritBox::editMessageText(__('telepath.keyboards.zomboid.status.starting'));
+            StartMessageModel::edit(__('telepath.keyboards.zomboid.status.starting'));
 
             $zomboidService->doStart();
 

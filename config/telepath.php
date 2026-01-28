@@ -18,6 +18,10 @@ return [
 
     'chat_id' => env('TELEPATH_CHAT_ID', ''),
 
+    'hook' => [
+        'async' => env('TELEPATH_HOOK_ASYNC', false),
+    ],
+
     /*
      * Routes path
      */
