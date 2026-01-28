@@ -11,8 +11,8 @@ return [
     'ip' => $dockerEnv['ZOMBOID_HOST_IP'] ?? 'localhost',
     'port' => $dockerEnv['ZOMBOID_PORT_1'] ?? ($dockerEnv['ZOMBOID_PORT_2'] ?? 'none'),
     'docker' => [
-        'name' => ($dockerEnv['APP_SERVER_NAME'] ?? 'pzadmin').'_zomboid',
-        'socket' => 'zomboid',
+        'name' => 'docker-zomboid-pzadmin-1',
+        'socket' => 'zomboid-pzadmin',
     ],
 
     'rcon' => [

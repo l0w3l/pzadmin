@@ -1,6 +1,5 @@
 services:
-    nginx:
-        container_name: "${APP_SERVER_NAME:-pzadmin}_nginx"
+    nginx-pzadmin:
         build: ./nginx
         deploy:
             resources:
@@ -18,7 +17,7 @@ services:
             - "${VITE_REVERB_PORT:-8080}:8080"
             - "${INERTIA_PORT:-13714}:13714"
         networks:
-            - backend
+            - backend-pzadmin
         volumes:
             - "${STORAGE_APP}:/var/www/html"
             - "${STORAGE_NGINX}/logs/:/var/log/nginx/"
@@ -27,8 +26,7 @@ services:
             - ./nginx/config/sites-enabled/:/etc/nginx/sites-enabled/
             - ./nginx/config/nginxconfig.io/:/etc/nginx/nginxconfig.io/
 
-    fpm:
-        container_name: "${APP_SERVER_NAME:-pzadmin}_fpm"
+    fpm-pzadmin:
         build:
             context: ./fpm
             args:
@@ -47,24 +45,22 @@ services:
                     cpus: "0.5"
                     memory: "200m"
         networks:
-            - backend
+            - backend-pzadmin
         volumes:
             - "${DOCKER_SOCKET}:/var/run/docker.sock"
             - "${STORAGE_APP}:/var/www/html"
             - ./fpm/config/www.conf:/usr/local/etc/php-fpm.d/www.conf
 
-    php-setup:
-        container_name: "${APP_SERVER_NAME:-pzadmin}_php-setup"
-        build: ./php
+    setup-pzadmin:
+        build: ./setup
         networks:
-            - backend
+            - backend-pzadmin
         restart: no
         entrypoint: ["bash", "/usr/local/bin/scripts/setup.sh"]
         volumes:
             - "${STORAGE_APP}:/var/www/html"
 
-    queue:
-        container_name: "${APP_SERVER_NAME:-pzadmin}_queue"
+    queue-pzadmin:
         build:
             context: ./queue
             args:
@@ -81,30 +77,28 @@ services:
                     cpus: "0.5"
                     memory: "100m"
         networks:
-            - backend
+            - backend-pzadmin
         restart: always
         entrypoint: [ "bash", "/usr/local/bin/scripts/laravel_queue.sh" ]
         volumes:
             - "${DOCKER_SOCKET}:/var/run/docker.sock"
             - "${STORAGE_APP}:/var/www/html"
 
-    php-laravel-reverb:
-        container_name: "${APP_SERVER_NAME:-pzadmin}_php-laravel-reverb"
-        build: ./php
+    laravel-reverb-pzadmin:
+        build: ./setup
         deploy:
             resources:
                 limits:
                     cpus: "0.5"
                     memory: "100m"
         networks:
-            - backend
+            - backend-pzadmin
         restart: "always"
         entrypoint: [ "bash", "/usr/local/bin/scripts/laravel_reverb.sh" ]
         volumes:
             - "${STORAGE_APP}:/var/www/html"
 
-    scheduler:
-        container_name: "${APP_SERVER_NAME:-pzadmin}_php-scheduler"
+    scheduler-pzadmin:
         build:
             context: ./scheduler
             args:
@@ -122,15 +116,14 @@ services:
                     cpus: "0.5"
                     memory: "100m"
         networks:
-            - backend
+            - backend-pzadmin
         restart: always
         entrypoint: [ "bash", "/usr/local/bin/scripts/laravel_scheduler.sh" ]
         volumes:
             - "${DOCKER_SOCKET}:/var/run/docker.sock"
             - "${STORAGE_APP}:/var/www/html"
 
-    zomboid:
-        container_name: "${APP_SERVER_NAME:-pzadmin}_zomboid"
+    zomboid-pzadmin:
         restart: unless-stopped
         build:
             context: ./zomboid
@@ -156,7 +149,7 @@ services:
             retries: 1
             start_period: 10s
         networks:
-            - backend
+            - backend-pzadmin
         ports:
             - "${ZOMBOID_PORT_1}:${ZOMBOID_PORT_1}/udp"
             - "${ZOMBOID_PORT_2}:${ZOMBOID_PORT_2}/udp"
@@ -171,5 +164,5 @@ services:
             - "${STORAGE_ZOMBOID_MODS}:/pz-dedicated/steamapps/workshop"
 
 networks:
-    backend:
+    backend-pzadmin:
         driver: bridge
