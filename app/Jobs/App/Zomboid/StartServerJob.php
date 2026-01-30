@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Jobs\Telegram;
+namespace App\Jobs\App\Zomboid;
 
-use App\Telegram\Messages\StartMessageModel;
+use App\Services\Zomboid\ZomboidServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
 
-class UpdateStatusJob implements ShouldQueue
+class StartServerJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -18,6 +19,6 @@ class UpdateStatusJob implements ShouldQueue
      */
     public function handle(): void
     {
-        StartMessageModel::reload();
+        App::make(ZomboidServiceInterface::class)->doStart();
     }
 }

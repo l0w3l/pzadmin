@@ -16,7 +16,7 @@ return [
         'ttl' => (int) env('TELEPATH_CONVERSATION_TIMEOUT', 60),
     ],
 
-    'chat_id' => env('TELEPATH_CHAT_ID', ''),
+    'chat_id' => (int) env('TELEPATH_CHAT_ID', ''),
 
     'hook' => [
         'async' => env('TELEPATH_HOOK_ASYNC', false),

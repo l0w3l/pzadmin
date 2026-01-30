@@ -2,8 +2,8 @@
 
 namespace App\Data\Zomboid;
 
+use App\Jobs\App\Zomboid\Backup\StartBackupJob;
 use App\Services\Docker\Enums\ContainerStatusEnum;
-use App\Services\Zomboid\Backup\BackupServiceInterface;
 use Carbon\CarbonInterface;
 use Carbon\CarbonInterval;
 use Illuminate\Support\Carbon;
@@ -31,7 +31,7 @@ final class ServerData extends Data
         $uptime = $startedAt->diffAsCarbonInterval(now());
 
         $statusEnum = ContainerStatusEnum::ERROR;
-        if (app()->make(BackupServiceInterface::class)->inProgress()) {
+        if (StartBackupJob::inProgress()) {
             $statusEnum = ContainerStatusEnum::BACKUP;
         } elseif ($serverInspection->State->Paused || $serverInspection->State->Dead || $serverInspection->State->OOMKilled || $serverInspection->State->ExitCode !== 0) {
             $statusEnum = ContainerStatusEnum::DOWN;

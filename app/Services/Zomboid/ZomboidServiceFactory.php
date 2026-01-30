@@ -18,7 +18,7 @@ class ZomboidServiceFactory implements ServiceFactoryInterface
      */
     public function get(array $params = []): ZomboidServiceInterface
     {
-        return App::make(ZomboidService::class, [
+        return App::make(ZomboidProxyService::class, [
             'zomboidDockerContainer' => (new DockerServiceFactory)->zomboid(),
         ]);
     }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Services\Zomboid;
 
 use App\Data\Zomboid\ServerData;
-use App\Models\ZomboidBackup;
 use App\Services\Docker\DockerServiceInterface;
 use App\Services\Docker\Enums\ContainerActionEnum;
 use App\Services\Zomboid\Backup\BackupServiceInterface;
@@ -29,12 +28,6 @@ class ZomboidService extends AbstractService implements ZomboidServiceInterface
 
     public function doStart(): bool
     {
-        $lastBackup = ZomboidBackup::latest()->first();
-
-        if ($lastBackup === null || $lastBackup->hash !== $this->backupService->configHash()) {
-            $this->backupService->backup();
-        }
-
         return $this->zomboidDockerContainer->operate(ContainerActionEnum::UP);
     }
 

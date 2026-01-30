@@ -11,10 +11,11 @@ RUN apt-get update && apt-get install -y \
     libgmp-dev \
  && docker-php-ext-install zip pcntl gmp \
  && pecl install redis \
+ && docker-php-ext-enable redis \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-RUN echo "opcache.enable_cli=0" > /usr/local/etc/php/conf.d/opcache-cli.ini
+RUN echo "opcache.enable_cli=1" > /usr/local/etc/php/conf.d/opcache-cli.ini
 
 RUN mkdir -p /usr/local/bin/scripts
 COPY ./scripts /usr/local/bin/scripts
