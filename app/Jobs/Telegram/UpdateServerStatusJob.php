@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use Lowel\Telepath\Core\Router\Keyboard\KeyboardBuilderInterface;
 use Lowel\Telepath\Facades\SpiritBox;
 use Phptg\BotApi\FailResult;
+use Phptg\BotApi\Type\LinkPreviewOptions;
 use Phptg\BotApi\Type\Message;
 
 class UpdateServerStatusJob implements ShouldQueue
@@ -30,7 +31,7 @@ class UpdateServerStatusJob implements ShouldQueue
             }
 
             self::setMessage(
-                SpiritBox::editMessageText($newMessage, chatId: $message->chat->id, messageId: $message->messageId, replyMarkup: $keyboardBuilder)
+                SpiritBox::editMessageText($newMessage, chatId: $message->chat->id, messageId: $message->messageId, linkPreviewOptions: new LinkPreviewOptions(true), replyMarkup: $keyboardBuilder)
             );
         });
     }
