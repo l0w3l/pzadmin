@@ -24,8 +24,7 @@ class RefreshInlineButton extends AbstractCallbackButton
                     parseMode: 'HTML',
                     linkPreviewOptions: new LinkPreviewOptions(true),
                     replyMarkup: $keyboardBuilder
-                ))
-            );
+                )), true);
         };
     }
 

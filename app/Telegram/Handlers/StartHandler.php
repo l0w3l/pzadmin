@@ -47,7 +47,7 @@ class StartHandler extends AbstractTelegramHandler
      * @throws BindingResolutionException
      * @throws Exception
      */
-    public static function resolveMessageAndKeyboard(callable $resolver): void
+    public static function resolveMessageAndKeyboard(callable $resolver, bool $force = false): void
     {
         $logsService = App::make(LogServiceInterface::class);
         $zomboidService = App::make(ZomboidServiceInterface::class);
@@ -96,7 +96,7 @@ class StartHandler extends AbstractTelegramHandler
         }
 
         $prevMessage = Cache::get('telegram.start');
-        if ($prevMessage !== $message) {
+        if ($prevMessage !== $message || $force) {
             Cache::forever('telegram.start', $message);
 
             $resolver($message, $keyboard);
