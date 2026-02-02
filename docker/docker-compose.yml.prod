@@ -78,8 +78,7 @@ services:
         deploy:
             resources:
                 limits:
-                    cpus: "0.5"
-                    memory: "100m"
+                    memory: "1000m"
         networks:
             - backend
         restart: always
@@ -170,6 +169,8 @@ services:
             - "${ZOMBOID_STEAM_PORT_1}:${ZOMBOID_STEAM_PORT_1}"
             - "${ZOMBOID_STEAM_PORT_2}:${ZOMBOID_STEAM_PORT_2}"
         volumes:
+            # Client
+            - ./zomboid/client:/pz-dedicated
             # Entry
             - ./zomboid/scripts:/server/scripts
             # Server data

@@ -28,6 +28,39 @@ cd ${STEAMAPPDIR}
 #                                   #
 #####################################
 
+echo "== Project Zomboid Dedicated Server =="
+
+STEAMAPPID=380870
+STEAMAPP=pz
+STEAMAPPDIR="${HOMEDIR}/${STEAMAPP}-dedicated"
+STEAMAPPS_DIR="${STEAMAPPDIR}/steamapps"
+MANIFEST="${STEAMAPPS_DIR}/appmanifest_${STEAMAPPID}.acf"
+
+mkdir -p "${STEAMAPPDIR}"
+chown -R "${USER}:${USER}" "${STEAMAPPDIR}"
+
+if [ ! -f "${MANIFEST}" ]; then
+  echo ">> Server not found, downloading via steamcmd..."
+
+  steamcmd \
+    +force_install_dir "${STEAMAPPDIR}" \
+    +login anonymous \
+    +app_update "${STEAMAPPID}" \
+    ${ZOMBOID_BETA:+-beta "$ZOMBOID_BETA" validate} \
+    +quit
+
+  echo ">> Download complete"
+else
+  echo ">> Server already installed, using cache"
+fi
+
+
+#####################################
+#                                   #
+# Force an update if the env is set #
+#                                   #
+#####################################
+
 if [ "${FORCEUPDATE}" == "1" ]; then
   echo "FORCEUPDATE variable is set, so the server will be updated right now"
   bash "${STEAMCMDDIR}/steamcmd.sh" +force_install_dir "${STEAMAPPDIR}" +login anonymous +app_update "${STEAMAPPID}" -beta unstable validate +quit

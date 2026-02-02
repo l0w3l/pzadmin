@@ -18,13 +18,6 @@ RUN apt-get update \
 RUN mkdir -p "${STEAMAPPDIR}"
 RUN chown -R "${USER}:${USER}" "${STEAMAPPDIR}"
 
-RUN steamcmd \
-      +force_install_dir "${STEAMAPPDIR}" \
-      +login anonymous \
-      +app_update "${STEAMAPPID}" \
-      ${ZOMBOID_BETA:+-beta $ZOMBOID_BETA validate} \
-      +quit
-
 # Copy the entry point file
 COPY --chown=${USER}:${USER} scripts/entry.sh /server/scripts/entry.sh
 RUN chmod 550 /server/scripts/entry.sh

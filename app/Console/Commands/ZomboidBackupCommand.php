@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\App\Zomboid\Backup\StartBackupJob;
+use App\Models\ZomboidBackup;
 use Illuminate\Console\Command;
 
 class ZomboidBackupCommand extends Command
@@ -25,11 +27,14 @@ class ZomboidBackupCommand extends Command
      */
     public function handle(): void
     {
-        $backupService = app()->make(\App\Services\Zomboid\Backup\BackupServiceInterface::class);
+        $this->info('Start backup...');
 
-        $backupFile = $backupService->backup();
+        $timeStart = now();
 
-        $this->info('Backup created successfully.');
-        $this->info($backupFile);
+        StartBackupJob::dispatchSync();
+
+        $this->info('Backup created successfully. Time taken: '.now()->diff($timeStart)->forHumans());
+
+        $this->info(ZomboidBackup::latest()->first()->file_path);
     }
 }

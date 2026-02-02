@@ -105,7 +105,7 @@ services:
         restart: unless-stopped
         networks:
             - backend
-            
+
     zomboid:
         container_name: "${APP_SERVER_NAME:-pzadmin}_zomboid"
         restart: unless-stopped
@@ -140,6 +140,8 @@ services:
             - "${ZOMBOID_STEAM_PORT_1}:${ZOMBOID_STEAM_PORT_1}"
             - "${ZOMBOID_STEAM_PORT_2}:${ZOMBOID_STEAM_PORT_2}"
         volumes:
+            # Client
+            - ./zomboid/client:/pz-dedicated
             # Entry
             - ./zomboid/scripts:/server/scripts
             # Server data

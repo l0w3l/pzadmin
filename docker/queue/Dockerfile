@@ -6,6 +6,7 @@ ARG DOCKER_GID
 
 RUN apt-get update && apt-get install -y \
     git \
+    pigz \
     unzip \
     libzip-dev \
     libgmp-dev \
