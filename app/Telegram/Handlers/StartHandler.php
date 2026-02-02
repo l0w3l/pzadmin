@@ -36,8 +36,7 @@ class StartHandler extends AbstractTelegramHandler
                         linkPreviewOptions: new LinkPreviewOptions(true),
                         replyMarkup: $keyboardBuilder
                     )
-                )
-            );
+                ), true);
         };
     }
 
