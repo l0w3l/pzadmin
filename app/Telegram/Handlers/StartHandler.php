@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Telegram\Handlers;
 
 use App\Exceptions\Services\Steam\SteamKeyNotFoundException;
+use App\Jobs\Telegram\UpdateServerStatusJob;
 use App\Services\Docker\Enums\ContainerStatusEnum;
 use App\Services\Steam\SteamServiceFactory;
 use App\Services\Zomboid\Log\LogServiceInterface;
 use App\Services\Zomboid\ZomboidServiceInterface;
 use App\Telegram\Keyboards\Inline\Zomboid\ZomboidInlineKeyboardFactory;
+use Cache;
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\App;
@@ -27,11 +29,13 @@ class StartHandler extends AbstractTelegramHandler
     {
         return static function () {
             self::resolveMessageAndKeyboard(
-                fn (string $message, KeyboardBuilderInterface $keyboardBuilder) => SpiritBox::sendMessage(
-                    $message,
-                    parseMode: 'HTML',
-                    replyMarkup: $keyboardBuilder,
-                    linkPreviewOptions: new LinkPreviewOptions(true)
+                fn (string $message, KeyboardBuilderInterface $keyboardBuilder) => UpdateServerStatusJob::setMessage(
+                    SpiritBox::sendMessage(
+                        $message,
+                        parseMode: 'HTML',
+                        linkPreviewOptions: new LinkPreviewOptions(true),
+                        replyMarkup: $keyboardBuilder
+                    )
                 )
             );
         };
@@ -91,6 +95,11 @@ class StartHandler extends AbstractTelegramHandler
             $keyboard = ZomboidInlineKeyboardFactory::isDead();
         }
 
-        $resolver($message, $keyboard);
+        $prevMessage = Cache::get('telegram.start');
+        if ($prevMessage !== $message) {
+            Cache::forever('telegram.start', $message);
+
+            $resolver($message, $keyboard);
+        }
     }
 }

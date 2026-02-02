@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 return [
     'start' => [
-        'active' => "🧟 Сервер активен 🌟\n\n:players\nIP: <code>:ip</code>\nPORT: <code>:port</code>\nUPTIME: :time",
-        'pending' => '⌛ Сервер собирается 🚧',
-        'down' => '☠️ Сервер выключен 😴',
-        'backup' => "💾 Профилактика пива... 🛡️\n\nКонфигурация сервера была изменена!\nПроизводится бекап...\n\n*может занять до 5 минут",
-        'unknown' => '❓ Статус сервера неизвестен 🤔',
+        'active' => "<tg-emoji emoji-id=\"5235493815892067259\">🧟‍♀️</tg-emoji> Сервер активен <tg-emoji emoji-id=\"5233532708054910255\">🌟</tg-emoji>\n\n:players\nIP: <code>:ip</code>\nPORT: <code>:port</code>\nUPTIME: :time",
+        'pending' => '<tg-emoji emoji-id="5235926538142106437">😳</tg-emoji> Сервер собирается <tg-emoji emoji-id="5235911956728134033">😥</tg-emoji>',
+        'down' => '<tg-emoji emoji-id="5235465073970920388">💀</tg-emoji> Сервер выключен <tg-emoji emoji-id="5235991645551345865">🦴</tg-emoji>',
+        'backup' => "<tg-emoji emoji-id=\"5233554663927727701\">😐</tg-emoji> Профилактика пива... <tg-emoji emoji-id=\"5233639261898556828\">🍽</tg-emoji>\n\nКонфигурация сервера была изменена!\nПроизводится бекап...\n\n*может занять до 5 минут",
+        'unknown' => '<tg-emoji emoji-id="5235518185536504861">🤒</tg-emoji> Статус сервера неизвестен <tg-emoji emoji-id="5235624554696556015">❄️</tg-emoji>',
     ],
 
     'keyboards' => [
@@ -16,8 +16,8 @@ return [
             'status' => [
                 'refreshing' => 'Обновление статуса сервера... 🧘‍♀️🍃☀️',
                 'starting' => 'Запуск сервера... ᕕ( ᐛ )ᕗ',
-                'restarting' => 'Перезапуск сервера... 📶🔁😵‍💫',
-                'stopping' => 'Выключение сервера... 👇⏻',
+                'restarting' => 'Перезапуск сервера... <tg-emoji emoji-id="5233355931495975496">❤️‍🔥<tg-emoji>🔁😵‍💫',
+                'stopping' => 'Выключение сервера... <tg-emoji emoji-id="5233692807255836393">😣</tg-emoji>👇⏻',
             ],
             'questions' => [
                 'restart' => 'Перезапустить сервер?',

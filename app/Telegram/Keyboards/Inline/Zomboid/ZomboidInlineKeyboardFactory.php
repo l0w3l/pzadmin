@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Telegram\Keyboards\Inline\Zomboid;
 
+use App\Jobs\Telegram\UpdateServerStatusJob;
 use App\Telegram\Keyboards\Inline\Zomboid\Buttons\Confirmation\FakeYesRestartOptionInlineButton;
 use App\Telegram\Keyboards\Inline\Zomboid\Buttons\Confirmation\FakeYesShutdownOptionInlineButton;
 use App\Telegram\Keyboards\Inline\Zomboid\Buttons\Confirmation\NoOptionInlineButton;
@@ -51,12 +52,16 @@ class ZomboidInlineKeyboardFactory implements KeyboardFactoryInterface
     {
         $builder = new InlineKeyboardBuilder;
 
+        UpdateServerStatusJob::stop();
+
         return $builder->row(new FakeYesRestartOptionInlineButton, new NoOptionInlineButton);
     }
 
     public static function restartConfirmation(): KeyboardBuilderInterface
     {
         $builder = new InlineKeyboardBuilder;
+
+        UpdateServerStatusJob::stop();
 
         return $builder->row(new NoOptionInlineButton, new YesRestartInlineButton);
     }
@@ -65,12 +70,16 @@ class ZomboidInlineKeyboardFactory implements KeyboardFactoryInterface
     {
         $builder = new InlineKeyboardBuilder;
 
+        UpdateServerStatusJob::stop();
+
         return $builder->row(new FakeYesShutdownOptionInlineButton, new NoOptionInlineButton);
     }
 
     public static function shutdownConfirmation(): KeyboardBuilderInterface
     {
         $builder = new InlineKeyboardBuilder;
+
+        UpdateServerStatusJob::stop();
 
         return $builder->row(new NoOptionInlineButton, new YesShutdownInlineButton);
     }

@@ -1,5 +1,7 @@
 <?php
 
+use Lowel\Telepath\Enums\ParseModeEnum;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -40,6 +42,8 @@ return [
             'limit' => (int) env('TELEPATH_LIMIT', 100),
             'timeout' => (int) env('TELEPATH_TIMEOUT', 30),
             'allowed_updates' => env('TELEPATH_ALLOWED_UPDATES', '*'),
+
+            'parse_mode' => ParseModeEnum::HTML->value,
 
             'whitelist' => env('TELEPATH_ADMINS', ''),
             'blacklist' => env('TELEPATH_BANNED', ''),

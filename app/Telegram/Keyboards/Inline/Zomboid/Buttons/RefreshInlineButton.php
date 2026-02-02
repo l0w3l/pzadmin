@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Telegram\Keyboards\Inline\Zomboid\Buttons;
 
+use App\Jobs\Telegram\UpdateServerStatusJob;
 use App\Telegram\Handlers\StartHandler;
 use Lowel\Telepath\Core\Router\Keyboard\Buttons\Inline\AbstractCallbackButton;
 use Lowel\Telepath\Core\Router\Keyboard\KeyboardBuilderInterface;
@@ -18,12 +19,12 @@ class RefreshInlineButton extends AbstractCallbackButton
             SpiritBox::editMessageText(__('telepath.keyboards.zomboid.status.refreshing'));
 
             StartHandler::resolveMessageAndKeyboard(
-                fn (string $message, KeyboardBuilderInterface $keyboardBuilder) => SpiritBox::editMessageText(
+                fn (string $message, KeyboardBuilderInterface $keyboardBuilder) => UpdateServerStatusJob::setMessage(SpiritBox::editMessageText(
                     $message,
                     parseMode: 'HTML',
                     linkPreviewOptions: new LinkPreviewOptions(true),
                     replyMarkup: $keyboardBuilder
-                )
+                ))
             );
         };
     }
